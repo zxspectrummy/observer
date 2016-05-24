@@ -1,0 +1,76 @@
+﻿Admin Menu
+  Permissions: สิทธิ์
+  User Management: การจัดการผู้ใช้
+
+Permissions
+  Heading: สิทธิ์
+  New Group Button: กลุ่มใหม่
+
+Permissions Edit
+  Heading: แก้ไขการอนุญาตสำหรับกลุ่ม
+  Name: ชื่อกลุ่ม
+  Delete Group Confirm: คุณแน่ใจว่าคุณต้องการลบกลุ่มนี้?
+  Group Name Required: ชื่อกลุ่มจะต้อง
+  Permission Invalid: หนึ่งหรือมากกว่าหนึ่งสิทธิ์ที่ไม่ถูกต้อง
+  Cannot Delete Admin: คุณไม่สามารถแก้ไขหรือลบกลุ่มผู้ดูแลระบบ
+
+User List
+  Heading: การจัดการผู้ใช้
+  Add a User: เพิ่มผู้ใช้
+  Display Name: ชื่อที่ใช้แสดง
+  Email: อีเมล์
+  Created: ที่สร้าง
+  Last Access: การเข้าถึงล่าสุด
+  Groups: กลุ่ม
+
+User Edit
+  Heading: ผู้ใช้งาน
+  Name: ชื่อ
+  Username: ชื่อผู้ใช้
+  Display Name: ชื่อที่ใช้แสดง
+  Email: อีเมล์
+  Password: รหัสผ่าน
+  Password (confirm): รหัสผ่าน (ยืนยัน)
+  Status: สถานะ
+  Groups: กลุ่ม
+  Password Warning: ป้อนรหัสผ่านเท่านั้นถ้าคุณต้องการที่จะเปลี่ยนรหัสผ่าน
+  Delete User Confirm: คุณแน่ใจหรือว่าต้องการลบผู้ใช้นี้หรือไม่?
+  Required Not Filled: หนึ่งหรือมากกว่าหนึ่งสาขาที่จำเป็นต้องได้รับไม่เต็ม
+  Invalid Email: ที่อยู่อีเมลของคุณให้ไม่ถูกต้อง
+  Email In Use: ที่อยู่อีเมลของคุณให้มีอยู่แล้วในการใช้งานโดยบัญชีอื่น
+  Username In Use: ชื่อผู้ใช้ที่คุณได้เลือกที่มีอยู่แล้วในการใช้งาน
+  Password Mismatch: รหัสผ่านที่ไม่ตรงกับ
+  Password Short: รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร
+
+Permissions List
+  administration: การบริหาร
+  manage media settings: จัดการการตั้งค่าสื่อ
+  manage devices: จัดการกับผู้เล่น
+  manage groups and permissions: จัดการกลุ่มและสิทธิ์
+  create, edit, and delete users: สร้างแก้ไขและลบผู้ใช้
+  manage client/interface settings: การจัดการลูกค้า / การตั้งค่าอินเตอร์เฟซ
+  install and uninstall modules: การติดตั้งและถอนการติดตั้งโมดูล
+  view log produced by logger module: บันทึกมุมมองที่ผลิตโดยโมดูลคนตัดไม้
+
+  Device Category: ผู้เล่น
+
+  manage schedule timeslots: ไทม์สลจัดการตารางเวลา
+  create, edit, and delete emergency broadcasts: สร้างแก้ไขและลบออกอากาศลำดับความสำคัญ
+  view device playlogs	: เล่นมุมมอง playlogs
+
+  manage schedule timeslots: ไทม์สลจัดการตารางเวลา
+  create, edit, and delete emergency broadcasts: สร้างแก้ไขและลบออกอากาศลำดับความสำคัญ
+  view device playlogs: เล่นมุมมอง playlogs
+
+  media: สื่อ
+  create, edit, and delete own media: สร้างแก้ไขและลบสื่อของตัวเอง
+  approve own media	: อนุมัติสื่อของตัวเอง
+  create, edit, approve, and delete all media	: สร้างแก้ไขอนุมัติและลบสื่อทั้งหมด
+  download all media: ดาวน์โหลดสื่อทั้งหมด
+
+  playlists: รายการเพลง
+  create, edit, and delete own playlists: สร้างแก้ไขและลบรายการเพลงของตัวเอง
+  create, edit, and delete all playlists: สร้างแก้ไขและลบรายการเพลงทั้งหมด
+
+  user interface: ส่วนติดต่อผู้ใช้
+  enable advanced show scheduling: ช่วยให้การจัดตารางเวลาการแสดงขั้นสูง

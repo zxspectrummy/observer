@@ -1,0 +1,32 @@
+OpenBroadcaster - Server Installation Instructions
+
+
+These instructions are an alternative to using ob.installer.sh.
+
+
+1. See dependencies.txt for server dependencies.  Mostly PHP/MySQL related, but 
+   a few things (python/gstreamer) to support transcoding and media 
+   identification. 
+
+2. Copy server files to a web environment (web document root).
+
+3. Import db/dbclean.sql to a database.
+
+4. Copy config.sample.php to config.php, and edit as necessary.
+
+5. Ensure media storage directories are writable by the web server.
+
+6. In the web document root, create 'assets', 'assets/profile_img', and
+   'assets/uploads' directories.  These directories should be writable by the
+   web server.
+
+7. The database import includes one user.  The username is admin.  The password
+   is something you must set in the database as follows (PHP):
+
+   mysql_query('UPDATE users set password = "'.password_hash($new_password.OB_HASH_SALT, PASSWORD_DEFAULT).'"
+                where username = "admin"');
+
+8. Log into OpenBroadcaster as admin, and access http://ob_install_url/updates/ to
+   verify your installation and run any required updates.
+
+-EOF-

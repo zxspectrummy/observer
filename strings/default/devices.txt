@@ -1,0 +1,89 @@
+﻿Admin Menu
+
+  Device Settings: Player Settings
+  Device Manager: Player Manager
+  Device Monitoring: Player Monitoring
+
+Device Manager
+
+  Heading: Player Manager
+  New Device Button: New Player
+  ID: ID
+  Name: Name
+  Description: Description
+  Status: Status
+
+  Version: Version
+  All: All
+  Schedule: Schedule
+  Emergency: Priority
+  Media: Media
+  Playlog: Playlog
+
+  not available: not available
+  never: never
+
+  Form Heading: Settings
+  Settings Name: Name
+  Settings Description: Description
+  Settings Parent Device: Parent Player
+  Schedule Check: use parent schedule
+  Dynamic Check:  use parent dynamic selections
+  ID Check:  use parent station IDs
+  Playlist Check:  use parent default playlist
+  Emergency Check:  use parent priority broadcasts
+
+  IP Address: IP Address
+  Password: Password
+  Enter New Password: (enter new password to reset)
+  Timezone: Timezone
+  Default Playlist: Default Playlist
+  Playlist Drag Zone: (drag playlist here)
+  Media Drag Zone: (drag media here)
+  Station IDs: Station IDs
+  Station ID Image Duration: Station ID Image Duration
+  seconds: seconds
+  Media Types: Media Types
+  Dynamic Selections Only: affects dynamic selections only
+  Audio: Audio
+  Images: Images
+  Video: Video
+  Line-In: Line-In
+
+  None: None
+
+  Device List Must Load: Player list must load before creating a new player.
+  Saved Message: Player saved.
+
+Device Monitoring
+
+  Heading: Player Monitoring
+  Limited Message: Results are limited to 1000 rows.
+  Options: Options
+  Device: Player
+  Start: Start
+  End: End
+  Sort: Sort
+
+  Media ID: Media ID
+  Artist: Artist
+  Title: Title
+  Date/Time: Date/Time
+  Context: Context
+  Notes: Notes
+
+  Ascending: Ascending
+  Descending: Descending
+
+  Filters: Filters
+
+  Exactly: is exactly
+  Not: is not
+  Contains: contains
+  Not Contain: does not contain
+
+  Add Filter Button: Add Filter
+  Load Data Button: Load Data
+
+  Results: Results
+  No Results Message: No search results.

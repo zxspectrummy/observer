@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: รหัสผ่านที่คุณได้ให้ถูกต้อง
+  Heading: เข้าสู่ระบบบัญชี
+  Automatically Logged Out: คุณถูกบันทึกไว้โดยอัตโนมัติหลังจากช่วงหนึ่งของการใช้งาน กรุณาเข้าสู่ระบบอีกครั้งก่อนดำเนินการต่อ
+  Username: ชื่อผู้ใช้
+  Password: รหัสผ่าน
+  Log In Button: เข้าสู่ระบบ
+  Log In Different User Button: เข้าสู่ระบบเป็นผู้ใช้ที่แตกต่างกัน
+
+Account Settings
+
+  Form Heading: การตั้งค่าบัญชี
+  Form Help: แก้ไขการตั้งค่าบัญชีดังต่อไปนี้ตามความจำเป็น เพียงใส่รหัสผ่านถ้าคุณต้องการที่จะเปลี่ยนรหัสผ่านของคุณ
+
+  Account Section: บัญชี
+
+  Username: ชื่อผู้ใช้
+  Name: ชื่อ
+  Display Name: ชื่อที่ใช้แสดง
+  Password: รหัสผ่านใหม่
+  Password Again: รหัสผ่านใหม่ (อีกครั้ง)
+  Email: อีเมล์
+
+  UI Section: ส่วนติดต่อผู้ใช้
+
+  Search Results Per Page: ผลการค้นหาในแต่ละหน้า
+
+  Language: ภาษา
+
+  Theme: กระทู้
+  Light On Dark (Lower Contrast): ไฟมืด (ความคมชัดลดลง)
+  Dark On Light (Lower Contrast): ในความมืดแสง (ต่ำกว่าความคมชัด)
+  Light On Dark (Higher Contrast): ไฟมืด (ความคมชัดที่สูงขึ้น)
+  Dark On Light (Higher Contrast): ในความมืดแสง (ความคมชัดที่สูงขึ้น)
+  Tanzanite: Tanzanite
+
+  Dyslexia-Friendly Font: ดิมิตรอักษร
+  Enabled Option: ที่เปิดใช้งาน
+  Disabled Option: พิการ
+
+  Settings Updated: การตั้งค่าได้รับการปรับปรุง การเปลี่ยนแปลงการตั้งค่าอินเตอร์เฟซผู้ใช้อาจต้องการให้คุณฟื้นฟูโปรแกรมที่จะมีผลบังคับใช้
+
+  Required Fields Not Filled: หนึ่งหรือมากกว่าหนึ่งสาขาที่จำเป็นต้องได้รับไม่เต็ม
+  Email Address Invalid: ที่อยู่อีเมลของคุณให้ไม่ถูกต้อง
+  Email Address In Use: ที่อยู่อีเมลของคุณให้มีอยู่แล้วในการใช้งานโดยบัญชีอื่น
+  Passwords Do Not Match: รหัสผ่านที่คุณได้ให้ไม่ตรงกับ
+  Password Not Long Enough: รหัสผ่านของคุณต้องมีอย่างน้อย 6 ตัวอักษร
+  Language Not Valid: ภาษาที่เลือกไม่ถูกต้อง
+  Theme Not Valid: รูปแบบที่เลือกไม่ถูกต้อง
+
+Account Menu
+
+  Account: บัญชี
+  Logout: ออกจากระบบ
+  Settings: การตั้งค่าบัญชี
+
+Layout
+
+  Logged In As: เข้าสู่ระบบเป็น: %1

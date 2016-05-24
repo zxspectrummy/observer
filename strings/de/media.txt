@@ -1,0 +1,124 @@
+﻿Media Menu
+
+  Media: Medien
+  Upload: Medien hochladen
+
+Admin Menu
+
+  Media Settings: Medieneinstellungen
+
+Upload Media
+
+  Heading: Medien hochladen
+  Instructions: Klicken Sie auf das graue Feld unten, oder ziehen Sie Dateien auf das Feld, um zu laden. Maximale Dateigröße beträgt 1 GB.
+  Select Files Legend: Dateien auswählen
+  Select Files: Klicken Sie, um Dateien auszuwählen, oder per Drag & Drop Dateien hier.
+  File Drop Failed: Dateiinformationen konnten nicht abgerufen werden. Versuchen Sie, in eine Datei zu wählen.
+  Upload Status: Hochladen: %1%
+  ID3 Unavailable: ID3 / EXIF-Daten nicht verfügbar
+  Wait For Upload To Save: Speichern nicht möglich, bitte warten, bis alle Uploads vollständig sind.
+
+Edit Media
+
+  Heading: Medien bearbeiten
+  Instructions: Bearbeiten Sie folgende Daten nach Bedarf und klicken Sie auf die Schaltfläche Speichern, um Ihre Änderungen zu übernehmen.
+
+Edit Media Form
+
+  ID3 Button: Verwenden Sie ID3 Daten
+  Upload Queue: Die Datei ist im Upload-Warteschlange
+
+  Artist: Künstler
+  Title: Titel
+  Album: Album / Series
+  Year: Jahr
+  Category: Kategorie
+  Country: Land
+  Language: Sprache
+  Genre: Genre
+  Comments: Comments
+  Copyright Owner: Sind Sie der Inhaber des Urheberrechts
+  Media Approved: Ist Medien zugelassen
+  Status: Status
+  Dynamic Selections: In Abgrenzungen
+
+  Private Option: Private (zur Verfügung nur)
+  Public Option: Public (für jedermann)
+  Not Applicable Option: Unzutreffend
+
+  Copy Field Button: Kopieren Alle
+
+  Media Saved: Medien wurden gespeichert.
+
+  Media Not Found: Dieses Medien-Objekt nicht mehr existiert.
+  Upload Not Valid: Der Datei-Upload ist nicht gültig.
+  File Upload Required: Ein Datei-Upload für neue Medien erforderlich.
+  Format Not Supported: Dieses Dateiformat wird nicht unterstützt.
+  Required Fields Not Filled: Ein oder mehrere Pflichtfelder wurden nicht ausgefüllt.
+  Artist/Title Too Long: Ein oder mehrere Künstler / Titel Felder sind zu lang.
+  Year Not Valid: Das Jahr ist nicht gültig.
+  Category Not Valid: Die gewählte Kategorie ist nicht mehr gültig.
+  Country Not Valid: Das ausgewählte Land ist nicht mehr gültig.
+  Genre Not Valid: Die gewählte Genre ist nicht mehr gültig.
+  Language Not Valid: Die ausgewählte Sprache ist nicht mehr gültig.
+  Status Not Valid: Die Medien-Status ist nicht gültig.
+  Genre Not Valid For Category: Die ausgewählten Genre ist nicht für die gewählte Kategorie verfügbar.
+
+Media Settings
+  Heading: Medien Kategorien & Genres
+  Instructions: Klicken Sie auf einen Kategorienamen, um die Genres innerhalb dieser Kategorie anzuzeigen.
+  Add Category Button: Fügen Sie eine Kategorie
+  Add Genre Button: Fügen Sie ein Genre
+
+  Supported File Formats: Unterstützte Dateiformate
+  File Format Instructions: Wählen Sie, welche Dateiformate Sie für Medien Uploads akzeptieren wollen. Eine Änderung dieser Einstellung wirkt sich nicht auf vorhandene Medien.
+
+  Audio Formats: Audioformate
+
+  FLAC Description: (Free Lossless Audio Codec)
+  MP3 Description: (MPEG-1 Audio Layer-3)
+  MP4 Description: (MPEG-4 Audio)
+  OGG Description: (Ogg-Container-Format)
+  WAV Description: (Waveform Audio)
+
+  Video Formats: Videoformate
+  AVI Description: (Audio Video Interleave, Container-Format)
+  MPEG Description: (Moving Picture Experts Group)
+  WMV Description: (Windows Media Video)
+  MOV Description: (Apple Quicktime)
+
+  Image Formats: Bildformate
+  JPEG Description: (Joint Photographic Experts Group)
+  PNG Description: (Portable Network Graphics)
+  SVG Description: (Scalable Vector Graphics)
+
+  Formats Saved Message: Dateiformateinstellungen gespeichert.
+
+  No Genres: Keine Gattungen gefunden.
+
+
+Category Edit
+
+  Name: Name
+  Name Required Message: Ein Kategoriename ist erforderlich.
+  Must Remove Message: Sie müssen die Genres in dieser Kategorie vor dem Löschen der Kategorie zu entfernen.
+  Saved Message: Kategorie gespeichert.
+  Category Deleted Message: Kategorie gelöscht.
+
+  Edit Category: Kategorie bearbeiten
+  New Category: New Kategorie
+
+Genre Edit
+
+  New Genre: New Genre
+  Edit Genre: Bearbeiten Genre
+
+  Name: Name
+  Description: Beschreibung
+  Category: Kategorie
+
+  Delete Genre Confirm: Sind Sie sicher, Sie wollen, um das Genre zu löschen?
+
+  Name Required Message: Ein Genre-Name ist erforderlich.
+  Genres Updated Message: Genres aktualisiert.
+  Genre Deleted Message: Genre Deleted.

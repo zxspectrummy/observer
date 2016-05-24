@@ -1,0 +1,124 @@
+﻿Media Menu
+
+  Media: Médias
+  Upload: Transférer multimédia
+
+Admin Menu
+
+  Media Settings: Réglages des médias
+
+Upload Media
+
+  Heading: Transférer multimédia
+  Instructions: Cliquez sur la case grise ci-dessous, ou faites glisser les fichiers sur la boîte à télécharger. Taille maximale du fichier est de 1 Go.
+  Select Files Legend: Sélectionnez Fichiers
+  Select Files: Cliquez sur pour sélectionner les fichiers, ou faites glisser et déposer des fichiers ici.
+  File Drop Failed: Impossible d'obtenir les informations de fichier. Essayez de cliquer pour sélectionner les fichiers à la place.
+  Upload Status: L'ajout: %1%
+  ID3 Unavailable: ID3 / Données EXIF Non disponible
+  Wait For Upload To Save: Impossible d'enregistrer, s'il vous plaît attendre jusqu'à ce que tous les téléchargements sont terminés.
+
+Edit Media
+
+  Heading: Modifier médias
+  Instructions: Modifier la suivants, si nécessaire, puis cliquez sur le bouton Enregistrer pour valider vos modifications.
+
+Edit Media Form
+
+  ID3 Button: Utiliser les données ID3
+  Upload Queue: Le fichier est dans File de téléchargement
+
+  Artist: Artiste
+  Title: Titre
+  Album: Album / série
+  Year: Année
+  Category: Catégorie
+  Country: Pays
+  Language: Langue
+  Genre: Genre
+  Comments: Commentaires
+  Copyright Owner: Vous êtes propriétaire du droit d'auteur
+  Media Approved: Est approuvé médias
+  Status: Statut
+  Dynamic Selections: Inclure dans les sélections dynamiques
+
+  Private Option: Privé (disponibles pour vous seulement)
+  Public Option: Publique (accessible à tous)
+  Not Applicable Option: Pas Applicable
+
+  Copy Field Button: Copie à tous
+
+  Media Saved: Media a été sauvegardé.
+
+  Media Not Found: Ce média ne existe plus.
+  Upload Not Valid: Le téléchargement de fichiers est pas valide.
+  File Upload Required: Un téléchargement de fichier est requis pour les nouveaux médias.
+  Format Not Supported: Ce format de fichier est pas pris en charge.
+  Required Fields Not Filled: Un ou plusieurs champs obligatoires ne sont pas remplis.
+  Artist/Title Too Long: Champs / titre un ou plusieurs artistes sont trop longs.
+  Year Not Valid: L'année est pas valide.
+  Category Not Valid: La catégorie sélectionnée est plus valide.
+  Country Not Valid: Le pays choisi est plus valide.
+  Genre Not Valid: Le genre sélectionné est plus valide.
+  Language Not Valid: La langue sélectionnée est plus valide.
+  Status Not Valid: Le statut de médias ne sont pas valides.
+  Genre Not Valid For Category: Le genre sélectionné ne sont pas disponibles pour la catégorie sélectionnée.
+
+Media Settings
+  Heading: Catégories Médias & Genres
+  Instructions: Cliquez sur un nom de catégorie pour montrer les genres au sein de cette catégorie.
+  Add Category Button: Ajouter une catégorie
+  Add Genre Button: Ajouter un genre
+
+  Supported File Formats: Formats de fichiers pris en charge
+  File Format Instructions: Sélectionnez les formats de fichier que vous souhaitez accepter pour les téléchargements de médias. La modification de ce paramètre ne sera pas affecter les médias existants.
+
+  Audio Formats: Formats Audio
+
+  FLAC Description: (Free Lossless Audio Codec)
+  MP3 Description: (MPEG-1 Audio Layer-3)
+  MP4 Description: (MPEG-4 Audio)
+  OGG Description: (Format Ogg Container)
+  WAV Description: (Waveform Audio)
+
+  Video Formats: Formats vidéo
+  AVI Description: (Audio Video Interleave, format conteneur)
+  MPEG Description: (Moving Picture Experts Group)
+  WMV Description: (Windows Media Video)
+  MOV Description: (Apple Quicktime)
+
+  Image Formats: Formats d'images
+  JPEG Description: (Joint Photographic Experts Group)
+  PNG Description: (Portable Network Graphics)
+  SVG Description: (Scalable Vector Graphics)
+
+  Formats Saved Message: paramètres de format de fichier enregistré.
+
+  No Genres: Aucun genres trouvé.
+
+
+Category Edit
+
+  Name: Nom
+  Name Required Message: Un nom de catégorie est nécessaire.
+  Must Remove Message: Vous devez supprimer les genres au sein de cette catégorie avant de supprimer la catégorie.
+  Saved Message: Catégorie sauvé.
+  Category Deleted Message: Catégorie supprimé.
+
+  Edit Category: Modifier une catégorie
+  New Category: Nouvelle catégorie
+
+Genre Edit
+
+  New Genre: Nouveau Genre
+  Edit Genre: Modifier Genre
+
+  Name: Nom
+  Description: Description
+  Category: Catégorie
+
+  Delete Genre Confirm: Êtes-vous sûr de vouloir supprimer le genre?
+
+  Name Required Message: Un nom de genre est nécessaire.
+  Genres Updated Message: Genres Mise à jour.
+  Genre Deleted Message: Genre supprimés.

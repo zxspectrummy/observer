@@ -1,0 +1,4 @@
+﻿Help Menu
+
+  Help: Hilfe
+  Documentation: Dokumentation

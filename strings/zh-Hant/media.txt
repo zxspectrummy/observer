@@ -1,0 +1,124 @@
+﻿Media Menu
+
+  Media: 媒體
+  Upload: 上傳媒體
+
+Admin Menu
+
+  Media Settings: 媒體設置
+
+Upload Media
+
+  Heading: 上傳媒體
+  Instructions: 點擊灰色框下方，或將文件拖動到上傳框。最大文件大小為1GB。
+  Select Files Legend: 選擇文件
+  Select Files: 單擊選擇文件，或拖動和拖放在這裡的文件。
+  File Drop Failed: 無法獲取文件信息。試著點擊選擇文件來代替。
+  Upload Status: 上傳：%1%
+  ID3 Unavailable: ID3 / EXIF​​數據不可用
+  Wait For Upload To Save: 無法保存，請等到所有上傳完成。
+
+Edit Media
+
+  Heading: 編輯媒體
+  Instructions: 編輯根據需要進行以下，然後單擊保存按鈕提交更改。
+
+Edit Media Form
+
+  ID3 Button: 使用ID3數據
+  Upload Queue: 文件在上傳隊列
+
+  Artist: 藝術家
+  Title: 稱號
+  Album: 專輯/系列
+  Year: 年
+  Category: 類別
+  Country: 國家
+  Language: 語言
+  Genre: 類型
+  Comments: 評論
+  Copyright Owner: 你是版權擁有者
+  Media Approved: 被媒體認可
+  Status: 狀態
+  Dynamic Selections: 包括動態的選擇
+
+  Private Option: 私人（提供給您只）
+  Public Option: 公眾（提供給大家）
+  Not Applicable Option: 不適用
+
+  Copy Field Button: 複製到所有
+
+  Media Saved: 媒體已保存。
+
+  Media Not Found: 此媒體項目已不存在。
+  Upload Not Valid: 該文件上傳無效。
+  File Upload Required: 一個文件上傳需要新媒體。
+  Format Not Supported: 不支持這種文件格式。
+  Required Fields Not Filled: 一個或多個必填字段未填寫。
+  Artist/Title Too Long: 一個或多個藝術家/標題字段是太長。
+  Year Not Valid: 這一年是無效的。
+  Category Not Valid: 選定的類別不再有效。
+  Country Not Valid: 選定的國家不再有效。
+  Genre Not Valid: 所選體裁不再有效。
+  Language Not Valid: 選擇的語言將不再有效。
+  Status Not Valid: 媒體的地位是無效的。
+  Genre Not Valid For Category: 所選體裁不適用於所選類別。
+
+Media Settings
+  Heading: 媒體類別和流派
+  Instructions: 點擊一個類別名稱來顯示該類別的類型。
+  Add Category Button: 添加類別
+  Add Genre Button: 添加一個流派
+
+  Supported File Formats: 支持的文件格式
+  File Format Instructions: 選擇您想要接受媒體上傳的文件格式。更改此設置將不會影響現有的媒體。
+
+  Audio Formats: 音頻格式
+
+  FLAC Description: （自由無損音頻編解碼器）
+  MP3 Description: （MPEG-1第3層音頻）
+  MP4 Description: （MPEG-4音頻）
+  OGG Description: （奧格容器格式）
+  WAV Description: （波形音頻）
+
+  Video Formats: 視頻格式
+  AVI Description: （音頻視頻交錯，容器格式）
+  MPEG Description: （運動圖像專家組）
+  WMV Description: （Windows媒體視頻）
+  MOV Description: （蘋果的Quicktime）
+
+  Image Formats: 圖像格式
+  JPEG Description: （聯合圖像專家組）
+  PNG Description: （可移植網絡圖形）
+  SVG Description: （可縮放矢量圖形）
+
+  Formats Saved Message: 文件格式設置保存。
+
+  No Genres: 沒有找到體裁。
+
+
+Category Edit
+
+  Name: 名字
+  Name Required Message: 類別名稱是必需的。
+  Must Remove Message: 刪除類別之前，您必須刪除此分類中的流派。
+  Saved Message: 分類保存。
+  Category Deleted Message: 類別中刪除。
+
+  Edit Category: 編輯類別
+  New Category: 新類別
+
+Genre Edit
+
+  New Genre: 新流派
+  Edit Genre: 編輯流派
+
+  Name: 名字
+  Description: 描述
+  Category: 類別
+
+  Delete Genre Confirm: 你確定要刪除的流派？
+
+  Name Required Message: 流派名稱是必需的。
+  Genres Updated Message: 流派更新。
+  Genre Deleted Message: 流派刪除。

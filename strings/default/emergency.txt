@@ -1,0 +1,48 @@
+﻿Schedules Menu
+
+  Emergencies: Priority Broadcasts
+
+Emergency
+
+  Heading: Priority Broadcasts
+  Instructions: Drag a media item into the table below to schedule priority broadcast.  Double-click an entry to edit.
+
+  No Broadcasts: There are no priority broadcasts scheduled for this player.
+
+  Name: Name
+  Start: Start
+  Stop: Stop
+  Frequency: Frequency
+  Duration: Duration
+  Media: Media
+
+  Only Schedule One Item: You can schedule only one item at a time.
+  Playlist Not Supported: Priority broadcast playlists are not supported at this time.
+  Not Found: Priority broadcast not found.
+  Required Field Missing: One or more required fields were not filled.
+  Item Does Not Exist: The item you are attempting to edit does not appear to exist.
+  Device Does Not Exist: This player does not appear to exist.
+  Media Invalid: This media item is invalid.
+  Media Not Approved: Media must be approved.
+  Media Is Archived: Media must not be archived.
+  Frequency Invalid: The frequency is invalid.
+  Duration Invalid: The duration is invalid.
+  Start DateTime Invalid: The start date/time is invalid.
+  Stop DateTime Invalid: The stop date/time is invalid.
+  Stop Must Be After Start: The stop date/time must occur after the start date/time.
+
+Emergency Edit
+
+  Heading: Priority Broadcast
+  Media Item: Media Item
+  Name: Name
+  Play Every: Play Every
+  Seconds: seconds
+  Image Duration: Image Duration
+  Minutes: minutes
+  Start Date: Start Date
+  Start Time: Start Time
+  Stop Date: Stop Date
+  Stop Time: Stop Time
+
+  Delete Emergency Confirm: Are you sure you want to delete this priority broadcast?

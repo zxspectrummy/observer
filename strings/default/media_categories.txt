@@ -1,0 +1,13 @@
+﻿Media Categories
+
+  Music: Music
+  Ad or PSA: Ad or PSA
+  Station ID: Station ID
+  Shows - Segments: Shows - Segments
+  Emergency Broadcast: Priority Broadcast
+  News or Weather: News or Weather
+  Lecture, Talk or Discussion: Lecture, Talk or Discussion
+  Show Promotion: Show Promotion
+  Entertainment (non-music): Entertainment (non-music)
+  Other: Other
+  Shows - Complete: Shows - Complete

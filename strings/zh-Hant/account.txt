@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: 您提供的密碼不正確。
+  Heading: 賬號登錄
+  Automatically Logged Out: 閒置一段時間後，你被自動註銷。請繼續前重新登錄。
+  Username: 用戶名
+  Password: 密碼
+  Log In Button: 登錄
+  Log In Different User Button: 登錄以其他用戶身份
+
+Account Settings
+
+  Form Heading: 賬戶設置
+  Form Help: 根據需要編輯以下帳戶設置。只有當你想改變你的密碼，輸入密碼。
+
+  Account Section: 帳戶
+
+  Username: 用戶名
+  Name: 名字
+  Display Name: 顯示名稱
+  Password: 新密碼
+  Password Again: 新密碼（再次）
+  Email: 電子郵件
+
+  UI Section: 用戶界面
+
+  Search Results Per Page: 每頁的搜索結果
+
+  Language: 語言
+
+  Theme: 主題
+  Light On Dark (Lower Contrast): 光在黑暗（低對比度）
+  Dark On Light (Lower Contrast): 暗月輕（低對比度）
+  Light On Dark (Higher Contrast): 光在黑暗（更高的對比度）
+  Dark On Light (Higher Contrast): 暗月光（更高的對比度）
+  Tanzanite: 坦桑石
+
+  Dyslexia-Friendly Font: 誦讀困難友好的字體
+  Enabled Option: 啟用
+  Disabled Option: 殘
+
+  Settings Updated: 設置已更新。用戶界面設置的變化可能需要刷新應用程序才能生效。
+
+  Required Fields Not Filled: 一個或多個必填字段未填寫。
+  Email Address Invalid: 您所提供的電子郵件地址無效。
+  Email Address In Use: 您所提供的電子郵件地址已被另一個帳號使用。
+  Passwords Do Not Match: 您提供的密碼不匹配。
+  Password Not Long Enough: 您的密碼必須至少6個字符長。
+  Language Not Valid: 所選的語言是無效的。
+  Theme Not Valid: 選定的主題是無效的。
+
+Account Menu
+
+  Account: 帳戶
+  Logout: 註銷
+  Settings: 賬戶設置
+
+Layout
+
+  Logged In As: 登錄為：%1

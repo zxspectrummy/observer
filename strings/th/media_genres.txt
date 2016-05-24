@@ -1,0 +1,238 @@
+﻿Media Genres
+
+  Yukon: ยูคอน
+  Classic Rock: คลาสสิกร็อค
+  Country: ประเทศ
+  Disco: ดิสโก้
+  Funk: คนขี้ขลาด
+  Grunge: กรันจ์
+  Hip Hop: ฮิปฮอป
+  Jazz: แจ๊ส
+  Metal: โลหะ
+  New Age: ยุคใหม่
+  Oldies: เนียร์
+  Pop: ป๊อป
+  RandB: RandB
+  Rap: การลงโทษ
+  Reggae: เร้กเก้
+  Rock: หิน
+  Techno: เทคโน
+  Misc: เกมส์อื่น ๆ
+  Trip Hop: ทริปฮอป
+  Asian-Pop: เอเชียป๊อป
+  Alternative Rock: ร็อคทางเลือก
+  Electronic: อิเล็กทรอนิกส์
+  Pop Folk: พื้นบ้านป๊อป
+  Eesti Pop: Eesti ป๊อป
+  Peru Folk: เปรูพื้นบ้าน
+  SoundTrack: ร่องเสียง
+  World Beat: ตีโลก
+  Celtic: เซลติก
+  Soft Rock: ร็อคนุ่ม
+  Ambient: ล้อมรอบ
+  Native American: ชาวอเมริกันพื้นเมือง
+  Hard Rock: ฮาร์ดร็อค
+  Progressive Rock: ร็อคหัวก้าวหน้า
+  Primus: คนที่หนึ่ง
+  Buddha Bar: พระพุทธรูปที่บาร์
+  SFX: SFX
+  Punk: แพศยา
+  Canadien Francais: Canadien ฝรั่งเศส
+  Landscape: ภูมิประเทศ
+  Yellowknife: เยล
+  Yellowknife: เยล
+  Abstract: นามธรรม
+  Adults: ผู้ใหญ่
+  Agriculture: การเกษตร
+  Americana: Americana
+  Animal: สัตว์
+  Architecture: สถาปัตยกรรม
+  Arts: ศิลปะ
+  AstroPhotography: astrophotography
+  Baby: ทารก
+  Backgrounds: พื้นหลัง
+  Boy: เด็กผู้ชาย
+  Business: ธุรกิจ
+  Celebrations: ฉลองสิริราชสมบัติ
+  Children: เด็ก ๆ
+  City: เมือง
+  Communications : คมนาคม
+  Computers : คอมพิวเตอร์
+  Conceptual: เกี่ยวกับความคิดเห็น
+  Couple: คู่
+  Culture: วัฒนธรรม
+  Documentary: สารคดี
+  Domestic: ในประเทศ
+  Earth Photos: โลกภาพถ่าย
+  Education: การศึกษา
+  Election: การเลือกตั้ง
+  Entertainment: การบันเทิง
+  Environmental: สิ่งแวดล้อม
+  Families: ครอบครัว
+  Fantasy: จินตนาการ
+  Financial : การเงิน
+  Fineart: FineArt
+  Flowers: ดอกไม้
+  Food: อาหาร
+  General: ทั่วไป
+  Girl: สาว
+  Glamour: เสน่ห์
+  Government: รัฐบาล
+  Health: สุขภาพ
+  Historic: ประวัติศาสตร์
+  Holidays: วันหยุด
+  Homes: ที่อยู่อาศัย
+  Humorous: ตลก
+  Industrial: ด้านอุตสาหกรรม
+  International: ระหว่างประเทศ
+  Landscapes: ภูมิทัศน์
+  Leisure: สันทนาการ
+  Lifestyles: ไลฟ์สไตล์
+  LoveRomance: LoveRomance
+  Manufacturing: การผลิต
+  Medical: ทางการแพทย์
+  Meetings : การประชุม
+  Men : ผู้ชาย
+  Military: ทหาร
+  Models: รุ่น
+  Money : เงิน
+  Music: เพลง
+  Nature: ธรรมชาติ
+  Nautical: เกี่ยวกับการเดินเรือ
+  Newspaper: หนังสือพิมพ์
+  Northern: ภาคเหนือ
+  Nostalgia: ความคิดถึง
+  Office : สำนักงาน
+  Outdoors: กลางแจ้ง
+  Patriotic: ด้วยความรักชาติ
+  Patterns: รูปแบบ
+  People : คน
+  Personality: บุคลิกภาพ
+  Pets: สัตว์เลี้ยง
+  PhotoEssay: PhotoEssay
+  Political: ในทางการเมือง
+  Portrait: ภาพเหมือน
+  Recreation: การพักผ่อนหย่อนใจ
+  Religion: ศาสนา
+  Science: วิทยาศาสตร์
+  Shopping: ช้อปปิ้ง
+  Signs: สัญญาณ
+  SpacePhotos: SpacePhotos
+  Sports: กีฬา
+  StillLife: StillLife
+  Symbols: สัญลักษณ์
+  Teamwork : การทำงานเป็นทีม
+  Technology : เทคโนโลยี
+  Textures: พื้นผิว
+  Tourism: การท่องเที่ยว
+  Traditional: แบบดั้งเดิม
+  Transportation: การขนส่ง
+  Travel : เดินทาง
+  Underwater: ใต้น้ำ
+  Vintage: เหล้าองุ่น
+  Weather: สภาพอากาศ
+  Wildlife: ธรรมชาติ
+  Women: ผู้หญิง
+  Work and Workplace: การทำงานและสถานที่ทำงาน
+  XXX: XXX
+  Action: การกระทำ
+  Adventure: การผจญภัย
+  Amateur: มือสมัครเล่น
+  Animation: นิเมชั่น
+  Biography: ชีวประวัติ
+  Blaxploitation: blaxploitation
+  Chick Flicks: เจี๊ยบ Flicks
+  Christmas: คริสต์มาส
+  Classic Hollywood: คลาสสิกฮอลลี
+  Comedy: ความขบขัน
+  Comic Book Based: ตามหนังสือการ์ตูน
+  Crime: อาชญากรรม
+  Cult Movies: ลัทธิภาพยนตร์
+  Detective Mystery Films: ภาพยนตร์ลึกลับนักสืบ
+  Disaster Films: ภัยพิบัติภาพยนตร์
+  Documentary: สารคดี
+  Drama: ละคร
+  Experimental: การทดลอง
+  Family: ครอบครัว
+  Fantasy: จินตนาการ
+  Film Noir: ฟิล์มนัวร์
+  Game Show: เกมโชว์
+  History: ประวัติศาสตร์
+  Horror: ความน่ากลัว
+  Martial Arts: ศิลปะการต่อสู้
+  Miscellaneous: เบ็ดเตล็ด
+  Mockumentary: mockumentary
+  Music Concerts: เพลงคอนเสิร์ต
+  Musical: ดนตรี
+  News: ข่าว
+  Northern: ภาคเหนือ
+  Organized Crime: อาชญากรรม
+  Reality TV: เรียลลิตี้ทีวี
+  Road Films: ภาพยนตร์ถนน
+  Romance: โรแมนติก
+  Satire: การเสียดสี
+  SciFi: SciFi
+  Short: สั้น
+  Silent Movies: ภาพยนตร์เงียบ
+  Sport: กีฬา
+  Supernatural Films: ภาพยนตร์อภินิหาร
+  Talk Show: ทอล์คโชว์
+  Teen Movies: หนังวัยรุ่น
+  Thrillers Suspense: ระทึกใจจดใจจ่อ
+  TrailersPreviews: TrailersPreviews
+  War: สงคราม
+  Western: ตะวันตก
+  XXX: XXX
+  Blues: เพลงบลูส
+  Folk: พื้นบ้าน
+  Part of Complete Show: ส่วนหนึ่งของการแสดงที่สมบูรณ์แบบ
+  Song/Media Intro: เพลง / สื่อแนะนำ
+  Song/Media Outro: เพลง / สื่อ Outro
+  Show Intro: แสดง Intro
+  Show Outro: แสดง Outro
+  Other: อื่น ๆ
+  CJUC Station ID: CJUC สถานี ID
+  CFET Station ID: CFET สถานี ID
+  Other Station ID: รหัสสถานีอื่น ๆ
+  Show Promotion: แสดงโปรโมชั่น
+  News: ข่าว
+  Weather: สภาพอากาศ
+  Other: อื่น ๆ
+  Emergency Broadcast: ออกอากาศลำดับความสำคัญ
+  Commercial Ad: โฆษณาเชิงพาณิชย์
+  Public Service Announcement: ประกาศบริการสาธารณะ
+  Complete Shows: การแสดงที่สมบูรณ์แบบ
+  Other: อื่น ๆ
+  Alternative: ทางเลือก
+  Alternative Country: ประเทศทางเลือก
+  House Music (Electro): เพลงเฮ้าส์ (Electro)
+  House Music (minimal): เพลงเฮ้าส์ (น้อยที่สุด)
+  House Music (Tech): เพลง (เทค)
+  House Music (Deep): เพลงเฮ้าส์ (ลึก)
+  House Music (prog): เพลงเฮ้าส์ (PROG)
+  Acoustic: อะคูสติก
+  Experimental electronic: ทดลองอิเล็กทรอนิกส์
+  Indie: อินดี้
+  Chillwave-Lounge: Chillwave-เลาจน์
+  House Music: บ้านเพลง
+  Dubtech: Dubtech
+  Electro-Bassline-Filter: Electro-Bassline กรอง
+  Minimalism: ศิลปะ
+  Classical: คลาสสิก
+  New Wave: คลื่นลูกใหม่
+  Concert: คอนเสิร์ต
+  Mash-up: mash-up
+  Dubstep: Dubstep
+  Movie Bits: ภาพยนตร์บิต
+  OTR Vintage Commercials: โฆษณา OTR วินเทจ
+  OTR Challenge: OTR ท้าทาย
+  OTR TV Themes: OTR ธีมส์ทีวี
+  Christmas Alt: คริสมาสต์ Alt
+  OTR Goon Show: OTR คนโง่อวด
+  Christmas: คริสต์มาส
+  Holiday: วันหยุด
+  ComedyFunny: ComedyFunny
+  RA Podcasts: RA พอดคาสต์
+  Moombahton: Moombahton
+  Soul: จิตวิญญาณ
+

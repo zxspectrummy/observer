@@ -1,0 +1,125 @@
+﻿Playlists Menu
+
+  Playlists: Playlists
+  New: Nouvelle liste de lecture
+
+Playlist New
+
+  Heading: Nouvelle liste de lecture
+  Instructions: Remplissez les informations suivantes playlist, puis faites glisser les médias et les éléments d'une sélection dans la zone de playlist ci-dessous.
+
+Playlist Edit
+
+  Heading: Modifier la sélection
+  Instructions: Modifier la liste de lecture suivants, si nécessaire.
+
+  Select One Playlist Only: Sélectionnez une playlist seulement.
+
+  Form Heading: Données playlist
+  Name: Nom
+  Description: Description
+  Status: Statut
+  Type: Type
+
+  Private Option: Privé (disponibles pour vous seulement)
+  Public Option: Publique (accessible à tous)
+
+  Standard Option: Standard
+  Advanced Option: Avancé
+  LiveAssist Option: LiveAssist
+
+  Items Heading: Articles playlist
+  Items Instructions Advanced: médias de glisser vers la zone ci-dessous. Double-cliquer sur les éléments à définir les propriétés. Cliquez sur pour sélectionner un élément, puis supprimez / retour arrière pour supprimer, touches haut / bas pour se déplacer.
+  Items Instructions Standard: Faites glisser les médias et playlists de la région ci-dessous. Double-cliquer sur les éléments à définir les propriétés. Cliquez sur pour sélectionner, puis supprimer / retour arrière pour supprimer, touches haut / bas pour se déplacer. Vous pouvez également cliquer-glisser pour réorganiser.
+
+  Zoom In: Agrandir
+  Zoom Out: Dézoomer
+
+  Drag Items Here: Glissez les articles ici
+
+  Add Dynamic Selection Button: Ajouter la sélection dynamique
+  Add Station ID Button: Ajouter de l'ID station
+  Add Breakpoint Button: Add Breakpoint
+
+  Dynamic Selection: Sélection Dynamique
+  Dynamic Selection Last Search Notice: La sélection dynamique est basée sur votre dernière recherche des médias.
+
+  Advanced Playlist Dynamic Selection Not Supported: Sélections dynamiques et des identifications de la station ne sont pas pris en charge par des listes de lecture avancées. Ces éléments ont été ignorées.
+
+  Breakpoint: Breakpoint
+
+  Station ID: ID station
+
+  Total Duration: Durée totale
+  Total Duration Estimated: (Estimé en raison de la teneur de longueur variable)
+
+  LiveAssist Buttons Heading: LiveAssist Boutons
+  LiveAssist Buttons Instructions: Faites glisser listes de lecture pour ce domaine de programmer la zone du bouton de LiveAssist. Chaque playlist sera une colonne de boutons, avec un seul bouton par élément de la playlist.
+
+  Clear Items Confirm: Désactivez tous les éléments de la liste?
+  Change Playlist Type Confirm: Modification du type de playlist effacera la liste de lecture existante. Êtes-vous sûr de vouloir faire cela?
+
+  Clear LiveAssist Items Confirm: Désactivez tous les boutons de LiveAssist?
+
+  Unable To Edit: Impossible de modifier cette playlist.
+  Name Required: Un nom de playlist est nécessaire.
+  Valid Status Required: Un état de validité est nécessaire.
+  Valid Type Required: Un type de validité est nécessaire.
+
+  Item Not Valid: Un ou plusieurs éléments de playlist est pas valide.
+  Durations Not Valid: Un ou plusieurs durées de médias est invalide ou nul.
+  Approved Media Required: Seulement approuvé, les médias non archivées peuvent être utilisés dans des listes de lecture.
+  Cannot Use Private Item: Un élément de média est marqué comme privé. Il ne peut être utilisé dans les listes de lecture créées par le même propriétaire.
+  Dynamic Item Not Valid: Un ou plusieurs éléments dynamiques de playlist est pas valide.
+
+  LiveAssist Item Not Valid: Un ou plusieurs listes de lecture LiveAssist bouton est invalide.
+
+  Error While Saving: Une erreur est survenue lors de l'enregistrement de cette playlist.
+
+
+Playlist Audio Properties
+
+  Heading: Propriétés audio
+  Instructions: Il n'y a actuellement pas de propriétés que vous pouvez définir pour les pistes audio.
+
+Playlist Breakpoint Properties
+
+  Heading: Propriétés du point d'arrêt
+  Instructions: Il n'y a actuellement pas de propriétés que vous pouvez définir pour les points d'arrêt.
+
+Playlist Dynamic Item Properties
+
+  Heading: Propriétés de l'élément dynamique
+  Selection Name: Sélection Nom
+  Number Of Items: Nombre d'éléments
+  All Items: tous les articles
+  Image Duration: Image Durée
+  In Seconds: (En seconde)
+
+  Description Heading: Description
+
+  Advanced Search Type: Recherche Avancée
+  All Media Search Type: Tous les médias
+  Standard Search Type: Recherche (artiste ou le titre)
+
+  Number Of Items Invalid: Le nombre d'articles est invalide.
+  Image Duration Invalid: La durée de l'image est invalide.
+  Invalid Search Criteria: Invalides critères de recherche.
+
+Playlist Image Properties
+
+  Heading: Propriétés de l'image
+  Image Duration: Image Durée
+  seconds: secondes
+
+  Valid Image Duration Required: Une durée d'image valide est nécessaire.
+
+Playlist Station ID Properties
+
+  Heading: Propriétés de l'ID de la station
+  Instructions: Il n'y a actuellement pas de propriétés que vous pouvez définir pour la station ID.
+
+Playlist Video Properties
+
+  Heading: Propriétés de la vidéo
+  Instructions: Il n'y a actuellement pas de propriétés que vous pouvez définir pour les vidéos.

@@ -1,0 +1,41 @@
+<obwidget type="message" id="item_properties_message"></obwidget>
+
+<div data-tns="Playlist Dynamic Item Properties">
+
+<fieldset>
+<legend data-t>Heading</legend>
+
+<div class="fieldrow">
+  <label class="required" data-t>Selection Name</label>
+  <input type="text" size="25" id="dynamic_name">
+</div>
+
+<div class="fieldrow">
+  <label class="required" data-t>Number Of Items</label>
+  <input type="text" size="5" id="dynamic_num_items"> <input type="checkbox" id="dynamic_num_items_all"> <span data-t>All Items</span>
+</div>
+
+<div class="fieldrow">
+  <label class="required" data-t>Image Duration</label>
+  <input type="text" size="5" id="dynamic_image_duration"> <span data-t>In Seconds</span>
+</div>
+</fieldset>
+
+<fieldset>
+<div class="fieldrow">
+  <button class="add" id="item_properties_save" data-t data-tns="Common">Save</button>
+  <button onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+</div>
+</fieldset>
+
+<fieldset>
+<legend data-t>Description Heading</legend>
+
+<p id="dynamic_item_instructions"></p>
+
+<div id="dynamic_item_description">
+</div>
+
+</fieldset>
+
+</div>

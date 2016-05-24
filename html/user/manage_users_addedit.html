@@ -1,0 +1,68 @@
+<obwidget id="user_addedit_message" type="message"></obwidget>
+
+<div data-tns="User Edit">
+
+  <fieldset>
+    <legend data-t>Heading</legend>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Name</label>
+      <input type="text" id="user_name_input" >
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Username</label>
+      <input type="text" id="user_username_input">
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Display Name</label>
+      <input type="text" id="user_display_name_input">
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Email</label>
+      <input type="text" id="user_email_input">
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Password</label>
+      <input type="password" id="user_password_input">
+      <span class="edit_only">* </span>
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Password (confirm)</label>
+      <input type="password" id="user_password_confirm_input">
+      <span class="edit_only">* </span>
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Status</label>
+      <select id="user_enabled_input">
+        <option value="1" data-t data-tns="Common">Enabled</option>
+        <option value="0" data-t data-tns="Common">Disabled</option>
+      </select>
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Groups</label>
+      <div id="user_addedit_group_list"></div>
+    </div>
+
+</fieldset>
+
+  <p class="edit_only" >* <span data-t>Password Warning</span></p>
+<fieldset>
+
+    <div class="fieldrow">
+      <button class="add" id="item_properties_save" onclick="OB.User.manageUsersSave();" data-t data-tns="Common">Save</button>
+      <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.manageUsersDelete();" data-t data-tns="Common">Delete</button>
+      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+    </div>
+
+</fieldset>
+
+
+<input type="hidden" id="user_addedit_id">
+  </div>

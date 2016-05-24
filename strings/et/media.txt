@@ -1,0 +1,124 @@
+﻿Media Menu
+
+  Media: Andmekandja
+  Upload: Laadi Meedia
+
+Admin Menu
+
+  Media Settings: Meedia Seaded
+
+Upload Media
+
+  Heading: Laadi Meedia
+  Instructions: Vajuta halli kasti või lohista failid peale kasti üles laadida. Maksimaalne faili suurus on 1 GB.
+  Select Files Legend: valige failid
+  Select Files: Klõpsake, et valida failid või lohistada faile siin.
+  File Drop Failed: Ei saanud faili info. Proovige klikkida valida faile asemel.
+  Upload Status: Üleslaadimine: %1%
+  ID3 Unavailable: ID3 / EXIF ​​andmed ei ole saadaval
+  Wait For Upload To Save: Ei saa salvestada, oodake, kuni kõik on üles laadinud on täielik.
+
+Edit Media
+
+  Heading: muuta meedia
+  Instructions: Muuda järgmised nõuetekohaselt, siis kliki nuppu Salvesta pühenduda oma muudatused.
+
+Edit Media Form
+
+  ID3 Button: Kasuta ID3 andmed
+  Upload Queue: Faili on üleslaadimisjärjekorda
+
+  Artist: Kunstnik
+  Title: Pealkiri
+  Album: Album / Seeria
+  Year: Aasta
+  Category: Kategooria
+  Country: Riik
+  Language: Keel
+  Genre: Žanr
+  Comments: Kommentaarid
+  Copyright Owner: Kas olete autoriõiguste omanik
+  Media Approved: Kas meedia heaks
+  Status: Seisund
+  Dynamic Selections: Kaasa dünaamiline valikud
+
+  Private Option: era- (võimalik ainult)
+  Public Option: avalik (kõigile kättesaadav)
+  Not Applicable Option: Ei kasuta
+
+  Copy Field Button: Kopeeri Kõik
+
+  Media Saved: Meedia on salvestatud.
+
+  Media Not Found: See meedia objekt ei ole enam olemas.
+  Upload Not Valid: File upload ei kehti.
+  File Upload Required: File upload on vaja uut meediat.
+  Format Not Supported: See vormingut ei toetata.
+  Required Fields Not Filled: Üks või mitu nõutud väljad ei täidetud.
+  Artist/Title Too Long: Üks või mitu artist / title väljad on liiga pikk.
+  Year Not Valid: Aastal ei kehti.
+  Category Not Valid: Kategooria valitud enam ei kehti.
+  Country Not Valid: Riigi valitud enam ei kehti.
+  Genre Not Valid: Žanr valitud enam ei kehti.
+  Language Not Valid: Valitud keelest enam ei kehti.
+  Status Not Valid: Meedia staatus ei kehti.
+  Genre Not Valid For Category: Valitud žanr ei ole valitud kategooriasse.
+
+Media Settings
+  Heading: Meedia Kategooriad & Žanrid
+  Instructions: Vajuta kategooria nimele, et näha žanrid sellesse kategooriasse.
+  Add Category Button: Lisa kategooria
+  Add Genre Button: Lisa Stiil
+
+  Supported File Formats: Toetatud formaadid
+  File Format Instructions: Vali mis failivorminguid soovid aktsepteerida meedia lisatud. Selle seade muutmine ei mõjuta olemasolevaid meedia.
+
+  Audio Formats: Audio formaadid
+
+  FLAC Description: (Free Lossless Audio Codec)
+  MP3 Description: (MPEG-1 Layer-3 Audio)
+  MP4 Description: (MPEG-4 Audio)
+  OGG Description: (Ogg Container Format)
+  WAV Description: (Lainekuju audio)
+
+  Video Formats: Video formaadid
+  AVI Description: (Audio Video Interleave, konteineri vormingu)
+  MPEG Description: (Moving Picture Experts Group)
+  WMV Description: (Windows Media Video)
+  MOV Description: (Apple Quicktime)
+
+  Image Formats: Pildivormingud
+  JPEG Description: (Joint Photographic Experts Group)
+  PNG Description: (Portable Network Graphics)
+  SVG Description: (Skaalautuvia vektorgraafika)
+
+  Formats Saved Message: Failivorming seaded salvestatakse.
+
+  No Genres: No žanrid leitud.
+
+
+Category Edit
+
+  Name: Nimi
+  Name Required Message: Kategooria nimi on nõutav.
+  Must Remove Message: Peate eemaldama žanrid selles kategoorias enne kustutamist kategooriasse.
+  Saved Message: Kategooria salvestatud.
+  Category Deleted Message: Kategooria kustutatakse.
+
+  Edit Category: Muuda kategooria
+  New Category: Uus Kategooria
+
+Genre Edit
+
+  New Genre: Uus Stiil
+  Edit Genre: Edit Stiil
+
+  Name: Nimi
+  Description: Kirjeldus
+  Category: Kategooria
+
+  Delete Genre Confirm: Olete kindel, et soovite kustutada žanr?
+
+  Name Required Message: Žanri nimi on nõutav.
+  Genres Updated Message: Žanrid uuendatud.
+  Genre Deleted Message: Kategooria kustutatud.

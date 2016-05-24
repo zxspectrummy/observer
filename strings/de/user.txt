@@ -1,0 +1,76 @@
+﻿Admin Menu
+  Permissions: Berechtigungen
+  User Management: Benutzerverwaltung
+
+Permissions
+  Heading: Berechtigungen
+  New Group Button: Neue Gruppe
+
+Permissions Edit
+  Heading: Berechtigungen bearbeiten Für Gruppen
+  Name: Gruppenname
+  Delete Group Confirm: Sind Sie sicher, Sie wollen, um diese Gruppe zu löschen?
+  Group Name Required: Ein Gruppenname ist erforderlich.
+  Permission Invalid: Ein oder mehrere Berechtigungen ist ungültig.
+  Cannot Delete Admin: Sie können nicht bearbeiten oder die Administratorgruppe zu löschen.
+
+User List
+  Heading: Benutzerverwaltung
+  Add a User: Hinzufügen eines Benutzers
+  Display Name: Anzeigename
+  Email: E-Mail-
+  Created: Erstellt
+  Last Access: Letzter Zugriff
+  Groups: Gruppen
+
+User Edit
+  Heading: Benutzer
+  Name: Name
+  Username: Benutzername
+  Display Name: Anzeigename
+  Email: E-Mail-
+  Password: Passwort
+  Password (confirm): Passwort (Bestätigung)
+  Status: Status
+  Groups: Gruppen
+  Password Warning: Geben Sie das Kennwort nur, wenn Sie das Passwort ändern möchten.
+  Delete User Confirm: Sind Sie sicher, Sie wollen diesen Benutzer löschen?
+  Required Not Filled: Ein oder mehrere Pflichtfelder wurden nicht ausgefüllt.
+  Invalid Email: Die E-Mail von Ihnen angegebene Adresse ist nicht gültig.
+  Email In Use: Die E-Mail von Ihnen angegebene Adresse wird bereits von einem anderen Konto
+  Username In Use: Der von Ihnen gewählte Benutzername wird bereits verwendet.
+  Password Mismatch: Die Passwörter stimmen nicht überein.
+  Password Short: Das Passwort muss mindestens 6 Zeichen lang sein.
+
+Permissions List
+  administration: Verwaltung
+  manage media settings: Medieneinstellungen verwalten
+  manage devices: Spieler verwalten
+  manage groups and permissions: Gruppen und Berechtigungen verwalten
+  create, edit, and delete users: Erstellen, Bearbeiten und Löschen von Benutzern
+  manage client/interface settings: Client / Schnittstellen-Einstellungen verwalten
+  install and uninstall modules: Installation und Deinstallation von Modulen
+  view log produced by logger module: View Log von Loggermodul hergestellt
+
+  Device Category: Spieler
+
+  manage schedule timeslots: Zeitplan Zeitschlitze verwalten
+  create, edit, and delete emergency broadcasts: Erstellen, Bearbeiten und Löschen von Prioritätssendungen
+  view device playlogs	: Spieler-Playlogs
+
+  manage schedule timeslots: Zeitplan Zeitschlitze verwalten
+  create, edit, and delete emergency broadcasts: Erstellen, Bearbeiten und Löschen von Prioritätssendungen
+  view device playlogs: Spieler-Playlogs
+
+  media: Medien
+  create, edit, and delete own media: Erstellen, Bearbeiten und Löschen von eigenen Medien
+  approve own media	: genehmigen eigenen Medien
+  create, edit, approve, and delete all media	: zu erstellen, zu bearbeiten, zu genehmigen, und löschen Sie alle Medien
+  download all media: laden Sie alle Medien
+
+  playlists: Wiedergabelisten
+  create, edit, and delete own playlists: Erstellen, Bearbeiten und Löschen von eigenen Playlists
+  create, edit, and delete all playlists: Erstellen, Bearbeiten und Löschen Alle Playlists
+
+  user interface: Benutzer interface
+  enable advanced show scheduling: Sie erweiterte Show Scheduling

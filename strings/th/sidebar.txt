@@ -1,0 +1,92 @@
+Advanced Search
+  Heading: รายละเอียดเพิ่มเติม
+  Edit Heading: แก้ไขรายละเอียดเพิ่มเติม
+  Search Criteria: เงื่อนไขการค้นหา
+
+  Search Description: ค้นหารายละเอียด
+  Search Description Instructions: ป้อนคำอธิบายการค้นหาจะแสดงแทนของรายการตัวกรองการค้นหา (ถ้ามี)
+
+  Search Criteria Instructions: เพิ่มเกณฑ์โดยใช้แบบฟอร์มดังกล่าวข้างต้น
+
+My Searches
+  Instructions: คลิกที่นี่เพื่อค้นหาอีกครั้ง คลิกขวาสำหรับตัวเลือกเพิ่มเติม
+  Heading: การค้นหาที่บันทึก
+  Search History Heading: ประวัติการค้นหา
+  No Searches: การค้นหาไม่พบ
+
+  Make Default: ให้เริ่มต้น
+  Unset Default: เริ่มต้นล้าง
+
+Sidebar
+  Enter Search Query: (ใส่คำค้นหา)
+  Advanced Search Query: (โหมดขั้นสูง)
+
+  Media Player: เครื่องเล่นมีเดีย
+  Media: สื่อ
+  Playlists: รายการเพลง
+  advanced: สูง
+  simple: ง่าย
+  my searches: การค้นหาของฉัน
+
+  My Filter Link: ของฉัน
+  Approved Filter Link: ได้
+  Unapproved Filter Link: ไม่ิ
+  Archived Filter Link: เก็
+
+  Video Search Symbol: วี
+  Image Search Symbol: ภ
+  Audio Search Symbol: เ
+
+  Artist: ศิลปิน
+  Album/Series: อัลบั้ม / ซีรีส์
+  Title: ชื่อเรื่อง
+  Year: ปี
+  Category: หมวดหมู่
+  Genre: ประเภท
+  Country: ประเทศ
+  Language: ภาษา
+  Time: เวลา
+  Name: ชื่อ
+  Description: ลักษณะ
+
+  Loading: กำลังโหลด ...
+  more: มากกว่า
+  less: น้อยกว่า
+  previous: ก่อน
+  next: ถัดไป
+
+  Media Items Found: %1 รายการพบสื่อ
+  Media Item Found: รายการที่ 1 พบสื่อ
+
+  No Media Found: สื่อไม่พบข้อมูล
+  No Playlists Found: รายการเพลงไม่พบข้อมูล
+
+  Playlist Found: 1 รายการเพลงพบ
+  Playlists Found: %1 พบรายการเพลง
+
+  At Least One Delete: เลือกอย่างน้อยหนึ่งรายการสื่อลบ
+  At Least One Restore: เลือกอย่างน้อยหนึ่งรายการสื่อที่จะเรียกคืน
+  Error Fetch Media Status: ข้อผิดพลาดในการดึงข้อมูลสถานะสื่อ
+  Media Move to Archive: สื่อจะถูกย้ายไปเก็บ
+  Media Deletion: สื่อจะถูกลบออกอย่างถาวร
+  Media Restored: สื่อได้รับการบูรณะ
+  Media Deleted: สื่อได้ถูกลบออก
+
+  Item will be removed from: รายการจะถูกลบออกจาก
+
+Playlist Delete
+  Delete Playlists: ลบรายการเพลง
+  Are You Sure: คุณแน่ใจว่าคุณต้องการลบรายการเพลงต่อไปนี้หรือไม่?
+  No Permission: รายการเพลงต่อไปนี้จะไม่ถูกลบในขณะที่คุณไม่มีสิทธิ์เพียงพอ
+
+
+Media Delete
+  Delete Media: ลบสื่อ
+  Are You Sure: คุณแน่ใจว่าคุณต้องการที่จะลบรายการสื่อต่อไปนี้หรือไม่?
+  No Permission: สื่อต่อไปนี้จะไม่ถูกลบในขณะที่คุณไม่มีสิทธิ์เพียงพอ
+
+Restore Media
+  Restore Media: Restore สื่อ
+  Are You Sure: คุณแน่ใจว่าคุณต้องการที่จะเรียกคืนรายการสื่อต่อไปนี้หรือไม่?
+  Will Be Moved: สินค้าจะถูกย้ายไปยังสื่อได้รับการอนุมัติ
+  Restore Button: ใช่ Restore

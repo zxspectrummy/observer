@@ -1,0 +1,26 @@
+﻿Admin Menu
+
+  Modules: 模块
+
+
+Modules Edit
+
+  Heading: 安装模块
+  Available Heading: 可用模块
+
+  No Modules Message: 没有安装的模块。
+  Following Modules Message: 下面的模块安装：
+  None Available Message: 没有可用的安装模块。
+  Following Available Message: 下面的模块可安装：
+
+  Delete Module Confirm: 你确定你要卸载模块“%1”？
+  Delete Yes Button: 是的，卸载模块
+
+  Uninstall Button: 卸载
+  Install Button: 安装
+
+  Name: 名字
+  Description: 描述
+
+  Install Module Confirm: 你确定你要安装的模块“%1”？
+  Install Yes Button: 是的，安装模块

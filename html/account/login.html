@@ -1,0 +1,28 @@
+<obwidget type="message" id="account_login_message"></obwidget>
+
+<div data-tns="Account Login">
+
+<fieldset>
+<legend data-t>Heading</legend>
+
+	<p data-t>Automatically Logged Out</p>
+
+<div class="fieldrow">
+  <label class="required" data-t>Username</label>
+  <span id="account_login_username"></span>
+</div>
+
+<div class="fieldrow">
+  <label class="required" data-t>Password</label>
+  <input id="account_login_password" type="password" name="account_login_password">
+</div>
+</fieldset>
+
+<fieldset>
+<div class="fieldrow">
+  <button class="add" id="account_login_submit" onclick="OB.Account.login();" data-t>Log In Button</button>
+  <button onclick="window.location.href = window.location.href;" data-t>Log In Different User Button</button>
+</div>
+</fieldset>
+
+</div>

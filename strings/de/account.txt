@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: Das Passwort, das Sie zur Verfügung gestellt haben, ist falsch.
+  Heading: Konto Login
+  Automatically Logged Out: Sie wurden automatisch nach einer gewissen Zeit der Inaktivität angemeldet. Bitte melden Sie sich erneut, bevor Sie fortfahren.
+  Username: Benutzername
+  Password: Passwort
+  Log In Button: Einloggen
+  Log In Different User Button: Melden Sie sich als anderer Anwender
+
+Account Settings
+
+  Form Heading: Kontoeinstellungen
+  Form Help: Bearbeiten Sie die folgenden Kontoeinstellungen nach Bedarf. Nur ein Passwort eingeben, wenn Sie Ihr Passwort ändern wollen.
+
+  Account Section: Konto
+
+  Username: Benutzername
+  Name: Name
+  Display Name: Anzeigename
+  Password: Neues Passwort
+  Password Again: Neues Passwort (wieder)
+  Email: E-Mail-
+
+  UI Section: Benutzer Interface
+
+  Search Results Per Page: Treffer pro Seite
+
+  Language: Sprache
+
+  Theme: Thema
+  Light On Dark (Lower Contrast): Light On Dark (Lower Contrast)
+  Dark On Light (Lower Contrast): Dunkel auf Licht (Lower Contrast)
+  Light On Dark (Higher Contrast): Light On Dark (Higher Contrast)
+  Dark On Light (Higher Contrast): Dunkel auf Licht (Higher Contrast)
+  Tanzanite: Tanzanite
+
+  Dyslexia-Friendly Font: Dyslexia freundliche Font
+  Enabled Option: Aktiviert
+  Disabled Option: Behindert
+
+  Settings Updated: Einstellungen wurden aktualisiert. Benutzeroberfläche Einstellungsänderungen erfordern möglicherweise die Anwendung wirksam zu aktualisieren.
+
+  Required Fields Not Filled: Ein oder mehrere Pflichtfelder wurden nicht ausgefüllt.
+  Email Address Invalid: Die E-Mail von Ihnen angegebene Adresse ist nicht gültig.
+  Email Address In Use: Die E-Mail von Ihnen angegebene Adresse wird bereits von einem anderen Konto.
+  Passwords Do Not Match: Die Passwörter, die Sie zur Verfügung gestellt haben nicht übereinstimmen.
+  Password Not Long Enough: Ihr Passwort muss mindestens 6 Zeichen lang sein.
+  Language Not Valid: Die ausgewählte Sprache ist nicht gültig.
+  Theme Not Valid: Das ausgewählte Design ist nicht gültig.
+
+Account Menu
+
+  Account: Konto
+  Logout: Abmelden
+  Settings: Kontoeinstellungen
+
+Layout
+
+  Logged In As: %1: Eingeloggt als

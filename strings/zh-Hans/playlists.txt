@@ -1,0 +1,125 @@
+﻿Playlists Menu
+
+  Playlists: 播放列表
+  New: 新建播放列表
+
+Playlist New
+
+  Heading: 新建播放列表
+  Instructions: 填写以下信息，播放列表，然后将媒体和播放列表中的项目到下面的列表区。
+
+Playlist Edit
+
+  Heading: 编辑播放列表
+  Instructions: 根据需要编辑以下播放列表。
+
+  Select One Playlist Only: 只选择一个播放列表。
+
+  Form Heading: 播放列表数据
+  Name: 名字
+  Description: 描述
+  Status: 状态
+  Type: 类型
+
+  Private Option: 私人（提供给您只）
+  Public Option: 公众（提供给大家）
+
+  Standard Option: 标准
+  Advanced Option: 先进
+  LiveAssist Option: LiveAssist
+
+  Items Heading: 播放列表项
+  Items Instructions Advanced: 拖动媒体到下方的区域。双击项目设置属性。点击选择项目，然后删除/退格删除，上/下键来移动。
+  Items Instructions Standard: 拖动媒体和播放列表下方的区域。双击项目设置属性。单击以选中，然后删除/退格删除，上/下键来移动。您也可以点击拖动来重新排序。
+
+  Zoom In: 放大
+  Zoom Out: 缩小
+
+  Drag Items Here: 拖动项目在这里
+
+  Add Dynamic Selection Button: 添加动态选择
+  Add Station ID Button: 添加站ID
+  Add Breakpoint Button: 添加断点
+
+  Dynamic Selection: 动态选择
+  Dynamic Selection Last Search Notice: 动态选择是根据你过去的媒体搜索。
+
+  Advanced Playlist Dynamic Selection Not Supported: 动态选择和站号是不是先进的播放列表支持。这些项目已被忽略。
+
+  Breakpoint: 断点
+
+  Station ID: 站ID
+
+  Total Duration: 总工期
+  Total Duration Estimated: （估计由于可变长度的内容）
+
+  LiveAssist Buttons Heading: LiveAssist按钮
+  LiveAssist Buttons Instructions: 播放列表拖动到该区域进行编程LiveAssist按钮区域。每个播放列表将是按钮的一列，与每个播放列表项目的一个按钮。
+
+  Clear Items Confirm: 清除播放列表中的所有项目？
+  Change Playlist Type Confirm: 更改播放列表类型将清除现有的播放列表。你确定要这么做吗？
+
+  Clear LiveAssist Items Confirm: 清除所有LiveAssist按钮？
+
+  Unable To Edit: 无法编辑该播放列表。
+  Name Required: 播放列表名称是必需的。
+  Valid Status Required: 一个有效的状态是必需的。
+  Valid Type Required: 一个有效的类型是必需的。
+
+  Item Not Valid: 一个或多个播放列表项是无效的。
+  Durations Not Valid: 一个或多个媒体持续时间是无效的或零。
+  Approved Media Required: 只有获得批准，未归档介质可以在播放列表中使用。
+  Cannot Use Private Item: 媒体项目被标记为私有。它只能在由相同的所有者创建的播放列表中。
+  Dynamic Item Not Valid: 一个或多个动态播放列表中的项目是无效的。
+
+  LiveAssist Item Not Valid: 一个或多个LiveAssist按钮的播放列表是无效的。
+
+  Error While Saving: 同时节省了此播放列表时发生错误。
+
+
+Playlist Audio Properties
+
+  Heading: 音频属性
+  Instructions: 目前有没有属性，你可以为音轨设置。
+
+Playlist Breakpoint Properties
+
+  Heading: 断点属性
+  Instructions: 目前有没有属性，你可以为断点设置。
+
+Playlist Dynamic Item Properties
+
+  Heading: 动态项目属性
+  Selection Name: 选择名称
+  Number Of Items: 项目数
+  All Items: 所有项目
+  Image Duration: 图片时间
+  In Seconds: （秒）
+
+  Description Heading: 描述
+
+  Advanced Search Type: 高级搜索
+  All Media Search Type: 所有媒体
+  Standard Search Type: 搜索（艺术家或标题）
+
+  Number Of Items Invalid: 项目的数量是无效的。
+  Image Duration Invalid: 的图像的持续时间是无效的。
+  Invalid Search Criteria: 无效的搜索条件。
+
+Playlist Image Properties
+
+  Heading: 图像属性
+  Image Duration: 图片时间
+  seconds: 秒
+
+  Valid Image Duration Required: 一个有效的图像时间是必需的。
+
+Playlist Station ID Properties
+
+  Heading: 站ID属性
+  Instructions: 目前有没有属性，你可以站号设置。
+
+Playlist Video Properties
+
+  Heading: 视频属性
+  Instructions: 目前有没有属性，你可以为视频设置。

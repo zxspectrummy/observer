@@ -1,0 +1,85 @@
+<div>
+
+  <div class="device_settings_form" data-tns="Device Manager">
+
+<fieldset>
+<legend data-t>Form Heading</legend>
+
+<div class="fieldrow">
+  <label class="required" data-t>Settings Name</label>
+  <input type="text" class="device_settings_name">
+</div>
+
+<div class="fieldrow">
+  <label data-t>Settings Description</label>
+  <input type="text" class="device_settings_description">
+</div>
+
+<div class="fieldrow">
+  <label data-t>Settings Parent Device</label>
+  <select class="device_settings_parent_id" onchange="OB.Device.settingsFormParentChange(this);">
+    <option value="0" data-t>None</option>
+  </select>
+</div>
+
+<div class="device_settings_parent_id_options hidden">
+
+  <div class="fieldrow">
+    <label class="empty"></label>
+    <div>
+      <div ><input class="device_settings_use_parent_schedule" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Schedule Check</span></div>
+      <div  class="device_settings_use_parent_dynamic_container"><input class="device_settings_use_parent_dynamic" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Dynamic Check</span></div>
+      <div ><input class="device_settings_use_parent_ids" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>ID Check</span></div>
+      <div ><input class="device_settings_use_parent_playlist" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Playlist Check</span></div>
+      <div ><input class="device_settings_use_parent_emergency" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Emergency Check</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="fieldrow">
+  <label data-t>IP Address</label>
+  <input type="text" class="device_settings_ip">
+</div>
+
+<div class="fieldrow">
+  <label class="required" data-t>Password</label>
+  <input type="password" placeholder="Enter New Password" class="device_settings_password" size="25" data-t>
+</div>
+
+<div class="fieldrow device_settings_media_types_row">
+  <label class="required" data-t>Media Types</label>
+  <div>
+    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_audio"> <span data-t>Audio</span>*</div>
+    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_images"> <span data-t>Images</span>*</div>
+    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_video"> <span data-t>Video</span>*</div>
+    <div class="device_settings_supports_linein_container"><input type="checkbox" class="device_settings_supports_linein"> <span data-t>Line-In</span></div>
+    <div class="device_settings_supports_dynamic">* <span data-t>Dynamic Selections Only</span></div>
+  </div>
+</div>
+
+<div class="fieldrow">
+  <label class="required" data-t>Timezone</label>
+  <select class="device_settings_timezone" name="timezone"></select>
+</div>
+
+<div class="fieldrow device_settings_default_playlist_row">
+  <label data-t>Default Playlist</label>
+  <span class="device_settings_default_playlist" ><span data-t>Playlist Drag Zone</span></span>
+</div>
+
+<div class="fieldrow device_settings_station_ids_row">
+  <label data-t>Station IDs</label>
+  <div class="device_settings_station_ids" ><span data-t>Media Drag Zone</span></div>
+</div>
+
+<div class="fieldrow device_settings_station_ids_duration_row">
+  <label data-t>Station ID Image Duration</label>
+  <input type="text" class="device_settings_station_id_image_duration" value="15" size="4"><span data-t>seconds</span>
+</div>
+
+</legend>
+
+</div>
+
+</div>

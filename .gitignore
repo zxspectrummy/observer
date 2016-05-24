@@ -1,0 +1,6 @@
+config.php
+assets
+modules/*
+!modules/now_playing
+!modules/logger
+!modules/tutorial

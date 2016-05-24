@@ -1,0 +1,48 @@
+﻿Schedules Menu
+
+  Emergencies: Diffusions prioritaires
+
+Emergency
+
+  Heading: Diffusions prioritaires
+  Instructions: Faites glisser un élément de support dans le tableau ci-dessous pour planifier diffusion prioritaire. Double-cliquez sur une entrée à modifier.
+
+  No Broadcasts: Il n'y a pas d'émissions prioritaires prévues pour ce joueur.
+
+  Name: Nom
+  Start: Début
+  Stop: Arrêtez
+  Frequency: Fréquence
+  Duration: Durée
+  Media: Médias
+
+  Only Schedule One Item: Vous pouvez programmer un seul élément à la fois.
+  Playlist Not Supported: Priorité playlists de diffusion ne sont pas pris en charge à ce moment.
+  Not Found: Priorité diffusion introuvable.
+  Required Field Missing: Un ou plusieurs champs obligatoires ne sont pas remplis.
+  Item Does Not Exist: L'article que vous tentez de modifier ne semble pas exister.
+  Device Does Not Exist: Ce joueur ne semble pas exister.
+  Media Invalid: Ce média est invalide.
+  Media Not Approved: Les médias doivent être approuvés.
+  Media Is Archived: Médias ne doivent pas être archivés.
+  Frequency Invalid: La fréquence est invalide.
+  Duration Invalid: La durée est invalide.
+  Start DateTime Invalid: La date / heure de début est invalide.
+  Stop DateTime Invalid: La date d'arrêt / heure est invalide.
+  Stop Must Be After Start: L'arrêt de date / heure doit se produire après la date / heure de début.
+
+Emergency Edit
+
+  Heading: Diffusion de priorité
+  Media Item: Médias article
+  Name: Nom
+  Play Every: Jouer Chaque
+  Seconds: secondes
+  Image Duration: Image Durée
+  Minutes: procès-verbal
+  Start Date: Date De Début
+  Start Time: Heure de début
+  Stop Date: Date d'arrêt
+  Stop Time: Temps d'arrêt
+
+  Delete Emergency Confirm: Êtes-vous sûr de vouloir supprimer cette émission de priorité?

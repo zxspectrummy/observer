@@ -1,0 +1,13 @@
+﻿Media Categories
+
+  Music: Muusika
+  Ad or PSA: Kuulutus või PSA
+  Station ID: jaama ID
+  Shows - Segments: näitab - segmendid
+  Emergency Broadcast: prioriteet saated
+  News or Weather: Uudised ja ilm
+  Lecture, Talk or Discussion: Loeng, arutelu või arutelu
+  Show Promotion: Näita edendamine
+  Entertainment (non-music): Meelelahutus (non-muusika)
+  Other: Muu
+  Shows - Complete: näitab - täielik

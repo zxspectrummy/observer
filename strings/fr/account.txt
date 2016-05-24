@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: Le mot de passe que vous avez fourni est incorrect.
+  Heading: Connexion Au Compte
+  Automatically Logged Out: Vous étiez connecté automatiquement après une certaine période d'inactivité. S'il vous plaît vous connecter à nouveau avant de continuer.
+  Username: Nom d'utilisateur
+  Password: Mot de passe
+  Log In Button: S'identifier
+  Log In Different User Button: Connexion en tant qu'utilisateur différent
+
+Account Settings
+
+  Form Heading: Paramètres du compte
+  Form Help: Modifier les paramètres de compte suivants selon les besoins. Seulement un mot de passe si vous souhaitez changer votre mot de passe.
+
+  Account Section: Compte
+
+  Username: Nom d'utilisateur
+  Name: Nom
+  Display Name: Nom D'Affichage
+  Password: Nouveau Mot De Passe
+  Password Again: Nouveau mot de passe (à nouveau)
+  Email: Email
+
+  UI Section: Interface utilisateur
+
+  Search Results Per Page: Résultats de la recherche par page
+
+  Language: Langue
+
+  Theme: Thème
+  Light On Dark (Lower Contrast): Clair sur sombre (Basse-Contraste)
+  Dark On Light (Lower Contrast): Sombre On Light (Basse-Contraste)
+  Light On Dark (Higher Contrast): Clair sur sombre (Contraste supérieur)
+  Dark On Light (Higher Contrast): Sombre On Light (Contraste supérieur)
+  Tanzanite: Tanzanite
+
+  Dyslexia-Friendly Font: Dyslexie-Friendly police
+  Enabled Option: Activé
+  Disabled Option: Handicapé
+
+  Settings Updated: Les paramètres ont été mis à jour. Réglage de l'interface utilisateur des changements peuvent exiger que vous actualisez l'application pour prendre effet.
+
+  Required Fields Not Filled: Un ou plusieurs champs obligatoires ne sont pas remplis.
+  Email Address Invalid: L'adresse e-mail que vous avez fournies ne sont pas valides.
+  Email Address In Use: L'adresse e-mail que vous avez fourni est déjà utilisé par un autre compte.
+  Passwords Do Not Match: Les mots de passe que vous avez fournies ne correspondent pas.
+  Password Not Long Enough: Votre mot de passe doit comporter au moins 6 caractères.
+  Language Not Valid: La langue sélectionnée est pas valide.
+  Theme Not Valid: Le thème choisi est pas valide.
+
+Account Menu
+
+  Account: Compte
+  Logout: Se Déconnecter
+  Settings: Paramètres du compte
+
+Layout
+
+  Logged In As: Connecté en tant que: %1

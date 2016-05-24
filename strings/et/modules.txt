@@ -1,0 +1,26 @@
+﻿Admin Menu
+
+  Modules: Moodulid
+
+
+Modules Edit
+
+  Heading: Paigaldatud moodulid
+  Available Heading: Saadaval moodulid
+
+  No Modules Message: Puuduvad moodulite paigaldatud.
+  Following Modules Message: Järgnevad moodulid on paigaldatud:
+  None Available Message: Puuduvad mooduleid paigaldada.
+  Following Available Message: Saadaval on järgmised moodulid paigaldada:
+
+  Delete Module Confirm: Oled sa kindel, et soovid eemaldada moodul "%1"?
+  Delete Yes Button: jah, uninstall moodul
+
+  Uninstall Button: uninstall
+  Install Button: paigaldama
+
+  Name: Nimi
+  Description: Kirjeldus
+
+  Install Module Confirm: Oled sa kindel, et soovid paigaldada moodul "%1"?
+  Install Yes Button: Jah, paigaldada moodul

@@ -1,0 +1,4 @@
+﻿Help Menu
+
+  Help: ช่วย
+  Documentation: เอกสาร

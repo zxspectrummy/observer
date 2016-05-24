@@ -1,0 +1,143 @@
+﻿Schedules Menu
+
+  Schedules: Termine
+  Shows: Zeitplan Shows
+  Permissions: Schedule Berechtigungen
+
+Schedule
+
+  Show Not Found: Nicht gefunden zu zeigen.
+  Permission Not Found: Rechte fuer nicht gefunden.
+
+  Device ID Invalid: Spielernummer ist ungültig.
+  Start Or End Date Invalid: Der Beginn Enddatum ist ungültig.
+  User ID Invalid: Benutzer-ID ist ungültig.
+
+  Schedule Only One: Sie können nur ein Element zu einem Zeitpunkt planen.
+  No Edit Permission: Sie haben keine Berechtigung, diese zu bearbeiten.
+
+  Schedule Shows Heading: Zeitplan Shows
+  Schedule Shows Instructions: Ziehen Sie die Medien oder Playlist auf Zeitplan. Doppelklicken Sie auf Show zu bearbeiten.
+
+  Line-In: Line-In
+  Schedule Line-In: Schedule Line-In
+
+  Schedule Permissions Heading: Schedule Berechtigungen
+  Schedule Permissions Add Button: Permission hinzufügen
+  Schedule Permissions Instructions: oder doppelklicken Sie auf ein Feld zu bearbeiten / löschen.
+
+  Schedule For: Zeitplan für:
+
+  Details Name: Name
+  Details Owner: Eigentümer
+  Details DateTime: Terminzeit
+  Details Duration: Dauer
+  Details Scheduled By: Geplante By
+  Details Scheduled For: Geplant für
+  Details Description: Beschreibung
+
+  Previous Week: Zurück
+  Next Week: Nächster
+
+  Sunday: Sonne
+  Monday: Mon
+  Tueday: Tue
+  Wednesday: Heiraten
+  Thursday: Thu
+  Friday: Fr
+  Saturday: Sat
+
+  January: Januar
+  February: Februar
+  March: März
+  April: April
+  May: Mai
+  June: Juni
+  July: Juli
+  August: August
+  September: September
+  October: Oktober
+  November: November
+  December: Dezember
+
+  DST Spring Ahead: DST Frühling Ahead
+  DST Fall Back: DST Fall Back
+
+Schedule Edit
+
+  No Timeslots Available: Sie haben noch keine Zeitschlitze für die ausgewählte Woche zur Verfügung.
+
+  Show Instructions: Um die richtigen Zeitschlitzen anzuzeigen, wählen Sie die gewünschte Woche vor Planung.
+  Show Heading: Zeitplan anzeigen
+
+  Line-In: Line-In
+
+  Item Name: Artikelname
+
+  Permission Instructions: Einige Informationen über diesen Zeitschlitz.
+  Permission Heading: Schedule Permission
+
+  Permission For: Erlaubnis
+  Permission Name: Name
+
+  Timeslot: Zeitfenster
+  Manual Input Option: Manuelle Eingabe
+
+  Scheduling Mode: Planungsmodus
+  One-Time Option: Einmal
+  Daily Option: Täglich
+  Weekly Option: Wöchentlich
+  Monthly Option: Monatlich
+  Every X Days Option: Alle x Tage
+  Every X Weeks Option: Alle X Wochen
+  Every X Months Option: Alle X Monate
+
+  Recurring Every: Wiederkehrende Jeder
+  Start Date: Anfangsdatum
+  Start Time: Startzeit
+
+  Duration: Dauer
+  Duration Days: Tage
+  Duration Hours: Stunden
+  Duration Minutes: Minuten
+  Duration Seconds: Sekunden
+
+  Recurring Last Date: Wiederkehrende Last Date
+
+  Delete Show Confirm: Löschen Sie dieses Video?
+  Delete Permission Confirm: Löschen Sie diese Berechtigung?
+
+  Show Not Found: Diese Show ist nicht mehr vorhanden.
+  Permission Not Found: Diese Genehmigung ist nicht mehr vorhanden.
+  Duration Not Valid: Die Dauer ist nicht gültig.
+
+  Required Field Missing: Ein oder mehrere Pflichtfelder wurden nicht ausgefüllt.
+  Device Not Found: Dieser Spieler existiert nicht mehr.
+
+  Item Invalid: Der Artikel, den Sie versuchen, zu planen ist nicht gültig.
+  Item Does Not Exist: Der Artikel, den Sie versuchen, Zeitplan existiert nicht.
+  User Does Not Exist: Der von Ihnen gewählte Benutzer existiert nicht.
+  Device Does Not Exist: Der von Ihnen gewählte Spieler existiert nicht.
+  Media Must Be Approved: Die Medien müssen genehmigt werden.
+  Media Must Not Be Archived: Die Medien dürfen nicht archiviert werden.
+  Scheduling Mode Not Valid: Die ausgewählte Planungsmodus ist ungültig.
+  Start Date/Time Not Valid: Das Startdatum / Uhrzeit ist ungültig.
+  Stop Date/Time Not Valid: Der Anschlag (letzte) Datum ist ungültig und muss nach dem Startdatum / Zeit.
+  Recurring Frequency Not Valid: Der wiederkehrende Frequenz ist nicht gültig.
+
+  Recurring Show Too Long: Wiederkehrende Shows kann nicht länger als 28 Tage sein.
+  Daily Show Too Long: Eine Show tägliche Linien kann nicht länger als einen Tag sein.
+  Weekly Show Too Long: Eine Show geplant Wochen darf nicht länger als eine Woche.
+  XDay Show Too Long: Eine Show kann nicht länger als seine Frequenz sein.
+  XWeek Show Too Long: Eine Show kann nicht länger als seine Frequenz sein.
+  Show Conflict: Diese Show Konflikte mit anderen auf dem Spielplan.
+  Schedule Permission Required: Sie haben keine Berechtigung, um einen Eintrag zu der angegebenen Zeit (en) zu planen.
+
+  Recurring Permission Too Long: Wiederkehrende Berechtigungen können nicht mehr als 28 Tage sein.
+  Daily Permission Too Long: Eine Berechtigung tägliche Linien kann nicht länger als einen Tag sein.
+  Weekly Permission Too Long: Eine Berechtigung geplanten Wochen darf nicht länger als eine Woche.
+  XDay Permission Too Long: Eine geplante Genehmigung darf nicht länger als seine Frequenz sein.
+  XWeek Permission Too Long: Eine geplante Genehmigung darf nicht länger als seine Frequenz sein.
+  Permission Conflict: Diese Erlaubnis Konflikt mit einer anderen auf dem Programm.
+
+

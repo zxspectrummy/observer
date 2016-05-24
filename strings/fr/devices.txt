@@ -1,0 +1,89 @@
+﻿Admin Menu
+
+  Device Settings: Paramètres du lecteur
+  Device Manager: Player Manager
+  Device Monitoring: Surveillance du joueur
+
+Device Manager
+
+  Heading: Player Manager
+  New Device Button: Nouveau Joueur
+  ID: ID
+  Name: Nom
+  Description: Description
+  Status: Statut
+
+  Version: Version
+  All: Tous
+  Schedule: Calendrier
+  Emergency: Priorité
+  Media: Médias
+  Playlog: Playlog
+
+  not available: indisponible
+  never: jamais
+
+  Form Heading: Paramètres
+  Settings Name: Nom
+  Settings Description: Description
+  Settings Parent Device: Parent Joueur
+  Schedule Check: calendrier de parent de l'utilisation
+  Dynamic Check: sélections dynamiques utilisation mères
+  ID Check: utiliser des ID de station de parent
+  Playlist Check: utiliser parent playlist par défaut
+  Emergency Check: utiliser parents émissions prioritaires
+
+  IP Address: Adresse IP
+  Password: Mot de passe
+  Enter New Password: (Entrer un nouveau mot de passe pour réinitialiser)
+  Timezone: Fuseau horaire
+  Default Playlist: Par défaut Playlist
+  Playlist Drag Zone: (Drag playlist ici)
+  Media Drag Zone: (supports de glisser ici)
+  Station IDs: ID station
+  Station ID Image Duration: ID station image Durée
+  seconds: secondes
+  Media Types: Types de support
+  Dynamic Selections Only: affecte sélections dynamiques seulement
+  Audio: Acoustique
+  Images: Images
+  Video: Vidéo
+  Line-In: Faire La Queue
+
+  None: Aucun
+
+  Device List Must Load: La liste des joueurs doit charger avant de créer un nouveau joueur.
+  Saved Message: Joueur sauvé: (ID #%1)
+
+Device Monitoring
+
+  Heading: Surveillance du joueur
+  Limited Message: Les résultats sont limités à 1000 lignes.
+  Options: Options
+  Device: Joueur
+  Start: Début
+  End: Fin
+  Sort: Genre
+
+  Media ID: ID médias
+  Artist: Artiste
+  Title: Titre
+  Date/Time: Date / Heure
+  Context: Contexte
+  Notes: Remarques
+
+  Ascending: Ascendant
+  Descending: Descendant
+
+  Filters: Filtres
+
+  Exactly: est exactement
+  Not: n'est pas
+  Contains: contient
+  Not Contain: ne contient pas
+
+  Add Filter Button: Ajouter un filtre
+  Load Data Button: Load Data
+
+  Results: Résultats
+  No Results Message: Aucun résultat de recherche.

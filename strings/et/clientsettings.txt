@@ -1,0 +1,9 @@
+﻿Admin Menu
+
+  Client Settings: Klient Seaded
+
+Client Settings
+
+  Heading: Klient Seaded
+  Welcome Message: Tere Sõnum
+  Save Confirmation: Tere sõnum salvestatakse.

@@ -1,0 +1,125 @@
+﻿Playlists Menu
+
+  Playlists: Lugude
+  New: uue näidendi nimekirja
+
+Playlist New
+
+  Heading: uue näidendi nimekirja
+  Instructions: Täida järgmised esitusloenditeabe, seejärel lohistage meedia ja playlist esemete playlist ala alla.
+
+Playlist Edit
+
+  Heading: muuta mängida nimekirja
+  Instructions: Muuda järgmised mängida nimekirja kui vaja.
+
+  Select One Playlist Only: Vali üks mängida nimekirja ainult.
+
+  Form Heading: mängida nimekirja andmed
+  Name: Nimi
+  Description: Kirjeldus
+  Status: Seisund
+  Type: Tüüp
+
+  Private Option: Private (võimalik ainult)
+  Public Option: Avalik (kõigile kättesaadav)
+
+  Standard Option: Standard
+  Advanced Option: Edasijõudnud
+  LiveAssist Option: live aidata
+
+  Items Heading: mängida nimekirja valikud
+  Items Instructions Advanced: Drag meedia valdkonna alla. Topeltklõpsake esemed seada omadused. Klõpsake, et valida objekt, siis kustutada / backspace eemaldada, üles / alla nooleklahve.
+  Items Instructions Standard: Drag meedia ja esitusloendeid ala alla. Topeltklõpsake esemed seada omadused. Klõpsake, et valida, siis kustutada / backspace eemaldada, üles / alla nooleklahve. Võite klõpsata-drag reorganiseerima.
+
+  Zoom In: suumida
+  Zoom Out: suumimiseks
+
+  Drag Items Here: Drag teemad siin
+
+  Add Dynamic Selection Button: lisada dünaamilist valikut
+  Add Station ID Button: lisada jaama ID
+  Add Breakpoint Button: lisada murdepunkti
+
+  Dynamic Selection: Dünaamiline valik
+  Dynamic Selection Last Search Notice: Dünaamiline valik põhineb viimase meedia otsing.
+
+  Advanced Playlist Dynamic Selection Not Supported: Dünaamiline valikud ja jaama ID-d ei toeta arenenud loendeid. Need teemad on ignoreeritud.
+
+  Breakpoint: Murdepunkt
+
+  Station ID: jaama ID
+
+  Total Duration: Kokku kestus
+  Total Duration Estimated: (Hinnanguliselt tingitud muutuva pikkusega sisu)
+
+  LiveAssist Buttons Heading: live aidata nupud
+  LiveAssist Buttons Instructions: Lohista esitusloendeid selles valdkonnas programmeerida live aidata nuppu piirkonnas. Iga mängida nimekirja on nuputulp, ühe nupu kohta mängida nimekirja kirje.
+
+  Clear Items Confirm: Kustuta kõik valikud esitusloendi?
+  Change Playlist Type Confirm: Muutuvad mängida nimekirja tüübist on selge olemasolevate mängida nimekirja. Olete kindel, et tahad seda teha?
+
+  Clear LiveAssist Items Confirm: Kustuta kõik live aidata nupud?
+
+  Unable To Edit: Ei saa muuta seda mängida nimekirja.
+  Name Required: mängida nimekirja nimi on nõutav.
+  Valid Status Required: Kehtiv seisund on vajalik.
+  Valid Type Required: Kehtib tüüp on vajalik.
+
+  Item Not Valid: Üks või mitu esitusi ei kehti.
+  Durations Not Valid: Üks või mitu meedia kestused on kehtetu või null.
+  Approved Media Required: Ainult heaks, arhiveerimata meedia saab kasutada esitusloendeid.
+  Cannot Use Private Item: Meedia kirje on märgitud privaatne. Seda saab kasutada ainult loendeid loodud ühele omanikule.
+  Dynamic Item Not Valid: Üks või mitu dünaamiline esitusi ei kehti.
+
+  LiveAssist Item Not Valid: Üks või mitu LiveAssist nuppu loendeid on kehtetu.
+
+  Error While Saving: Salvestamisel ilmnes viga selle mängida nimekirja.
+
+
+Playlist Audio Properties
+
+  Heading: Audio omadused
+  Instructions: Seal ei ole praegu omadused saab seada audio tracks.
+
+Playlist Breakpoint Properties
+
+  Heading: Murdepunkt omadused
+  Instructions: Seal ei ole praegu omadused saate katkestuspunkte.
+
+Playlist Dynamic Item Properties
+
+  Heading: Dünaamiline elemendi omaduste
+  Selection Name: Valik nimi
+  Number Of Items: Asjade kogus
+  All Items: kõik teemad
+  Image Duration: Image Kestus
+  In Seconds: (Sekundites)
+
+  Description Heading: Kirjeldus
+
+  Advanced Search Type: Täpsem otsing
+  All Media Search Type: Kogu meedia
+  Standard Search Type: Otsing (esitaja või pealkirja)
+
+  Number Of Items Invalid: Arv on kehtetu.
+  Image Duration Invalid: Image kestus on kehtetu.
+  Invalid Search Criteria: Vale otsingut.
+
+Playlist Image Properties
+
+  Heading: Pildi omadused
+  Image Duration: Image Kestus
+  seconds: sekundit
+
+  Valid Image Duration Required: Kehtib pilt kestus on vaja.
+
+Playlist Station ID Properties
+
+  Heading: jaama ID ID omadused
+  Instructions: Seal ei ole praegu omadused saab seada jaama IDd.
+
+Playlist Video Properties
+
+  Heading: Video omadused
+  Instructions: Seal ei ole praegu omadused saate videoid.

@@ -1,0 +1,23 @@
+﻿Common
+  Okay: 好
+  Save: 保存
+  New: 新
+  Edit: 编辑
+  Delete: 删除
+  Restore: 恢复
+  Cancel: 取消
+  Yes Delete: 是的，删除
+  No Cancel: 否，取消
+  Clear: 明确
+  Close: 关闭
+  Details: 详细信息
+  Download: 下载
+  Search: 搜索
+  Add: 添加
+  Yes: 是的
+  No: 没有
+  Expand: 扩大
+  Collapse: 崩溃
+  Enabled: 启用
+  Disabled: 残
+

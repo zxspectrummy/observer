@@ -1,0 +1,238 @@
+﻿Media Genres
+
+  Yukon: 育空地区
+  Classic Rock: 经典摇滚
+  Country: 国家
+  Disco: 迪斯科
+  Funk: 恐惧
+  Grunge: 垃圾
+  Hip Hop: 嘻哈
+  Jazz: 爵士乐
+  Metal: 金属
+  New Age: 新时代
+  Oldies: 怀旧
+  Pop: 流行的
+  RandB: RandB
+  Rap: 敲击
+  Reggae: 雷鬼
+  Rock: 岩
+  Techno: TECHNO
+  Misc: 杂项
+  Trip Hop: 合之旅
+  Asian-Pop: 亚洲流行
+  Alternative Rock: 另类摇滚
+  Electronic: 电子
+  Pop Folk: 民间流行
+  Eesti Pop: 爱沙尼亚流行
+  Peru Folk: 秘鲁民俗
+  SoundTrack: 声带
+  World Beat: 世界节拍
+  Celtic: 塞尔特
+  Soft Rock: 软岩
+  Ambient: 环境
+  Native American: 美洲原住民
+  Hard Rock: 硬石
+  Progressive Rock: 前卫摇滚
+  Primus: 博智
+  Buddha Bar: 佛陀酒吧
+  SFX: SFX
+  Punk: 朋克
+  Canadien Francais: 加拿大元语
+  Landscape: 景观
+  Yellowknife: 耶洛奈夫
+  Yellowknife: 耶洛奈夫
+  Abstract: 抽象
+  Adults: 成人
+  Agriculture: 农业
+  Americana: 美洲
+  Animal: 动物
+  Architecture: 架构
+  Arts: 艺术
+  AstroPhotography: 天文摄影
+  Baby: 婴儿
+  Backgrounds: 背景
+  Boy: 男孩
+  Business: 业务
+  Celebrations: 庆祝活动
+  Children: 孩子们
+  City: 城市
+  Communications : 通讯
+  Computers : 计算机
+  Conceptual: 概念上的
+  Couple: 对
+  Culture: 文化
+  Documentary: 记录片
+  Domestic: 国内
+  Earth Photos: 地球照片
+  Education: 教育
+  Election: 选举
+  Entertainment: 娱乐
+  Environmental: 环境的
+  Families: 家庭
+  Fantasy: 幻想
+  Financial : 财政
+  Fineart: FINEART
+  Flowers: 花卉
+  Food: 食品
+  General: 一般
+  Girl: 女孩
+  Glamour: 魅力
+  Government: 政府
+  Health: 健康
+  Historic: 历史性
+  Holidays: 假期
+  Homes: 家园
+  Humorous: 幽默
+  Industrial: 产业
+  International: 国际
+  Landscapes: 景观
+  Leisure: 闲暇
+  Lifestyles: 生活方式
+  LoveRomance: LoveRomance
+  Manufacturing: 制造业
+  Medical: 医
+  Meetings : 会议
+  Men : 男人
+  Military: 军事
+  Models: 车型
+  Money : 钱
+  Music: 音乐
+  Nature: 大自然
+  Nautical: 海
+  Newspaper: 报纸
+  Northern: 北方
+  Nostalgia: 怀旧之情
+  Office : 办公室
+  Outdoors: 户外
+  Patriotic: 爱国
+  Patterns: 图案
+  People : 人
+  Personality: 个性
+  Pets: 宠物
+  PhotoEssay: PhotoEssay
+  Political: 政治
+  Portrait: 肖像
+  Recreation: 娱乐
+  Religion: 宗教
+  Science: 科学
+  Shopping: 购物
+  Signs: 迹象
+  SpacePhotos: SpacePhotos
+  Sports: 体育
+  StillLife: StillLife
+  Symbols: 符号
+  Teamwork : 合作
+  Technology : 技术
+  Textures: 纹理
+  Tourism: 旅游
+  Traditional: 传统
+  Transportation: 运输
+  Travel : 旅游
+  Underwater: 水下
+  Vintage: 葡萄收获期
+  Weather: 天气
+  Wildlife: 野生动物
+  Women: 妇女
+  Work and Workplace: 工作和工作场所
+  XXX: XXX
+  Action: 行动
+  Adventure: 冒险
+  Amateur: 业余
+  Animation: 动画
+  Biography: 传记
+  Blaxploitation: 利用黑人
+  Chick Flicks: 小鸡笔触
+  Christmas: 圣诞
+  Classic Hollywood: 好莱坞经典
+  Comedy: 喜剧
+  Comic Book Based: 漫画书基
+  Crime: 犯罪
+  Cult Movies: 邪教电影
+  Detective Mystery Films: 侦探悬疑片
+  Disaster Films: 灾难电影
+  Documentary: 记录片
+  Drama: 剧
+  Experimental: 试验
+  Family: 家庭
+  Fantasy: 幻想
+  Film Noir: 黑色电影
+  Game Show: 游戏展
+  History: 历史
+  Horror: 恐怖
+  Martial Arts: 武术
+  Miscellaneous: 杂项
+  Mockumentary: 伪纪录片
+  Music Concerts: 音乐会
+  Musical: 音乐
+  News: 新闻
+  Northern: 北方
+  Organized Crime: 有组织犯罪
+  Reality TV: 现实电视
+  Road Films: 电影之路
+  Romance: 浪漫
+  Satire: 讽刺
+  SciFi: 科幻
+  Short: 短
+  Silent Movies: 无声电影
+  Sport: 体育
+  Supernatural Films: 灵异电影
+  Talk Show: 脱口秀
+  Teen Movies: 青少年电影
+  Thrillers Suspense: 惊悚悬疑
+  TrailersPreviews: TrailersPreviews
+  War: 战争
+  Western: 西
+  XXX: XXX
+  Blues: 蓝调
+  Folk: 民间
+  Part of Complete Show: 成套表演的一部分
+  Song/Media Intro: 宋/媒体简介
+  Song/Media Outro: 宋/媒体尾奏
+  Show Intro: 展会简介
+  Show Outro: 展会尾奏
+  Other: 其他
+  CJUC Station ID: CJUC站ID
+  CFET Station ID: CFET站ID
+  Other Station ID: 其他站ID
+  Show Promotion: 展会推广
+  News: 新闻
+  Weather: 天气
+  Other: 其他
+  Emergency Broadcast: 优先广播
+  Commercial Ad: 商业广告
+  Public Service Announcement: 公共服务公告
+  Complete Shows: 完整的节目
+  Other: 其他
+  Alternative: 另类
+  Alternative Country: 替代国
+  House Music (Electro): 音乐房子（电）
+  House Music (minimal): 众议院音乐（最小）
+  House Music (Tech): 众议院音乐（科技）
+  House Music (Deep): 众议院音乐（深）
+  House Music (prog): 众议院音乐（PROG）
+  Acoustic: 声
+  Experimental electronic: 实验电子
+  Indie: 独立
+  Chillwave-Lounge: Chillwave-休息室
+  House Music: 楼音乐
+  Dubtech: Dubtech
+  Electro-Bassline-Filter: 电贝斯过滤
+  Minimalism: 极简主义
+  Classical: 经典
+  New Wave: 新浪潮
+  Concert: 音乐会
+  Mash-up: 混搭
+  Dubstep: 的dubstep
+  Movie Bits: 电影位
+  OTR Vintage Commercials: OTR复古财经
+  OTR Challenge: OTR挑战
+  OTR TV Themes: OTR电视主题
+  Christmas Alt: 圣诞Alt键
+  OTR Goon Show: OTR笨蛋展示
+  Christmas: 圣诞
+  Holiday: 节日
+  ComedyFunny: ComedyFunny
+  RA Podcasts: RA播客
+  Moombahton: Moombahton
+  Soul: 灵魂
+

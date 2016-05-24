@@ -1,0 +1,89 @@
+﻿Admin Menu
+
+  Device Settings: 播放器设置
+  Device Manager: 玩家经理
+  Device Monitoring: 玩家监控
+
+Device Manager
+
+  Heading: 玩家经理
+  New Device Button: 新玩家
+  ID: ID
+  Name: 名字
+  Description: 描述
+  Status: 状态
+
+  Version: 版本
+  All: 所有
+  Schedule: 时间表
+  Emergency: 优先
+  Media: 媒体
+  Playlog: Playlog
+
+  not available: 无法使用
+  never: 从来没有
+
+  Form Heading: 设置
+  Settings Name: 名字
+  Settings Description: 描述
+  Settings Parent Device: 家长球员
+  Schedule Check: 利用母公司的时间表
+  Dynamic Check: 使用动态家长选择
+  ID Check: 使用父站号
+  Playlist Check: 使用默认父播放列表
+  Emergency Check: 用父母的优先广播
+
+  IP Address: IP地址
+  Password: 密码
+  Enter New Password: （输入新的密码重置）
+  Timezone: 时区
+  Default Playlist: 默认播放列表
+  Playlist Drag Zone: （拖动播放列表在这里）
+  Media Drag Zone: （拖动此间媒体）
+  Station IDs: 车站标识
+  Station ID Image Duration: 站ID图片时间
+  seconds: 秒
+  Media Types: 媒体类型
+  Dynamic Selections Only: 仅影响动态选择
+  Audio: 音频
+  Images: 图片
+  Video: 视频
+  Line-In: LINE-IN
+
+  None: 无
+
+  Device List Must Load: 创建一个新的播放器之前，球员名单必须加载。
+  Saved Message: 玩家保存：（ID＃%1）
+
+Device Monitoring
+
+  Heading: 玩家监控
+  Limited Message: 结果被限制为1000行。
+  Options: 选项
+  Device: 播放机
+  Start: 开始
+  End: 结束
+  Sort: 分类
+
+  Media ID: 媒体ID
+  Artist: 艺术家
+  Title: 称号
+  Date/Time: 日期/时间
+  Context: 上下文
+  Notes: 笔记
+
+  Ascending: 升序
+  Descending: 降序
+
+  Filters: 过滤器
+
+  Exactly: 正是
+  Not: 不
+  Contains: 包含
+  Not Contain: 不含
+
+  Add Filter Button: 添加过滤器
+  Load Data Button: 加载数据
+
+  Results: 结果
+  No Results Message: 任何搜索结果。

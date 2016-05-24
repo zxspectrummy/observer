@@ -1,0 +1,9 @@
+﻿Admin Menu
+
+  Client Settings: 客户端设置
+
+Client Settings
+
+  Heading: 客户端设置
+  Welcome Message: 欢迎辞
+  Save Confirmation: 欢迎信息保存。

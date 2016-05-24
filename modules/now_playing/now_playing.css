@@ -1,0 +1,32 @@
+body
+{
+	font-family:Helvetica,Arial,'DejaVu Sans','Liberation Sans',Freesans,sans-serif;
+	font-size: 14px;
+}
+
+#now_playing_track_countdown_container, #now_playing_show_countdown_container
+{
+	font-size: 0.8em;
+}
+
+#now_playing
+{
+	margin: auto;
+}
+
+#now_playing.error
+{
+text-align: center;
+}
+
+#now_playing .label
+{
+	font-weight: bold;
+}
+
+#now_playing .powered_by td
+{
+	padding-top: 25px;
+	text-align: right;
+	font-size: 0.8em;
+}

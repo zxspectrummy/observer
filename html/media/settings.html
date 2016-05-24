@@ -1,0 +1,97 @@
+<div data-tns="Media Settings">
+
+<h1 data-t>Heading</h1>
+
+<p data-t>Instructions</p>
+
+<obwidget type="message" id="media_categories_message"></obwidget>
+
+<p><button onclick="OB.Media.categoryAddeditWindow();" data-t>Add Category Button</button> <button onclick="OB.Media.genreAddeditWindow();" data-t>Add Genre Button</button></p>
+
+<table class="table">
+<tbody id="media_categories">
+</tbody>
+</table>
+
+<div id="media_settings_formats">
+
+<h1 data-t>Supported File Formats</h1>
+
+<p data-t>File Format Instructions</p>
+
+<obwidget type="message" id="formats_message"></obwidget>
+
+<fieldset>
+<legend data-t>Audio Formats</legend>
+
+<div class="fieldrow">
+  <input value="flac" type="checkbox" class="audio_formats" name="audio_formats"> FLAC <span data-t>FLAC Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="mp3" type="checkbox" class="audio_formats" name="audio_formats"> MP3 <span data-t>MP3 Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="mp4" type="checkbox" class="audio_formats" name="audio_formats"> MP4 <span data-t>MP4 Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="ogg" type="checkbox" class="audio_formats" name="audio_formats"> OGG <span data-t>OGG Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="wav" type="checkbox" class="audio_formats" name="audio_formats"> WAV <span data-t>WAV Description</span>
+</div>
+</fieldset>
+
+<fieldset>
+<legend data-t>Video Formats</legend>
+
+<div class="fieldrow">
+  <input value="avi" type="checkbox" class="video_formats" name="video_formats"> AVI <span data-t>AVI Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="mpg" type="checkbox" class="video_formats" name="video_formats"> MPEG <span data-t>MPEG Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="ogg" type="checkbox" class="video_formats" name="video_formats"> OGG <span data-t>OGG Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="wmv" type="checkbox" class="video_formats" name="video_formats"> WMV <span data-t>WMV Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="mov" type="checkbox" class="video_formats" name="video_formats"> MOV <span data-t>MOV Description</span>
+</div>
+
+</fieldset>
+
+<fieldset>
+<legend>Image Formats</legend>
+
+<div class="fieldrow">
+  <input value="jpg" type="checkbox" class="image_formats" name="image_formats"> JPEG <span data-t>JPEG Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="png" type="checkbox" class="image_formats" name="image_formats"> PNG <span data-t>PNG Description</span>
+</div>
+
+<div class="fieldrow">
+  <input value="svg" type="checkbox" class="image_formats" name="image_formats"> SVG <span data-t>SVG Description</span>
+</div>
+</fieldset>
+
+<fieldset>
+<div class="fieldrow">
+  <button class="add" id="media_settings_formats_save" onclick="OB.Media.formatsSave();" data-t data-tns="Common">Save</button>
+</div>
+</fieldset>
+
+</div>
+
+</div>

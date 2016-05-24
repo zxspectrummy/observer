@@ -1,0 +1,125 @@
+﻿Playlists Menu
+
+  Playlists: Wiedergabelisten
+  New: Neue Wiedergabeliste
+
+Playlist New
+
+  Heading: Neue Wiedergabeliste
+  Instructions: Füllen Sie das folgende Playlist-Informationen, und ziehen Sie Medien und Playlist Artikel in den Wiedergabelistenbereich unten.
+
+Playlist Edit
+
+  Heading: Wiedergabeliste bearbeiten
+  Instructions: Bearbeiten Sie die folgenden Playlist nach Bedarf.
+
+  Select One Playlist Only: Wählen Sie nur eine Playlist.
+
+  Form Heading: Play Daten
+  Name: Name
+  Description: Beschreibung
+  Status: Status
+  Type: Art
+
+  Private Option: Private (zur Verfügung nur)
+  Public Option: Public (für jedermann)
+
+  Standard Option: Standard
+  Advanced Option: Fortgeschritten
+  LiveAssist Option: LiveAssist
+
+  Items Heading: Playlist Artikel
+  Items Instructions Advanced: Ziehen Sie die Medien an die unten Bereich. Doppelklicken Sie auf Produkte, um Eigenschaften festzulegen. Klicken Sie auf Option aus, und löschen / Backspace zu entfernen, nach oben / unten-Tasten zu bewegen.
+  Items Instructions Standard: Ziehen Sie die Medien und Wiedergabelisten auf dem Bereich unten. Doppelklicken Sie auf Produkte, um Eigenschaften festzulegen. Klicken Sie auf Tasten wählen, dann löschen / Backspace zu entfernen, nach oben / unten zu bewegen. Sie können auch auf-ziehen Sie, um neu zu ordnen.
+
+  Zoom In: Hineinzoomen
+  Zoom Out: Rauszoomen
+
+  Drag Items Here: Nachrichten hierher ziehen
+
+  Add Dynamic Selection Button: Fügen Sie dynamische Auswahl
+  Add Station ID Button: Hinzufügen Standort ID
+  Add Breakpoint Button: Haltepunkt hinzufügen
+
+  Dynamic Selection: Dynamische Auswahl
+  Dynamic Selection Last Search Notice: Die dynamische Auswahl wird an Ihrem letzten Mediensuche auf der Basis.
+
+  Advanced Playlist Dynamic Selection Not Supported: Abgrenzungen und Station-IDs werden von fortgeschrittenen Wiedergabelisten unterstützt. Diese Gegenstände wurden ignoriert.
+
+  Breakpoint: Haltepunkt
+
+  Station ID: Station ID
+
+  Total Duration: Gesamtdauer
+  Total Duration Estimated: (Geschätzt aufgrund variabler Länge Content)
+
+  LiveAssist Buttons Heading: LiveAssist Buttons
+  LiveAssist Buttons Instructions: Ziehen Sie Wiedergabelisten auf diesen Bereich, um die LiveAssist Tastenbereich zu programmieren. Jede Playlist wird eine Spalte von Tasten sein, mit einem Tastendruck pro Playlist Artikel.
+
+  Clear Items Confirm: Alle Artikel aus der Playlist?
+  Change Playlist Type Confirm: Ändern Playlist Typ wird die vorhandene Playlist zu löschen. Sind Sie sicher, dass Sie dies tun wollen?
+
+  Clear LiveAssist Items Confirm: Alle löschen LiveAssist Tasten?
+
+  Unable To Edit: Können Sie diese Playlist bearbeiten.
+  Name Required: Eine Playlist-Name ist erforderlich.
+  Valid Status Required: Ein gültiger Status erforderlich ist.
+  Valid Type Required: Eine gültige Zeichen notwendig.
+
+  Item Not Valid: Ein oder mehrere Playlist Artikel ist nicht gültig.
+  Durations Not Valid: Eine oder mehrere Medienlaufzeiten ist ungültig oder Null.
+  Approved Media Required: Nur zugelassene, können nicht archivierte Medien in Wiedergabelisten verwendet werden.
+  Cannot Use Private Item: Ein Medien-Objekt wird als privat markiert. Es kann nur in Wiedergabelisten erstellt vom gleichen Eigentümer verwendet werden.
+  Dynamic Item Not Valid: Eine oder mehrere dynamische Playlist Artikel ist nicht gültig.
+
+  LiveAssist Item Not Valid: Ein oder mehrere LiveAssist Taste Wiedergabelisten ist ungültig.
+
+  Error While Saving: Beim Speichern Diese Playlist ist ein Fehler aufgetreten.
+
+
+Playlist Audio Properties
+
+  Heading: Audioeigenschaften
+  Instructions: Es gibt derzeit keine Immobilien die Sie für Audio-Tracks einstellen können.
+
+Playlist Breakpoint Properties
+
+  Heading: Haltepunkt-Eigenschaften
+  Instructions: Es gibt derzeit keine Immobilien für Haltepunkte setzen können.
+
+Playlist Dynamic Item Properties
+
+  Heading: Dynamische Objekteigenschaften
+  Selection Name: Selection-Name
+  Number Of Items: Anzahl der Einträge
+  All Items: alle Einzelteile
+  Image Duration: Bilddauer
+  In Seconds: (In Sekunden)
+
+  Description Heading: Beschreibung
+
+  Advanced Search Type: Erweiterte Suche
+  All Media Search Type: Alle Medien
+  Standard Search Type: Suche (Künstler oder Titel)
+
+  Number Of Items Invalid: Die Anzahl der Elemente ist ungültig.
+  Image Duration Invalid: Die Bild Dauer ist ungültig.
+  Invalid Search Criteria: Ungültige Suchkriterien.
+
+Playlist Image Properties
+
+  Heading: Bildeigenschaften
+  Image Duration: Bilddauer
+  seconds: Sekunden
+
+  Valid Image Duration Required: Ein gültiger Bilddauer erforderlich ist.
+
+Playlist Station ID Properties
+
+  Heading: Station ID Properties
+  Instructions: Es gibt derzeit keine Immobilien für Station IDs festlegen können.
+
+Playlist Video Properties
+
+  Heading: Videoeigenschaften
+  Instructions: Es gibt derzeit keine Immobilien für Videos einstellen können.

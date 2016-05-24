@@ -1,0 +1,125 @@
+﻿Playlists Menu
+
+  Playlists: รายการเพลง
+  New: รายการเพลงใหม่
+
+Playlist New
+
+  Heading: รายการเพลงใหม่
+  Instructions: กรอกข้อมูลต่อไปนี้รายการที่จะเล่นแล้วลากสื่อและรายการรายการเพลงรายการเพลงเข้ามาในพื้นที่ดังต่อไปนี้
+
+Playlist Edit
+
+  Heading: แก้ไขเพลย์ลิส
+  Instructions: แก้ไขรายการที่จะเล่นต่อไปตามที่ต้องการ
+
+  Select One Playlist Only: เลือกหนึ่งในเพลย์ลิสเท่านั้น
+
+  Form Heading: ข้อมูลเพลย์ลิส
+  Name: ชื่อ
+  Description: ลักษณะ
+  Status: สถานะ
+  Type: ชนิด
+
+  Private Option: ภาคเอกชน (ที่มีให้คุณเท่านั้น)
+  Public Option: สาธารณะ (ใช้ได้กับทุกคน)
+
+  Standard Option: มาตรฐาน
+  Advanced Option: สูง
+  LiveAssist Option: LiveAssist
+
+  Items Heading: เพลย์ลิสรายการ
+  Items Instructions Advanced: สื่อลากไปยังพื้นที่ด้านล่าง ดับเบิลคลิกที่รายการที่จะตั้งค่าคุณสมบัติ คลิ๊กเพื่อเลือกรายการแล้วลบ / Backspace ลบปุ่มขึ้น / ลงที่จะย้าย
+  Items Instructions Standard: สื่อลากและรายการเพลงไปยังพื้นที่ด้านล่าง ดับเบิลคลิกที่รายการที่จะตั้งค่าคุณสมบัติ คลิกเพื่อเลือกแล้วลบ / Backspace ลบปุ่มขึ้น / ลงที่จะย้าย นอกจากนี้คุณยังสามารถคลิกลากเพื่อเรียงลำดับ
+
+  Zoom In: ซูมเข้า
+  Zoom Out: Zoom Out
+
+  Drag Items Here: ลากรายการที่นี่
+
+  Add Dynamic Selection Button: เพิ่มการเลือกแบบไดนามิก
+  Add Station ID Button: เพิ่มรหัสสถานี
+  Add Breakpoint Button: เพิ่มเบรกพอยต์
+
+  Dynamic Selection: การเลือกแบบไดนามิก
+  Dynamic Selection Last Search Notice: เลือกแบบไดนามิกจะขึ้นอยู่กับการค้นหาสื่อครั้งล่าสุดของคุณ
+
+  Advanced Playlist Dynamic Selection Not Supported: การเลือกแบบไดนามิกและรหัสสถานีที่ไม่ได้รับการสนับสนุนโดยรายการเพลงขั้นสูง รายการเหล่านี้ได้รับการปฏิเสธ
+
+  Breakpoint: เบรกพอยต์
+
+  Station ID: รหัสสถานี
+
+  Total Duration: ระยะเวลารวม
+  Total Duration Estimated: (ประมาณเนื่องจากเนื้อหายาวตัวแปร)
+
+  LiveAssist Buttons Heading: LiveAssist ปุ่ม
+  LiveAssist Buttons Instructions: รายการเพลงลากไปยังพื้นที่นี้ในการเขียนโปรแกรมในพื้นที่ปุ่ม LiveAssist แต่ละรายการที่จะเล่นจะมีคอลัมน์ของปุ่มที่มีปุ่มเดียวต่อรายการรายการเพลง
+
+  Clear Items Confirm: ล้างรายการทั้งหมดจากรายการเพลง?
+  Change Playlist Type Confirm: การเปลี่ยนประเภทรายการเพลงจะล้างรายการเพลงที่มีอยู่ คุณแน่ใจว่าคุณต้องการที่จะทำเช่นนี้?
+
+  Clear LiveAssist Items Confirm: ล้างปุ่ม LiveAssist ทั้งหมดหรือไม่
+
+  Unable To Edit: ไม่สามารถแก้ไขรายการเพลงนี้
+  Name Required: ชื่อรายการที่จะเล่นจะต้อง
+  Valid Status Required: สถานะที่ถูกต้อง
+  Valid Type Required: ประเภทที่ถูกต้อง
+
+  Item Not Valid: อย่างน้อยหนึ่งรายการรายการที่จะเล่นไม่ถูกต้อง
+  Durations Not Valid: หนึ่งหรือมากกว่าระยะเวลาที่สื่อไม่ถูกต้องหรือเป็นศูนย์
+  Approved Media Required: ได้รับการอนุมัติเพียงสื่อยกเลิกการเก็บถาวรสามารถใช้ในรายการเพลง
+  Cannot Use Private Item: รายการสื่อถูกทำเครื่องหมายเป็นส่วนตัว มันสามารถนำมาใช้เฉพาะในรายการเพลงที่สร้างขึ้นโดยเจ้าของเดียวกัน
+  Dynamic Item Not Valid: อย่างน้อยหนึ่งรายการรายการเพลงแบบไดนามิกที่ไม่ถูกต้อง
+
+  LiveAssist Item Not Valid: หนึ่งหรือมากกว่าหนึ่งรายการเพลงปุ่ม LiveAssist ไม่ถูกต้อง
+
+  Error While Saving: เกิดข้อผิดพลาดในขณะที่ประหยัดรายการเพลงนี้
+
+
+Playlist Audio Properties
+
+  Heading: เสียงคุณสมบัติ
+  Instructions: ปัจจุบันมีคุณสมบัติที่คุณสามารถตั้งค่าสำหรับแทร็กเสียง
+
+Playlist Breakpoint Properties
+
+  Heading: คุณสมบัติเบรกพอยต์
+  Instructions: ปัจจุบันมีคุณสมบัติไม่คุณสามารถกำหนดให้เป็นจุดพัก
+
+Playlist Dynamic Item Properties
+
+  Heading: แบบไดนามิกคุณสมบัติของรายการ
+  Selection Name: ชื่อเลือก
+  Number Of Items: จำนวนรายการ
+  All Items: รายการทั้งหมด
+  Image Duration: ภาพที่ระยะเวลา
+  In Seconds: (เป็นวินาที)
+
+  Description Heading: ลักษณะ
+
+  Advanced Search Type: รายละเอียดเพิ่มเติม
+  All Media Search Type: สื่อทั้งหมด
+  Standard Search Type: ค้นหา (ศิลปินหรือชื่อเรื่อง)
+
+  Number Of Items Invalid: จำนวนรายการที่ไม่ถูกต้อง
+  Image Duration Invalid: ระยะเวลาของภาพที่ไม่ถูกต้อง
+  Invalid Search Criteria: เกณฑ์การค้นหาที่ไม่ถูกต้อง
+
+Playlist Image Properties
+
+  Heading: ภาพสถานที่ให้บริการ
+  Image Duration: ภาพที่ระยะเวลา
+  seconds: วินาที
+
+  Valid Image Duration Required: ระยะเวลาที่ภาพถูกต้อง
+
+Playlist Station ID Properties
+
+  Heading: รหัสสถานีคุณสมบัติ
+  Instructions: ปัจจุบันมีคุณสมบัติไม่คุณสามารถกำหนดให้รหัสสถานี
+
+Playlist Video Properties
+
+  Heading: วิดีโอคุณสมบัติ
+  Instructions: ปัจจุบันมีคุณสมบัติที่คุณสามารถตั้งค่าสำหรับวิดีโอ

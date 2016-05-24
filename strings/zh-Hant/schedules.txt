@@ -1,0 +1,143 @@
+﻿Schedules Menu
+
+  Schedules: 時刻表
+  Shows: 節目時間表
+  Permissions: 附表權限
+
+Schedule
+
+  Show Not Found: 顯示未找到。
+  Permission Not Found: Permisison沒有找到。
+
+  Device ID Invalid: 玩家ID無效。
+  Start Or End Date Invalid: 結束日期開始是無效的。
+  User ID Invalid: 用戶ID無效。
+
+  Schedule Only One: 可以在一個時間安排只有一個項目。
+  No Edit Permission: 您沒有編輯此項目的權限。
+
+  Schedule Shows Heading: 節目時間表
+  Schedule Shows Instructions: 拖動媒體或播放列表上日程。雙擊節目進行編輯。
+
+  Line-In: LINE-IN
+  Schedule Line-In: 計劃線路輸入
+
+  Schedule Permissions Heading: 附表權限
+  Schedule Permissions Add Button: 添加權限
+  Schedule Permissions Instructions: 或雙擊一個框編輯/刪除。
+
+  Schedule For: 日程安排：
+
+  Details Name: 名字
+  Details Owner: 業主
+  Details DateTime: 日期/時間
+  Details Duration: 長短
+  Details Scheduled By: 調度
+  Details Scheduled For: 預定
+  Details Description: 描述
+
+  Previous Week: 上一頁
+  Next Week: 下一個
+
+  Sunday: 太陽
+  Monday: 週一
+  Tueday: 週二
+  Wednesday: 週三
+  Thursday: 週四
+  Friday: 週五
+  Saturday: 週六
+
+  January: 一月
+  February: 二月
+  March: 三月
+  April: 四月
+  May: 五月
+  June: 六月
+  July: 七月
+  August: 八月
+  September: 九月
+  October: 十月
+  November: 十一月
+  December: 十二月
+
+  DST Spring Ahead: DST提前春天
+  DST Fall Back: DST秋季返回
+
+Schedule Edit
+
+  No Timeslots Available: 您沒有可供選擇的任何一周的時隙。
+
+  Show Instructions: 以顯示正確的時隙，調度之前，選擇所需的一周。
+  Show Heading: 附表顯示
+
+  Line-In: LINE-IN
+
+  Item Name: 項目名稱
+
+  Permission Instructions: 提供有關此時隙的一些信息。
+  Permission Heading: 附表權限
+
+  Permission For: 許可
+  Permission Name: 名字
+
+  Timeslot: 時隙
+  Manual Input Option: 手動輸入
+
+  Scheduling Mode: 調度方式
+  One-Time Option: 一度
+  Daily Option: 日報
+  Weekly Option: 周刊
+  Monthly Option: 每月一次
+  Every X Days Option: 每隔X天
+  Every X Weeks Option: 每X週
+  Every X Months Option: 每X個月
+
+  Recurring Every: 每一個反复出現
+  Start Date: 開始日期
+  Start Time: 開始時間
+
+  Duration: 長短
+  Duration Days: 天
+  Duration Hours: 小時
+  Duration Minutes: 分鐘
+  Duration Seconds: 秒
+
+  Recurring Last Date: 經常性的最後一天日期
+
+  Delete Show Confirm: 刪除這說明了什麼？
+  Delete Permission Confirm: 刪除此權限？
+
+  Show Not Found: 這個節目不再存在。
+  Permission Not Found: 此權限不再存在。
+  Duration Not Valid: 的持續時間是無效的。
+
+  Required Field Missing: 一個或多個必填字段未填寫。
+  Device Not Found: 這名球員已經不再存在。
+
+  Item Invalid: 您嘗試安排該項目是無效的。
+  Item Does Not Exist: 你正試圖安排的項目不存在。
+  User Does Not Exist: 您選擇的用戶不存在。
+  Device Does Not Exist: 您選擇的球員並不存在。
+  Media Must Be Approved: 媒體必須經過批准。
+  Media Must Not Be Archived: 媒體不得歸檔。
+  Scheduling Mode Not Valid: 所選調度模式是無效的。
+  Start Date/Time Not Valid: 開始日期/時間是無效的。
+  Stop Date/Time Not Valid: 停止（最後一個）日期是無效的，必須來的開始日期/時間之後。
+  Recurring Frequency Not Valid: 的重複次數是無效的。
+
+  Recurring Show Too Long: 經常性節目不能長於28天。
+  Daily Show Too Long: 每天安排了節目不能超過一天。
+  Weekly Show Too Long: 一位選秀節目每週定期不能超過一個星期。
+  XDay Show Too Long: 一位選秀節目不能超過它的頻率。
+  XWeek Show Too Long: 一位選秀節目不能超過它的頻率。
+  Show Conflict: 與其他上了日程本次車展的衝突。
+  Schedule Permission Required: 您沒有權限在指定的時間（s）安排的項目。
+
+  Recurring Permission Too Long: 週期性的權限不能長於28天。
+  Daily Permission Too Long: 每天安排了權限不能超過一天。
+  Weekly Permission Too Long: 排定每週的權限不能超過一個星期。
+  XDay Permission Too Long: 排定的權限不能超過其頻率。
+  XWeek Permission Too Long: 排定的權限不能超過其頻率。
+  Permission Conflict: 與其他上了日程此權限衝突。
+
+

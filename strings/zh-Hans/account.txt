@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: 您提供的密码不正确。
+  Heading: 账号登录
+  Automatically Logged Out: 闲置一段时间后，你被自动注销。请继续前重新登录。
+  Username: 用户名
+  Password: 密码
+  Log In Button: 登录
+  Log In Different User Button: 登录以其他用户身份
+
+Account Settings
+
+  Form Heading: 账户设置
+  Form Help: 根据需要编辑以下帐户设置。只有当你想改变你的密码，输入密码。
+
+  Account Section: 帐户
+
+  Username: 用户名
+  Name: 名字
+  Display Name: 显示名称
+  Password: 新密码
+  Password Again: 新密码（再次）
+  Email: 电子邮件
+
+  UI Section: 用户界面
+
+  Search Results Per Page: 每页的搜索结果
+
+  Language: 语言
+
+  Theme: 主题
+  Light On Dark (Lower Contrast): 光在黑暗（低对比度）
+  Dark On Light (Lower Contrast): 暗月轻（低对比度）
+  Light On Dark (Higher Contrast): 光在黑暗（更高的对比度）
+  Dark On Light (Higher Contrast): 暗月光（更高的对比度）
+  Tanzanite: 坦桑石
+
+  Dyslexia-Friendly Font: 诵读困难友好的字体
+  Enabled Option: 启用
+  Disabled Option: 残
+
+  Settings Updated: 设置已更新。用户界面设置的变化可能需要刷新应用程序才能生效。
+
+  Required Fields Not Filled: 一个或多个必填字段未填写。
+  Email Address Invalid: 您所提供的电子邮件地址无效。
+  Email Address In Use: 您所提供的电子邮件地址已被另一个帐号使用。
+  Passwords Do Not Match: 您提供的密码不匹配。
+  Password Not Long Enough: 您的密码必须至少6个字符长。
+  Language Not Valid: 所选的语言是无效的。
+  Theme Not Valid: 选定的主题是无效的。
+
+Account Menu
+
+  Account: 帐户
+  Logout: 注销
+  Settings: 账户设置
+
+Layout
+
+  Logged In As: 登录为：%1

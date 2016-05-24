@@ -1,0 +1,181 @@
+﻿Media Menu
+
+  Media: Media
+  Upload: Upload Media
+
+Admin Menu
+
+  Media Settings: Media Settings
+
+Upload Media
+
+  Heading: Upload Media
+  Instructions: Click on the grey box below, or drag files onto the box to upload. Maximum file size is 1GB.
+  Select Files Legend: Select Files
+  Select Files: Click to select files, or drag & drop files here.
+  File Drop Failed: Could not get file information.  Try clicking to select files instead.
+  Upload Status: Uploading: %1%
+  ID3 Unavailable: ID3/EXIF Data Unavailable
+  Wait For Upload To Save: Unable to save, please wait until all uploads are complete.
+
+Edit Media
+
+  Heading: Edit Media
+  Instructions: Edit the following as required, then click the save button to commit your changes.
+
+Edit Media Form
+
+  ID3 Button: Use ID3 Data
+  Upload Queue: File is in Upload Queue
+
+  Artist: Artist
+  Title: Title
+  Album: Album / Series
+  Year: Year
+  Category: Category
+  Country: Country
+  Language: Language
+  Genre: Genre
+  Comments: Comments
+  Copyright Owner: Are you the copyright owner
+  Media Approved: Is media approved
+  Status: Status
+  Dynamic Selections: Include in dynamic selections
+
+  Private Option: Private (available to you only)
+  Public Option: Public (available to everyone)
+  Not Applicable Option: Not Applicable
+
+  Copy Field Button: Copy To All
+
+  Media Saved: Media has been saved.
+
+  Media Not Found: This media item no longer exists.
+  Upload Not Valid: The file upload is not valid.
+  File Upload Required: A file upload is required for new media.
+  Format Not Supported: This file format is not supported.
+  Required Fields Not Filled: One or more required fields were not filled.
+  Artist/Title Too Long: One or more artist/title fields are too long.
+  Year Not Valid: The year is not valid.
+  Category Not Valid: The category selected is no longer valid.
+  Country Not Valid: The country selected is no longer valid.
+  Genre Not Valid: The genre selected is no longer valid.
+  Language Not Valid: The language selected is no longer valid.
+  Status Not Valid: The media status is not valid.
+  Genre Not Valid For Category: The selected genre is not available for the selected category.
+
+Media Details
+
+  Media not found: Media not found.
+
+  Media Details: Media Details
+  Loading media details: Loading media details...
+  Details: Details
+
+  ID: ID
+  Uploader: Uploader
+  Created: Created
+  Last Updated: Last Updated
+  Copyright: Copyright
+  Approval: Approval
+  Dynamic Selections: Dynamic Selections
+  
+  Public: Public
+  Private: Private
+
+  Archived: Archived  
+  Approved: Approved
+  Not Approved: Not Approved
+
+  Where is this media used?: Where is this media used?
+  Media is not in use: Media is not in use.
+
+  Possible Dynamic Selection: Indicates possible dynamic selection.
+
+Media Delete
+  Delete Media: Delete Media
+  Are You Sure: Are you sure you want to delete the following media items?
+  No Permission: The following media will not be deleted, as you do not have adequate permissions.
+  Item will be removed from: Item will be removed from
+
+  At Least One Delete: Select at least one media item to delete.
+  Error Fetch Media Status: Error fetching media status.
+  Media Move to Archive: Media will be moved to archive.
+  Media Deletion: Media will be permanently deleted.
+  Media Deleted: Media has been deleted.
+
+Media Restore
+  At Least One Restore: Select at least one media item to restore.
+  Restore Media: Restore Media
+  Are You Sure: Are you sure you want to restore the following media items?
+  Will Be Moved: Item will be moved to approved media.
+  Restore Button: Yes, Restore
+  Media Restored: Media has been restored.
+
+Media Where Used
+
+  device: station ID
+  playlist: playlist
+  playlist_dynamic: dynamic playlist
+  emergency: priority broadcast
+  schedule: schedule for player
+  recurring schedule: recurring schedule for player
+
+Media Settings
+  Heading: Media Categories & Genres
+  Instructions: Click on a category name to show the genres within that category.
+  Add Category Button: Add a Category
+  Add Genre Button: Add a Genre
+
+  Supported File Formats: Supported File Formats
+  File Format Instructions: Select which file formats you wish to accept for media uploads.  Changing this setting will not affect existing media.
+
+  Audio Formats: Audio Formats
+
+  FLAC Description: (Free Lossless Audio Codec)
+  MP3 Description: (MPEG-1 Layer-3 Audio)
+  MP4 Description: (MPEG-4 Audio)
+  OGG Description: (Ogg Container Format)
+  WAV Description: (Waveform Audio)
+
+  Video Formats: Video Formats
+  AVI Description: (Audio Video Interleave, container format)
+  MPEG Description: (Moving Picture Experts Group)
+  WMV Description: (Windows Media Video)
+  MOV Description: (Apple Quicktime)
+
+  Image Formats: Image Formats
+  JPEG Description: (Joint Photographic Experts Group)
+  PNG Description: (Portable Network Graphics)
+  SVG Description: (Scalable Vector Graphics)
+
+  Formats Saved Message: File format settings saved.
+
+  No Genres: No genres found.
+
+
+Category Edit
+
+  Name: Name
+  Name Required Message: A category name is required.
+  Must Remove Message: You must remove the genres within this category before deleting the category.
+  Saved Message: Category Saved.
+  Category Deleted Message: Category deleted.
+
+  Edit Category: Edit Category
+  New Category: New Category
+
+Genre Edit
+
+  New Genre: New Genre
+  Edit Genre: Edit Genre
+
+  Name: Name
+  Description: Description
+  Category: Category
+
+  Delete Genre Confirm: Are you sure you want to delete the genre?
+
+  Name Required Message: A genre name is required.
+  Genres Updated Message: Genres Updated.
+  Genre Deleted Message: Genre Deleted.

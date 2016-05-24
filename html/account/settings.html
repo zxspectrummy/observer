@@ -1,0 +1,89 @@
+<div data-tns="Account Settings">
+
+  <h1 data-t>Form Heading</h1>
+
+  <p data-t>Form Help</p>
+
+  <obwidget type="message" id="account_settings_message"></obwidget>
+
+  <fieldset>
+  <legend data-t>Account Section</legend>
+
+  <div class="fieldrow">
+    <label class="required" data-tid="Username" data-t>Username</label>
+    <span id="account_username"></span>
+  </div>
+
+  <div class="fieldrow">
+    <label class="required" for="account_name_input" data-t>Name</label>
+    <input id="account_name_input" type="text" name="name">
+  </div>
+
+  <div class="fieldrow">
+    <label class="required" for="account_display_name_input" data-t>Display Name</label>
+    <input id="account_display_name_input" type="text" name="name">
+  </div>
+    
+  <div class="fieldrow">
+    <label for="account_password_input" data-t>Password</label>
+    <input id="account_password_input" type="password" name="password">
+  </div>
+
+  <div class="fieldrow">
+    <label for="account_password_again_input" data-t>Password Again</label>
+    <input id="account_password_again_input" type="password" name="password_again">
+  </div>
+
+  <div class="fieldrow">
+    <label class="required" for="account_email_input" data-t>Email</label>
+    <input id="account_email_input" type="text" name="email">
+  </div>
+
+  </fieldset>
+
+  <fieldset>
+  <legend data-t>UI Section</legend>
+
+  <div class="fieldrow">
+    <label for="account_user_results_per_page" data-t>Search Results Per Page</label>
+    <select id="account_user_results_per_page">
+      <option>5</option>
+      <option>10</option>
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
+      <option>250</option>
+      <option>500</option>
+      <option>1000</option>
+    </select>
+  </div>
+
+  <div class="fieldrow">
+    <label data-t>Language</label>
+    <select id="account_language">
+    </select>
+  </div>
+
+  <div class="fieldrow">
+    <label data-t>Theme</label>
+    <select id="account_theme">
+    </select>
+  </div>
+
+  <div class="fieldrow">
+    <label data-t>Dyslexia-Friendly Font</label>
+    <select id="account_dyslexia_friendly_font">
+      <option value="1" data-t data-tns="Common">Enabled</option>
+      <option value="0" data-t data-tns="Common">Disabled</option>
+    </select>
+  </div>
+
+  </fieldset>
+
+  <fieldset>
+  <div class="fieldrow">
+    <button class="add" onclick="OB.Account.settingsSubmit();" data-t data-tns="Common">Save</button>
+  </div>
+  </fieldset>
+
+</div>

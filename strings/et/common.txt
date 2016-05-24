@@ -1,0 +1,23 @@
+﻿Common
+  Okay: Hästi
+  Save: Salvesta
+  New: Uus
+  Edit: Edit
+  Delete: Kustutama
+  Restore: Taastama
+  Cancel: Tühistama
+  Yes Delete: Jah, Kustuta
+  No Cancel: Ei, Loobu
+  Clear: Selge
+  Close: Lähedal
+  Details: Detailid
+  Download: Lae
+  Search: Otsing
+  Add: Lisama
+  Yes: Jah
+  No: Ei
+  Expand: Laienema
+  Collapse: Kokkuvarisemine
+  Enabled: Lubatud
+  Disabled: Invaliidistunud
+

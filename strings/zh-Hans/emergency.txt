@@ -1,0 +1,48 @@
+﻿Schedules Menu
+
+  Emergencies: 优先广播
+
+Emergency
+
+  Heading: 优先广播
+  Instructions: 一个媒体项目拖到下面的表格来安排优先广播。双击编辑条目。
+
+  No Broadcasts: 有计划在该球员没有优先级广播。
+
+  Name: 名字
+  Start: 开始
+  Stop: 停止
+  Frequency: 频率
+  Duration: 长短
+  Media: 媒体
+
+  Only Schedule One Item: 可以在一个时间安排只有一个项目。
+  Playlist Not Supported: 不支持在这个时候优先广播播放列表。
+  Not Found: 找不到优先广播。
+  Required Field Missing: 一个或多个必填字段未填写。
+  Item Does Not Exist: 您正在尝试编辑的项目似乎并不存在。
+  Device Does Not Exist: 这款播放器似乎并不存在。
+  Media Invalid: 这个媒体项是无效的。
+  Media Not Approved: 媒体必须经过批准。
+  Media Is Archived: 媒体不得归档。
+  Frequency Invalid: 频率是无效的。
+  Duration Invalid: 的持续时间是无效的。
+  Start DateTime Invalid: 开始日期/时间是无效的。
+  Stop DateTime Invalid: 停止日期/时间无效。
+  Stop Must Be After Start: 开始日期/时间后停止日期/时间必须发生。
+
+Emergency Edit
+
+  Heading: 优先广播
+  Media Item: 媒体项目
+  Name: 名字
+  Play Every: 每玩
+  Seconds: 秒
+  Image Duration: 图片时间
+  Minutes: 分钟
+  Start Date: 开始日期
+  Start Time: 开始时间
+  Stop Date: 截止日期
+  Stop Time: 停止时间
+
+  Delete Emergency Confirm: 你确定你要删除这个优先广播？

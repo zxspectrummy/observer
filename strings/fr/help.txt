@@ -1,0 +1,4 @@
+﻿Help Menu
+
+  Help: Aidez-Moi
+  Documentation: Documentation

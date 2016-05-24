@@ -1,0 +1,89 @@
+﻿Admin Menu
+
+  Device Settings: Player-Einstellungen
+  Device Manager: Player Manager
+  Device Monitoring: Player Überwachung
+
+Device Manager
+
+  Heading: Player Manager
+  New Device Button: Neuer Spieler
+  ID: Identifikation
+  Name: Name
+  Description: Beschreibung
+  Status: Status
+
+  Version: Version
+  All: Alle
+  Schedule: Zeitplan
+  Emergency: Priorität
+  Media: Medien
+  Playlog: Playlog
+
+  not available: nicht verfügbar
+  never: nie
+
+  Form Heading: Einstellungen
+  Settings Name: Name
+  Settings Description: Beschreibung
+  Settings Parent Device: Mutter Spieler
+  Schedule Check: Verwendung Mutter Zeitplan
+  Dynamic Check: Verwendung Mutter Abgrenzungen
+  ID Check: benutzen Mutterstation-IDs
+  Playlist Check: benutzen Mutterstandardplaylist
+  Emergency Check: benutzen Mutter Priorität Sendungen
+
+  IP Address: IP Adresse
+  Password: Passwort
+  Enter New Password: (Neues Passwort eingeben, um Reset)
+  Timezone: Zeitzone
+  Default Playlist: Standard-Playlist
+  Playlist Drag Zone: (Drag Play hier)
+  Media Drag Zone: (Drag Medien hier)
+  Station IDs: Station IDs
+  Station ID Image Duration: Station ID Bilddauer
+  seconds: Sekunden
+  Media Types: Medientypen
+  Dynamic Selections Only: betrifft nur Abgrenzungen
+  Audio: Audio-
+  Images: Bilder
+  Video: Video
+  Line-In: Line-In
+
+  None: Keiner
+
+  Device List Must Load: Spielerliste muss vor der Erstellung eines neuen Player zu laden.
+  Saved Message: Player gespeichert: (ID #%1)
+
+Device Monitoring
+
+  Heading: Player Überwachung
+  Limited Message: Ergebnisse werden in 1000 Zeilen beschränkt.
+  Options: Options
+  Device: Spieler
+  Start: Start
+  End: Ende
+  Sort: Art
+
+  Media ID: Medien-ID
+  Artist: Künstler
+  Title: Titel
+  Date/Time: Terminzeit
+  Context: Zusammenhang
+  Notes: Aufzeichnungen
+
+  Ascending: Aufsteigend
+  Descending: Absteigend
+
+  Filters: Filter
+
+  Exactly: ist genau das,
+  Not: ist nicht
+  Contains: enthält
+  Not Contain: nicht enthält
+
+  Add Filter Button: Filter hinzufügen
+  Load Data Button: Load Data
+
+  Results: Ergebnisse
+  No Results Message: Keine Suchergebnisse.

@@ -1,0 +1,26 @@
+﻿Admin Menu
+
+  Modules: 模塊
+
+
+Modules Edit
+
+  Heading: 安裝模塊
+  Available Heading: 可用模塊
+
+  No Modules Message: 沒有安裝的模塊。
+  Following Modules Message: 下面的模塊安裝：
+  None Available Message: 沒有可用的安裝模塊。
+  Following Available Message: 下面的模塊可安裝：
+
+  Delete Module Confirm: 你確定你要卸載模塊“%1”？
+  Delete Yes Button: 是的，卸載模塊
+
+  Uninstall Button: 卸載
+  Install Button: 安裝
+
+  Name: 名字
+  Description: 描述
+
+  Install Module Confirm: 你確定你要安裝的模塊“%1”？
+  Install Yes Button: 是的，安裝模塊

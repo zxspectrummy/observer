@@ -1,0 +1,48 @@
+﻿Schedules Menu
+
+  Emergencies: Priority-Übertragungen
+
+Emergency
+
+  Heading: Priority-Übertragungen
+  Instructions: Ziehen Sie eine Medien-Objekt in die Tabelle unten, um Priorität Sendeplan. Doppelklicken Sie auf einen Eintrag, um zu bearbeiten.
+
+  No Broadcasts: Es sind keine Priorität Sendungen Für diesen Spieler geplant.
+
+  Name: Name
+  Start: Start
+  Stop: Stopp
+  Frequency: Häufigkeit
+  Duration: Dauer
+  Media: Medien
+
+  Only Schedule One Item: Sie können nur ein Element zu einem Zeitpunkt planen.
+  Playlist Not Supported: Priority Broadcast Wiedergabelisten werden zu diesem Zeitpunkt nicht unterstützt.
+  Not Found: Priority Sendung nicht gefunden.
+  Required Field Missing: Ein oder mehrere Pflichtfelder wurden nicht ausgefüllt.
+  Item Does Not Exist: Der Artikel, den Sie versuchen, zu bearbeiten nicht angezeigt wird, zu existieren.
+  Device Does Not Exist: Dieser Player nicht erscheint, zu existieren.
+  Media Invalid: Dieses Medien-Objekt ist ungültig.
+  Media Not Approved: Medien müssen genehmigt werden.
+  Media Is Archived: Medien dürfen nicht archiviert werden.
+  Frequency Invalid: Die Frequenz ist ungültig.
+  Duration Invalid: Die Dauer ist ungültig.
+  Start DateTime Invalid: Das Startdatum / Uhrzeit ist ungültig.
+  Stop DateTime Invalid: Die Haltestelle Datum / Uhrzeit ist ungültig.
+  Stop Must Be After Start: Die Haltestelle Datum / Uhrzeit muss nach dem Startdatum / Zeit auftreten.
+
+Emergency Edit
+
+  Heading: Priority Broadcast-
+  Media Item: Medien Artikel
+  Name: Name
+  Play Every: Jede Wiedergabe
+  Seconds: Sekunden
+  Image Duration: Bilddauer
+  Minutes: Minuten
+  Start Date: Anfangsdatum
+  Start Time: Startzeit
+  Stop Date: Stop Datum
+  Stop Time: Stop Time
+
+  Delete Emergency Confirm: Sind Sie sicher, dass Sie möchten, dass diese Priorität Broadcast löschen?

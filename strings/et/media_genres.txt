@@ -1,0 +1,238 @@
+﻿Media Genres
+
+  Yukon: Yukon
+  Classic Rock: Klassikaline Rock
+  Country: Riik
+  Disco: Disko
+  Funk: Hirmutama
+  Grunge: Grunge
+  Hip Hop: Hip-hop
+  Jazz: Džäss
+  Metal: Metall
+  New Age: New Age
+  Oldies: Oldies
+  Pop: Pop-
+  RandB: RandB
+  Rap: Koputus
+  Reggae: Reggae
+  Rock: Kalju
+  Techno: Techno
+  Misc: Muu
+  Trip Hop: Reisi Hop
+  Asian-Pop: Aasia-Pop
+  Alternative Rock: Alternative Rock
+  Electronic: Elektrooniline
+  Pop Folk: Pop Folk
+  Eesti Pop: Eesti Pop
+  Peru Folk: Peruu Folk
+  SoundTrack: Filmimuusika
+  World Beat: World Beat
+  Celtic: Celtic
+  Soft Rock: Soft Rock
+  Ambient: Ümbritsev
+  Native American: Native American
+  Hard Rock: Hard Rock
+  Progressive Rock: Progressive Rock
+  Primus: Primus
+  Buddha Bar: Buddha Bar
+  SFX: SFX
+  Punk: Punk
+  Canadien Francais: Canadien Francais
+  Landscape: Maastik
+  Yellowknife: Yellowknife
+  Yellowknife: Yellowknife
+  Abstract: Abstraktne
+  Adults: Täiskasvanud
+  Agriculture: Põllumajandus
+  Americana: Americana
+  Animal: Loom
+  Architecture: Arhitektuur
+  Arts: Kunst
+  AstroPhotography: Astrofotograafias
+  Baby: Laps
+  Backgrounds: Taustad
+  Boy: Poiss
+  Business: Äri
+  Celebrations: Pidustused
+  Children: Lapsed
+  City: Linn
+  Communications : Communications
+  Computers : Arvutid
+  Conceptual: Kontseptuaalne
+  Couple: Paar
+  Culture: Kultuur
+  Documentary: Dokumentaalfilm
+  Domestic: Sise-
+  Earth Photos: Maa Fotod
+  Education: Haridus
+  Election: Valimised
+  Entertainment: Meelelahutus
+  Environmental: Keskkonna-
+  Families: Pered
+  Fantasy: Fantaasia
+  Financial : Finants-
+  Fineart: Kaunid kunstid
+  Flowers: Lilled
+  Food: Toit
+  General: Üldine
+  Girl: Tüdruk
+  Glamour: Glamour
+  Government: Valitsus
+  Health: Tervis
+  Historic: Ajalooline
+  Holidays: Holidays
+  Homes: Majad
+  Humorous: Lõbus
+  Industrial: Tööstus-
+  International: Rahvusvaheline
+  Landscapes: Maastikud
+  Leisure: Vaba aeg
+  Lifestyles: Elustiili
+  LoveRomance: LoveRomance
+  Manufacturing: Tootmine
+  Medical: Meditsiini-
+  Meetings : Koosolekud
+  Men : Mehed
+  Military: Sõjaline
+  Models: Mudelid
+  Money : Raha
+  Music: Muusika
+  Nature: Loodus
+  Nautical: Merendus-
+  Newspaper: Ajaleht
+  Northern: Põhja-
+  Nostalgia: Nostalgia
+  Office : Kontor
+  Outdoors: Väljas
+  Patriotic: Isamaalik
+  Patterns: Mustrid
+  People : Inimesed
+  Personality: Isiksus
+  Pets: Lemmikloomad
+  PhotoEssay: PhotoEssay
+  Political: Poliitiline
+  Portrait: Portree
+  Recreation: Puhkus
+  Religion: Religioon
+  Science: Teadus
+  Shopping: Ostud
+  Signs: Märgid
+  SpacePhotos: SpacePhotos
+  Sports: Sport
+  StillLife: StillLife
+  Symbols: Sümbolid
+  Teamwork : Meeskonnatöö
+  Technology : Tehnoloogia
+  Textures: Tekstuurid
+  Tourism: Turism
+  Traditional: Traditsiooniline
+  Transportation: Vedu
+  Travel : Reisimine
+  Underwater: Veealune
+  Vintage: Aastakäik
+  Weather: Ilm
+  Wildlife: Wildlife
+  Women: Naised
+  Work and Workplace: Töö ja töökoha
+  XXX: XXX
+  Action: Tegevus
+  Adventure: Seiklus
+  Amateur: Amatöör
+  Animation: Animafilm
+  Biography: Elulugu
+  Blaxploitation: Blaxploitation
+  Chick Flicks: Chick kinos
+  Christmas: Jõulud
+  Classic Hollywood: Klassikaline Hollywood
+  Comedy: Komöödia
+  Comic Book Based: Comic Book Based
+  Crime: Kuritegevus
+  Cult Movies: Cult Filmid
+  Detective Mystery Films: Detektiiv Mystery Films
+  Disaster Films: Katastroof Films
+  Documentary: Dokumentaalfilm
+  Drama: Draama
+  Experimental: Eksperimentaalne
+  Family: Pere
+  Fantasy: Fantaasia
+  Film Noir: Film Noir
+  Game Show: Game Show
+  History: Ajalugu
+  Horror: Õudus
+  Martial Arts: Martial Arts
+  Miscellaneous: Muu
+  Mockumentary: Mockumentary
+  Music Concerts: Muusika Kontserdid
+  Musical: Muusikal
+  News: Uudised
+  Northern: Põhja-
+  Organized Crime: Organiseeritud kuritegevuse
+  Reality TV: Reality TV
+  Road Films: Tee Filmid
+  Romance: Romaani
+  Satire: Satiir
+  SciFi: SciFi
+  Short: Lühike
+  Silent Movies: Silent Filmid
+  Sport: Sport
+  Supernatural Films: Supernatural Films
+  Talk Show: Jutusaade
+  Teen Movies: Teen Filmid
+  Thrillers Suspense: Astroloogia Põnevusfilm
+  TrailersPreviews: TrailersPreviews
+  War: Sõda
+  Western: Lääne-
+  XXX: XXX
+  Blues: Blues
+  Folk: Rahva-
+  Part of Complete Show: Osa Täielik Show
+  Song/Media Intro: Song / Meedia tutvustus
+  Song/Media Outro: Song / Meedia outro
+  Show Intro: Näita tutvustus
+  Show Outro: Näita outro
+  Other: Muu
+  CJUC Station ID: CJUC Station ID
+  CFET Station ID: CFET Station ID
+  Other Station ID: Muud Station ID
+  Show Promotion: Näita Promotion
+  News: Uudised
+  Weather: Ilm
+  Other: Muu
+  Emergency Broadcast: Prioriteet Broadcast
+  Commercial Ad: Commercial Ad
+  Public Service Announcement: Avalik teade
+  Complete Shows: Täielik Shows
+  Other: Muu
+  Alternative: Alternatiiv
+  Alternative Country: Alternatiivsed Riik
+  House Music (Electro): House Muusika (Electro)
+  House Music (minimal): House Muusika (minimaalne)
+  House Music (Tech): House Muusika (Tech)
+  House Music (Deep): House Muusika (Deep)
+  House Music (prog): House Muusika (prog)
+  Acoustic: Akustiline
+  Experimental electronic: Eksperimentaalse elektroonilise
+  Indie: Indie
+  Chillwave-Lounge: Chillwave-Lounge
+  House Music: House Muusika
+  Dubtech: Dubtech
+  Electro-Bassline-Filter: Electro-Bassline-Filter
+  Minimalism: Minimalism
+  Classical: Klassikaline
+  New Wave: New Wave
+  Concert: Kontsert
+  Mash-up: Mash-up
+  Dubstep: Dubstep
+  Movie Bits: Filmi Bits
+  OTR Vintage Commercials: OTR Vintage Commercials
+  OTR Challenge: OTR Challenge
+  OTR TV Themes: OTR TV Teemad
+  Christmas Alt: Jõulud Alt
+  OTR Goon Show: OTR Goon Show
+  Christmas: Jõulud
+  Holiday: Puhkus
+  ComedyFunny: ComedyFunny
+  RA Podcasts: RA Saated
+  Moombahton: Moombahton
+  Soul: Hing
+

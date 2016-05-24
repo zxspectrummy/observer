@@ -1,0 +1,89 @@
+﻿Admin Menu
+
+  Device Settings: mängija seaded
+  Device Manager: mängija juht
+  Device Monitoring: mängija monitor
+
+Device Manager
+
+  Heading: mängija juht
+  New Device Button: uus mängija
+  ID: ID
+  Name: Nimi
+  Description: Kirjeldus
+  Status: Seisund
+
+  Version: Versioon
+  All: Kõik
+  Schedule: Ajakava
+  Emergency: Prioriteet
+  Media: Andmekandja
+  Playlog: mängida log
+
+  not available: ei ole saadaval
+  never: mitte kunagi
+
+  Form Heading: Seaded
+  Settings Name: Nimi
+  Settings Description: Kirjeldus
+  Settings Parent Device: vanem mängija
+  Schedule Check: kasutamine vanema ajakava
+  Dynamic Check: kasutamine vanema dünaamiline valikud
+  ID Check: kasuta vanem jaama ID
+  Playlist Check: kasuta vanem vaikimisi mängida nimekirja
+  Emergency Check: kasuta vanem prioriteet saated
+
+  IP Address: IP aadress
+  Password: Salasõna
+  Enter New Password: (Sisestage uus parool lähtestada)
+  Timezone: ajatsooni
+  Default Playlist: Vaikimisi mängida nimekirja
+  Playlist Drag Zone: (drag mängida nimekirja siin)
+  Media Drag Zone: (drag meedia siin)
+  Station IDs: jaama ID
+  Station ID Image Duration: jaama ID pilti kestus
+  seconds: sekundit
+  Media Types: Meedia tüübid
+  Dynamic Selections Only: mõjutab dünaamiline valikuid ainult
+  Audio: Heli-
+  Images: pildid
+  Video: video
+  Line-In: välissisend
+
+  None: Mitte ükski
+
+  Device List Must Load: Mängijate nimekiri tuleb laadida enne loomisel uus mängija.
+  Saved Message: mängija salvestatud: (ID #%1)
+
+Device Monitoring
+
+  Heading: mängija jälgimine
+  Limited Message: Tulemused on piiratud 1000 rida.
+  Options: Valikud
+  Device: Mängija
+  Start: Algus
+  End: Lõpp
+  Sort: Sort
+
+  Media ID: Meedia ID
+  Artist: Kunstnik
+  Title: Pealkiri
+  Date/Time: Kuupäev / aeg
+  Context: Kontekst
+  Notes: Märkused
+
+  Ascending: Kasvav
+  Descending: Kahanev
+
+  Filters: Filtrid
+
+  Exactly: on täpselt
+  Not: ei ole
+  Contains: sisaldab
+  Not Contain: ei sisalda
+
+  Add Filter Button: Lisa Filter
+  Load Data Button: Load Andmed
+
+  Results: Tulemused
+  No Results Message: No otsingutulemustes.

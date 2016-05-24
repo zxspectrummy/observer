@@ -1,0 +1,38 @@
+
+<div data-tns="Genre Edit">
+
+<obwidget id="genre_addedit_message" type="message"></obwidget>
+
+
+  <fieldset>
+    <legend id="genre_addedit_heading">Heading</legend>
+
+
+    <div class="fieldrow">
+      <label class="required" data-t>Name</label>
+      <input type="text" id="genre_name">
+    </div>
+
+    <div class="fieldrow">
+      <label data-t>Description</label>
+      <input type="text" id="genre_description">
+    </div>
+
+    <div class="fieldrow">
+      <label class="required" data-t>Category</label>
+      <select id="genre_categories"></select>
+    </div>
+
+  </fieldset>
+
+
+  <fieldset>
+    <div class="fieldrow">
+      <button class="add" id="item_properties_save" onclick="OB.Media.genreSave();" data-t data-tns="Common">Save</button>
+      <button class="edit_only delete" id="item_properties_delete" onclick="OB.Media.genreDelete();" data-t data-tns="Common">Delete</button>
+      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+    </div>
+  </fieldset>
+</div>
+
+<input type="hidden" id="genre_addedit_id">

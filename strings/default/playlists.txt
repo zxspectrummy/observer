@@ -1,0 +1,166 @@
+﻿Playlists Menu
+
+  Playlists: Playlists
+  New: New Playlist
+
+Playlist New
+
+  Heading: New Playlist
+  Instructions: Fill out the following playlist information, then drag media and playlist items into the playlist area below.
+
+Playlist Edit
+
+  Heading: Edit Playlist
+  Instructions: Edit the following playlist as required.
+
+  Select One Playlist Only: Select one playlist only.
+
+  Form Heading: Playlist Data
+  Name: Name
+  Description: Description
+  Status: Status
+  Type: Type
+
+  Private Option: Private (available to you only)
+  Public Option: Public (available to everyone)
+
+  Standard Option: Standard
+  Advanced Option: Advanced
+  LiveAssist Option: LiveAssist
+
+  Items Heading: Playlist Items
+  Items Instructions Advanced: Drag media to the area below.  Double-click items to set properties.  Click to select item, then delete/backspace to remove, up/down keys to move.
+  Items Instructions Standard: Drag media and playlists to the area below.  Double-click items to set properties.  Click to select, then delete/backspace to remove, up/down keys to move.  You can also click-drag to reorder.
+
+  Zoom In: Zoom In
+  Zoom Out: Zoom Out
+
+  Drag Items Here: Drag Items Here
+
+  Add Dynamic Selection Button: Add Dynamic Selection
+  Add Station ID Button: Add Station ID
+  Add Breakpoint Button: Add Breakpoint
+
+  Dynamic Selection: Dynamic Selection
+  Dynamic Selection Last Search Notice: The dynamic selection is based on your last media search.
+
+  Advanced Playlist Dynamic Selection Not Supported: Dynamic selections and station IDs are not supported by advanced playlists.  These items have been ignored.
+
+  Breakpoint: Breakpoint
+
+  Station ID: Station ID
+
+  Total Duration: Total Duration
+  Total Duration Estimated: (estimated due to variable length content)
+
+  LiveAssist Buttons Heading: LiveAssist Buttons
+  LiveAssist Buttons Instructions: Drag playlists to this area to program the LiveAssist button area.  Each playlist will be a column of buttons, with one button per playlist item.
+
+  Clear Items Confirm: Clear all items from the playlist?
+  Change Playlist Type Confirm: Changing playlist type will clear the existing playlist.  Are you sure you want to do this?
+
+  Clear LiveAssist Items Confirm: Clear all LiveAssist buttons?
+
+  Unable To Edit: Unable to edit this playlist.
+  Name Required: A playlist name is required.
+  Valid Status Required: A valid status is required.
+  Valid Type Required: A valid type is required.
+
+  Item Not Valid: One or more playlist items is not valid.
+  Durations Not Valid: One or more media durations is invalid or zero.
+  Approved Media Required: Only approved, unarchived media can be used in playlists.
+  Cannot Use Private Item: A media item is marked as private.  It can only be used in playlists created by the same owner.
+  Dynamic Item Not Valid: One or more dynamic playlist items is not valid.
+
+  LiveAssist Item Not Valid: One or more LiveAssist button playlists is invalid.
+
+  Error While Saving: An error occurred while saving this playlist.
+
+Playlist Details
+
+  Playlist not found: Playlist not found.
+
+  Playlist Details: Playlist Details
+  Loading playlist details: Loading playlist details...
+
+  Items: Items
+  Details: Details
+
+  Duration: Duration
+
+  estimated: estimated
+
+  No playlist items found: No playlist items found.
+
+  ID: ID
+  Owner: Owner
+  Created: Created
+  Last Updated: Last Updated
+
+  Private: Private
+  Public: Public
+
+Playlist Where Used
+
+  Where is this playlist used?: Where is this playlist used?
+  Playlist is not in use: Playlist is not in use.
+
+  schedule: schedule for player
+  recurring schedule: recurring schedule for player
+  default playlist: default playlist for player
+  liveassist buttons: liveassist buttons for playlist
+
+Playlist Delete
+
+  Delete Playlists: Delete Playlists
+  Are You Sure: Are you sure you want to delete the following playlists?
+  Item will be removed from: Item will be removed from
+  No Permission: The following playlists will not be deleted, as you do not have adequate permissions.
+  Playlists have been deleted: Playlists have been deleted.
+
+Playlist Audio Properties
+
+  Heading: Audio Properties
+  Instructions: There are presently no properties you can set for audio tracks.
+
+Playlist Breakpoint Properties
+
+  Heading: Breakpoint Properties
+  Instructions: There are presently no properties you can set for breakpoints.
+
+Playlist Dynamic Item Properties
+
+  Heading: Dynamic Item Properties
+  Selection Name: Selection Name
+  Number Of Items: Number of Items
+  All Items: all items
+  Image Duration: Image Duration
+  In Seconds: (in seconds)
+
+  Description Heading: Description
+
+  Advanced Search Type: Advanced Search
+  All Media Search Type: All Media
+  Standard Search Type: Search (artist or title)
+
+  Number Of Items Invalid: The number of items is invalid.
+  Image Duration Invalid: The image duration is invalid.
+  Invalid Search Criteria: Invalid search criteria.
+
+Playlist Image Properties
+
+  Heading: Image Properties
+  Image Duration: Image Duration
+  seconds: seconds
+
+  Valid Image Duration Required: A valid image duration is required.
+
+Playlist Station ID Properties
+
+  Heading: Station ID Properties
+  Instructions: There are presently no properties you can set for station IDs.
+
+Playlist Video Properties
+
+  Heading: Video Properties
+  Instructions: There are presently no properties you can set for videos.

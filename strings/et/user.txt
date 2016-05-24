@@ -1,0 +1,76 @@
+﻿Admin Menu
+  Permissions: Reeglid
+  User Management: Kasutaja Management
+
+Permissions
+  Heading: Reeglid
+  New Group Button: uue grupi
+
+Permissions Edit
+  Heading: muuta grupi
+  Name: Grupi nimi
+  Delete Group Confirm: Olete kindel, et soovite kustutada selle grupiga?
+  Group Name Required: Grupi nimi on nõutav.
+  Permission Invalid: Üks või rohkem õigusi on kehtetu.
+  Cannot Delete Admin: Sa ei saa muuta või kustutada ülemate grupi.
+
+User List
+  Heading: Kasutaja Management
+  Add a User: Lisa Kasutaja
+  Display Name: Display Name
+  Email: E-
+  Created: Loodud
+  Last Access: Viimati Access
+  Groups: Grupid
+
+User Edit
+  Heading: Kasutaja
+  Name: Nimi
+  Username: Kasutajanimi
+  Display Name: Display Name
+  Email: E-
+  Password: Salasõna
+  Password (confirm): Salasõna (kinnitus)
+  Status: Seisund
+  Groups: Grupid
+  Password Warning: Sisesta salasõna ainult siis, kui soovite muuta parooli.
+  Delete User Confirm: Olete kindel, et soovite kustutada selle kasutaja?
+  Required Not Filled: Üks või mitu nõutud väljad ei täidetud.
+  Invalid Email: E-posti aadress on ette ei kehti.
+  Email In Use: E-posti aadress on andnud juba kasutusel teise konto
+  Username In Use: Kasutajanimi olete valinud on juba kasutusel.
+  Password Mismatch: Paroolid ei kattu.
+  Password Short: Salasõna peab olema vähemalt 6 tähemärki.
+
+Permissions List
+  administration: haldus
+  manage media settings: juhtida meedia seaded
+  manage devices: hallata mängijad
+  manage groups and permissions: hallata rühmade ja load
+  create, edit, and delete users: luua, muuta ja kustutada kasutajaid
+  manage client/interface settings: juhtida kliendi / interface seaded
+  install and uninstall modules: paigaldada ja eemaldada moodulid
+  view log produced by logger module: Vaata logi toodetud puuraidur moodul
+
+  Device Category: mängija
+
+  manage schedule timeslots: hallata ajakava ajapilu
+  create, edit, and delete emergency broadcasts: luua, muuta ja kustutada prioriteet saated
+  view device playlogs	: Arvestades mängija mängida logisid
+
+  manage schedule timeslots: hallata ajakava ajapilu
+  create, edit, and delete emergency broadcasts: luua, muuta ja kustutada prioriteet saated
+  view device playlogs: Arvestades mängija mängida logisid
+
+  media: andmekandja
+  create, edit, and delete own media: luua, muuta ja kustutada enda meedia
+  approve own media	: kinnitab oma meedia
+  create, edit, approve, and delete all media	: luua, muuta, heaks kiita, ja kustutada kõik meedia
+  download all media: lae kõik meedia
+
+  playlists: esitusloendeid
+  create, edit, and delete own playlists: luua, muuta ja kustutada enda esitusloendeid
+  create, edit, and delete all playlists: luua, muuta ja kustutada kõik esitusloendeid
+
+  user interface: Kasutajaliides
+  enable advanced show scheduling: Võimaldada Näita sõiduplaani

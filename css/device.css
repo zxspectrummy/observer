@@ -1,0 +1,39 @@
+.device_settings_station_ids
+{
+  position: relative;
+  top: -5px;
+  margin-bottom: -5px;
+  padding: 5px;
+}
+
+.device_settings_default_playlist
+{
+  padding: 5px;
+}
+
+.device_settings_supports_linein_container
+{
+  margin-top: 0 !important; /* needed for consistent spacing when items above are hidden */
+}
+
+#device_list .last_connect_error div
+{
+  height: 20px;
+  text-align: right;
+  font-weight: bold;
+}
+
+#device_list .last_connect_time div
+{
+  height: 20px;
+  white-space: nowrap;
+}
+
+#monitor_filter_list div
+{
+  margin: 7px 0;
+}
+
+select{
+  width:auto;
+}

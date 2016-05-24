@@ -1,0 +1,24 @@
+<div data-tns="Category Edit">
+
+<obwidget type="message" id="category_addedit_message" ></obwidget>
+
+<fieldset>
+<legend id="category_addedit_heading"></legend>
+
+<div class="fieldrow">
+  <label class="required" data-t>Name</label>
+  <input type="text" id="category_name_input">
+</div>
+</fieldset>
+
+<fieldset>
+<div class="fieldrow">
+  <button class="add" onclick="OB.Media.categorySave();" data-t data-tns="Common">Save</button>
+  <button class="delete edit_only" onclick="OB.Media.categoryDelete();" data-t data-tns="Common">Delete</button>
+  <button onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+</div>
+</fieldset>
+
+<input type="hidden" id="category_addedit_id">
+
+</div>

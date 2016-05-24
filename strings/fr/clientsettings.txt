@@ -1,0 +1,9 @@
+﻿Admin Menu
+
+  Client Settings: Paramètres client
+
+Client Settings
+
+  Heading: Paramètres client
+  Welcome Message: Message de bienvenue
+  Save Confirmation: Message de bienvenue enregistré.

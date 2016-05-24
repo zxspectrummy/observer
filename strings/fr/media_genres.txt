@@ -1,0 +1,238 @@
+﻿Media Genres
+
+  Yukon: Yukon
+  Classic Rock: Classic Rock
+  Country: Pays
+  Disco: Discothèque
+  Funk: Trouille
+  Grunge: Grunge
+  Hip Hop: Hip Hop
+  Jazz: Jazz
+  Metal: Métal
+  New Age: Nouvel Age
+  Oldies: Oldies
+  Pop: Pop
+  RandB: RandB
+  Rap: Rap
+  Reggae: Reggae
+  Rock: Rock
+  Techno: Techno
+  Misc: Divers
+  Trip Hop: Trip Hop
+  Asian-Pop: Asie-Pop
+  Alternative Rock: Rock Alternatif
+  Electronic: Électronique
+  Pop Folk: Pop Folk
+  Eesti Pop: Eesti Pop
+  Peru Folk: Pérou Folk
+  SoundTrack: SoundTrack
+  World Beat: World Beat
+  Celtic: Celtique
+  Soft Rock: Soft Rock
+  Ambient: Ambiant
+  Native American: Américain De Naissance
+  Hard Rock: Hard Rock
+  Progressive Rock: Progressive Rock
+  Primus: Primus
+  Buddha Bar: Buddha Bar
+  SFX: SFX
+  Punk: Punk
+  Canadien Francais: Canadien Francais
+  Landscape: Paysage
+  Yellowknife: Yellowknife
+  Yellowknife: Yellowknife
+  Abstract: Résumé
+  Adults: Adultes
+  Agriculture: Agriculture
+  Americana: Americana
+  Animal: Animal
+  Architecture: Architecture
+  Arts: Lettres
+  AstroPhotography: Astrophotographie
+  Baby: Bébé
+  Backgrounds: Fond
+  Boy: Garçon
+  Business: Entreprise
+  Celebrations: Célébrations
+  Children: Enfants
+  City: Ville
+  Communications : Communications
+  Computers : Ordinateurs
+  Conceptual: Conceptuel
+  Couple: Couple
+  Culture: Culture
+  Documentary: Documentaire
+  Domestic: Domestique
+  Earth Photos: Photos de la Terre
+  Education: Éducation
+  Election: Élection
+  Entertainment: Divertissement
+  Environmental: Écologique
+  Families: Familles
+  Fantasy: Fantaisie
+  Financial : Financier
+  Fineart: Fineart
+  Flowers: Fleurs
+  Food: Nourriture
+  General: Général
+  Girl: Fille
+  Glamour: Glamour
+  Government: Gouvernement
+  Health: Santé
+  Historic: Historique
+  Holidays: Fêtes
+  Homes: Maisons
+  Humorous: Humoristique
+  Industrial: Industriel
+  International: International
+  Landscapes: Paysages
+  Leisure: Loisir
+  Lifestyles: Style de vie
+  LoveRomance: LoveRomance
+  Manufacturing: Fabrication
+  Medical: Médical
+  Meetings : Réunions
+  Men : Hommes
+  Military: Militaire
+  Models: Modèles
+  Money : Argent
+  Music: Musique
+  Nature: Nature
+  Nautical: Nautique
+  Newspaper: Journal
+  Northern: Nord
+  Nostalgia: Nostalgie
+  Office : Bureau
+  Outdoors: À l'extérieur
+  Patriotic: Patriotique
+  Patterns: Patterns
+  People : Personnes
+  Personality: Personnalité
+  Pets: Animaux
+  PhotoEssay: PhotoEssay
+  Political: Politique
+  Portrait: Portrait
+  Recreation: Récréation
+  Religion: Religion
+  Science: Science
+  Shopping: Shopping
+  Signs: Signes
+  SpacePhotos: SPACEPHOTOS
+  Sports: Sportif
+  StillLife: Nature morte
+  Symbols: Symboles
+  Teamwork : Travail d'équipe
+  Technology : Technologie
+  Textures: Textures
+  Tourism: Tourisme
+  Traditional: Traditionnel
+  Transportation: Transport
+  Travel : Voyage
+  Underwater: Sous L'Eau
+  Vintage: Millésime
+  Weather: Temps
+  Wildlife: Faune
+  Women: Femmes
+  Work and Workplace: Travail et en milieu de travail
+  XXX: XXX
+  Action: Action
+  Adventure: Aventure
+  Amateur: Amateur
+  Animation: Animation
+  Biography: Biographie
+  Blaxploitation: Blaxploitation
+  Chick Flicks: Chick Flicks
+  Christmas: Noël
+  Classic Hollywood: Classique Hollywood
+  Comedy: Comédie
+  Comic Book Based: Bandes dessinées Based
+  Crime: Crime
+  Cult Movies: Grands Classiques
+  Detective Mystery Films: Policier Mystère Films
+  Disaster Films: Films en cas de catastrophe
+  Documentary: Documentaire
+  Drama: Drame
+  Experimental: Expérimental
+  Family: Famille
+  Fantasy: Fantaisie
+  Film Noir: Film Noir
+  Game Show: Jeu Télévisé
+  History: Histoire
+  Horror: Horreur
+  Martial Arts: Arts Martiaux
+  Miscellaneous: Divers
+  Mockumentary: Mockumentary
+  Music Concerts: Musique Concerts
+  Musical: Musical
+  News: Nouvelles
+  Northern: Nord
+  Organized Crime: Crime organisé
+  Reality TV: Télé réalité
+  Road Films: Road Films
+  Romance: Romance
+  Satire: Satire
+  SciFi: SciFi
+  Short: Court
+  Silent Movies: Silent Movies
+  Sport: Sport
+  Supernatural Films: Supernatural Films
+  Talk Show: Émission de télévision
+  Teen Movies: Films adolescents
+  Thrillers Suspense: Thrillers Suspense
+  TrailersPreviews: TrailersPreviews
+  War: Guerre
+  Western: Occidental
+  XXX: XXX
+  Blues: Blues
+  Folk: Folklorique
+  Part of Complete Show: Une partie de complète Afficher
+  Song/Media Intro: Song / Médias Intro
+  Song/Media Outro: Song / Médias Outro
+  Show Intro: Afficher Intro
+  Show Outro: Afficher Outro
+  Other: Autre
+  CJUC Station ID: CJUC ID station
+  CFET Station ID: CFET ID station
+  Other Station ID: Autre Station ID
+  Show Promotion: Afficher Promotion
+  News: Nouvelles
+  Weather: Temps
+  Other: Autre
+  Emergency Broadcast: Diffusion de priorité
+  Commercial Ad: Ad Commercial
+  Public Service Announcement: Public Service Announcement
+  Complete Shows: Spectacles complets
+  Other: Autre
+  Alternative: Alternative
+  Alternative Country: Alternative Country
+  House Music (Electro): House Music (Electro)
+  House Music (minimal): House Music (minime)
+  House Music (Tech): House Music (Tech)
+  House Music (Deep): House Music (Deep)
+  House Music (prog): House Music (prog)
+  Acoustic: Acoustique
+  Experimental electronic: Électronique expérimentale
+  Indie: Indie
+  Chillwave-Lounge: Chillwave-Lounge
+  House Music: House Music
+  Dubtech: Dubtech
+  Electro-Bassline-Filter: Electro-Bassline-Filter
+  Minimalism: Minimalisme
+  Classical: Classique
+  New Wave: Nouvelle Vague
+  Concert: Concert
+  Mash-up: Mélanger
+  Dubstep: Dubstep
+  Movie Bits: Film Bits
+  OTR Vintage Commercials: Commercials Vintage OTR
+  OTR Challenge: OTR Défi
+  OTR TV Themes: OTR TV Themes
+  Christmas Alt: Alt Noël
+  OTR Goon Show: OTR Spectacle de Cinglé
+  Christmas: Noël
+  Holiday: Vacances
+  ComedyFunny: ComedyFunny
+  RA Podcasts: RA Podcasts
+  Moombahton: Moombahton
+  Soul: Âme
+

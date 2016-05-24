@@ -1,0 +1,43 @@
+
+<obwidget id ="my_searches_message" type="message"></obwidget>
+
+<div data-tns="My Searches">
+
+<p data-t>Instructions</p>
+
+  <fieldset>
+    <legend data-t>Heading</legend>
+
+    <p id="my_searches_saved_nosearches" class="hidden" data-t>No Searches</p>
+
+    <div id="my_searches_saved"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend data-t>Search History Heading</legend>
+
+    <p id="my_searches_history_nosearches" class="hidden" data-t>No Searches</p>
+    <div id="my_searches_history"></div>
+
+  </fieldset>
+
+  <fieldset>
+    <div class="fieldrow">
+      <button onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Close</button>
+    </div>
+
+  </fieldset>
+
+  <div class="my_searches_context_menu" id="my_searches_history_context_menu">
+    <div><a class="context_menu_item" onclick="OB.Sidebar.mySearchesSave();" data-t data-tns="Common">Save</a></div>
+    <div><a class="context_menu_item" onclick="OB.Sidebar.mySearchesDelete();" data-t data-tns="Common">Delete</a></div>
+  </div>
+
+  <div class="my_searches_context_menu" id="my_searches_saved_context_menu">
+    <div><a class="context_menu_item" onclick="OB.Sidebar.mySearchesEditWindow();" data-t data-tns="Common">Edit</a></div>
+    <div class="hidden" id="my_searches_context_menu_set_default"><a class="context_menu_item" onclick="OB.Sidebar.mySearchesMakeDefault();" data-t>Make Default</a></div>
+    <div class="hidden" id="my_searches_context_menu_unset_default" ><a class="context_menu_item" onclick="OB.Sidebar.mySearchesUnsetDefault();" data-t>Unset Default</a></div>
+    <div><a class="context_menu_item" onclick="OB.Sidebar.mySearchesDelete();" data-t data-tns="Common">Delete</a></div>
+  </div>
+
+</div>

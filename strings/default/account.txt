@@ -1,0 +1,60 @@
+﻿Account Login
+
+  Password Incorrect: The password you have provided is incorrect.
+  Heading: Account Login
+  Automatically Logged Out: You were automatically logged out after a certain period of inactivity.  Please log in again before continuing.
+  Username: Username
+  Password: Password
+  Log In Button: Log In
+  Log In Different User Button: Log in as Different User
+
+Account Settings
+
+  Form Heading: Account Settings
+  Form Help: Edit the following account settings as needed.  Only enter a password if you wish to change your password.
+
+  Account Section: Account
+
+  Username: Username
+  Name: Name
+  Display Name: Display Name
+  Password: New Password
+  Password Again: New Password (again)
+  Email: Email
+
+  UI Section: User Interface
+
+  Search Results Per Page: Search Results Per Page
+
+  Language: Language
+
+  Theme: Theme
+  Light On Dark (Lower Contrast): Light On Dark (Lower Contrast)
+  Dark On Light (Lower Contrast): Dark On Light (Lower Contrast)
+  Light On Dark (Higher Contrast): Light On Dark (Higher Contrast)
+  Dark On Light (Higher Contrast): Dark On Light (Higher Contrast)
+  Tanzanite: Tanzanite
+
+  Dyslexia-Friendly Font: Dyslexia-Friendly Font
+  Enabled Option: Enabled
+  Disabled Option: Disabled
+
+  Settings Updated: Settings have been updated. User interface setting changes may require you refresh the application to take effect.
+
+  Required Fields Not Filled: One or more required fields were not filled.
+  Email Address Invalid: The email address you have provided is not valid.
+  Email Address In Use: The email address you have provided is already in use by another account.
+  Passwords Do Not Match: The passwords you have provided do not match.
+  Password Not Long Enough: Your password must be at least 6 characters long.
+  Language Not Valid: The language selected is not valid.
+  Theme Not Valid: The theme selected is not valid.
+
+Account Menu
+
+  Account: Account
+  Logout: Logout
+  Settings: Account Settings
+
+Layout
+
+  Logged In As: Logged in as: %1

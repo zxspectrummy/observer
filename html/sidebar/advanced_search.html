@@ -1,0 +1,103 @@
+<obwidget id="advanced_search_message" type="message" ></obwidget>
+
+<div data-tns="Advanced Search">
+  <fieldset class="advanced_search">
+    <legend class="advanced_search_item" data-t>Heading</legend>
+    <legend class="edit_my_search_item hidden" data-t>Edit Heading</legend>
+
+    <div class="fieldrow">
+
+      <select onchange="OB.Sidebar.advancedSearchFilterChange();" id="advanced_search_filter">
+        <option value="artist">Artist</option>
+        <option value="title">Title</option>
+        <option value="album">Album</option>
+        <option value="year">Year</option>
+        <option value="type">Media Type</option>
+        <option value="category">Category</option>
+        <option value="country">Country</option>
+        <option value="language">Language</option>
+        <option value="genre">Genre</option>
+        <option value="comments">Comments</option>
+        <option value="duration" >Duration</option>
+      </select>
+
+      <select id="advanced_search_text_options">
+        <option value="like">contains</option>
+        <option value="not_like">does not contain</option>
+        <option value="is">is exactly</option>
+        <option value="not">is not</option>
+      </select>
+
+      <select id="advanced_search_year_options" class="hidden">
+        <option value="is">is exactly</option>
+        <option value="not">is not</option>
+        <option value="gte">is greater than or equal to</option>
+        <option value="lte">is less than or equal to</option>
+      </select>
+
+      <select id="advanced_search_duration_options" class="hidden">
+        <option value="gte">is greater than or equal to (seconds)</option>
+        <option value="lte">is less than or equal to (seconds)</option>
+      </select>
+
+      <select id="advanced_search_bool_options" class="hidden">
+        <option value="is">is</option>
+        <option value="not">is not</option>
+      </select>
+
+      <select id="advanced_search_type_options" class="hidden">
+        <option value="audio">Audio</option>
+        <option value="video">Video</option>
+        <option value="image">Image</option>
+      </select>
+
+      <select id="advanced_search_category_options" class="hidden"></select>
+
+      <select id="advanced_search_country_options" class="hidden"></select>
+
+      <select id="advanced_search_language_options" class="hidden"></select>
+
+      <select id="advanced_search_genre_options" class="hidden"></select>
+
+      <input type="text" id="advanced_search_value" size="25">
+
+      &nbsp;
+
+      <button onclick="OB.Sidebar.advancedSearchAdd();" data-t data-tns="Common">Add</button>
+
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend data-t>Search Criteria</legend>
+
+    <p id="advanced_search_no_criteria" data-t>Search Criteria Instructions</p>
+
+    <div id="advanced_search_criteria_list"></div>
+
+  </fieldset>
+
+  <fieldset class="edit_my_search_item hidden">
+    <legend data-t>Search Description</legend>
+    <p data-t>Search Description Instructions</p>
+    <div class="fieldrow">
+      <textarea id="edit_my_search_item_description"></textarea>
+    </div>
+
+    <div class="fieldrow edit_my_search_item hidden">
+      <button class="add" id="edit_my_search_item_save" onclick="OB.Sidebar.mySearchesEdit();" data-t data-tns="Common">Save</button>
+      <button id="item_properties_cancel" onclick="OB.Sidebar.mySearchesWindow();" data-t data-tns="Common">Cancel</button>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="fieldrow advanced_search_item">
+    <div class="fieldrow">
+      <button onclick="OB.Sidebar.advancedSearch();" data-t data-tns="Common">Search</button>
+      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+    </div>
+  </fieldset>
+
+
+</div>

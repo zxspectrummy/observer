@@ -1,0 +1,92 @@
+Advanced Search
+  Heading: 高级搜索
+  Edit Heading: 编辑高级搜索
+  Search Criteria: 搜索条件
+
+  Search Description: 搜索说明
+  Search Description Instructions: 输入搜索说明显示，而不是搜索筛选器列表（可选）。
+
+  Search Criteria Instructions: 添加使用上面的标准。
+
+My Searches
+  Instructions: 点击重新搜索。右键单击更多的选择。
+  Heading: 已保存的搜索
+  Search History Heading: 搜索历史
+  No Searches: 没有找到搜索。
+
+  Make Default: 设为默认
+  Unset Default: 未设置默认
+
+Sidebar
+  Enter Search Query: （输入搜索查询）
+  Advanced Search Query: （高级模式）
+
+  Media Player: 媒体播放器
+  Media: 媒体
+  Playlists: 播放列表
+  advanced: 先进
+  simple: 简单
+  my searches: 我的搜索
+
+  My Filter Link: 我的
+  Approved Filter Link: 批准
+  Unapproved Filter Link: 未经批准
+  Archived Filter Link: 存档
+
+  Video Search Symbol: 视频
+  Image Search Symbol: 图像
+  Audio Search Symbol: 音频
+
+  Artist: 艺术家
+  Album/Series: 专辑/系列
+  Title: 称号
+  Year: 年
+  Category: 类别
+  Genre: 类型
+  Country: 国家
+  Language: 语言
+  Time: 时间
+  Name: 名字
+  Description: 描述
+
+  Loading: 加载中...
+  more: 更多
+  less: 减
+  previous: 前
+  next: 下一个
+
+  Media Items Found: 发现%1的媒体项目
+  Media Item Found: 1媒体项目发现
+
+  No Media Found: 没有发现媒体
+  No Playlists Found: 没有发现播放列表
+
+  Playlist Found: 1个播放列表发现
+  Playlists Found: 发现%1的播放列表
+
+  At Least One Delete: 至少选择一个媒体项删除。
+  At Least One Restore: 至少选择一个媒体项目恢复。
+  Error Fetch Media Status: 错误获取媒体的地位。
+  Media Move to Archive: 媒体将被移动到存档。
+  Media Deletion: 媒体将被永久删除。
+  Media Restored: 媒体已经恢复。
+  Media Deleted: 媒体已被删除。
+
+  Item will be removed from: 项目将从被删除
+
+Playlist Delete
+  Delete Playlists: 删除播放列表
+  Are You Sure: 你确定要删除下列播放列表？
+  No Permission: 下面的播放列表将不会被删除，因为你没有足够的权限。
+
+
+Media Delete
+  Delete Media: 删除媒体
+  Are You Sure: 要删除以下媒体项目吗？
+  No Permission: 下面的媒体不会被删除，因为你没有足够的权限。
+
+Restore Media
+  Restore Media: 还原媒体
+  Are You Sure: 要还原以下媒体项目吗？
+  Will Be Moved: 项目将被移动到批准的媒体。
+  Restore Button: 是的，恢复

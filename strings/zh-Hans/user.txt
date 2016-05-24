@@ -1,0 +1,76 @@
+﻿Admin Menu
+  Permissions: 权限
+  User Management: 用户管理
+
+Permissions
+  Heading: 权限
+  New Group Button: 新集团
+
+Permissions Edit
+  Heading: 编辑权限对于集团
+  Name: 集团名称
+  Delete Group Confirm: 您确定要删除该组？
+  Group Name Required: 一组名称是必需的。
+  Permission Invalid: 一个或多个许可无效。
+  Cannot Delete Admin: 您不能编辑或删除管理员组。
+
+User List
+  Heading: 用户管理
+  Add a User: 添加用户
+  Display Name: 显示名称
+  Email: 电子邮件
+  Created: 创建
+  Last Access: 上次访问
+  Groups: 群体
+
+User Edit
+  Heading: 用户
+  Name: 名字
+  Username: 用户名
+  Display Name: 显示名称
+  Email: 电子邮件
+  Password: 密码
+  Password (confirm): 密码（确认）
+  Status: 状态
+  Groups: 群体
+  Password Warning: 输入密码，只有当你想更改密码。
+  Delete User Confirm: 你确定要删除这个用户？
+  Required Not Filled: 一个或多个必填字段未填写。
+  Invalid Email: 您所提供的电子邮件地址无效。
+  Email In Use: 您所提供的电子邮件地址已在使用由另一账户
+  Username In Use: 您选择的用户名已在使用。
+  Password Mismatch: 密码不匹配。
+  Password Short: 密码必须至少6个字符。
+
+Permissions List
+  administration: 管理
+  manage media settings: 管理媒体设置
+  manage devices: 管理球员
+  manage groups and permissions: 管理组和权限
+  create, edit, and delete users: 创建，编辑和删除用户
+  manage client/interface settings: 管理客户端/界面设置
+  install and uninstall modules: 安装和卸载模块
+  view log produced by logger module: 通过记录仪模块查看日志产生
+
+  Device Category: 播放机
+
+  manage schedule timeslots: 管理调度时隙
+  create, edit, and delete emergency broadcasts: 创建，编辑和删除的优先广播
+  view device playlogs	: 查看球员playlogs
+
+  manage schedule timeslots: 管理调度时隙
+  create, edit, and delete emergency broadcasts: 创建，编辑和删除的优先广播
+  view device playlogs: 查看球员playlogs
+
+  media: 媒体
+  create, edit, and delete own media: 创建，编辑和删除自己的媒体
+  approve own media	: 批准自己的媒体
+  create, edit, approve, and delete all media	: 创建，编辑，审批，并删除所有媒体
+  download all media: 下载所有媒体
+
+  playlists: 播放列表
+  create, edit, and delete own playlists: 创建，编辑和删除自己的播放列表
+  create, edit, and delete all playlists: 创建，编辑和删除所有播放列表
+
+  user interface: 用户界面
+  enable advanced show scheduling: 启用高级调度秀
