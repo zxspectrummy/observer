@@ -40,9 +40,9 @@ __OpenBroadcaster Server__ uses AJAX, Gstreamer, HTML5 and Javascript to deliver
  * Point-of-purchase promotions
 
 OpenBroadcaster Server
-http://www.openbroadcaster.pro/
+http://www.openbroadcaster.com/
 
-Copyright 2012-2016 OpenBroadcaster, Inc.
+Copyright 2012-2018 OpenBroadcaster, Inc.
 
 Licensed under GNU AGPLv3.  See COPYING.
 
