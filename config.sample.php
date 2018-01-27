@@ -1,4 +1,4 @@
-<?
+<?php
 
 const OB_DB_USER = 'dbuser'; // database user
 const OB_DB_PASS = 'dbpass'; // database password

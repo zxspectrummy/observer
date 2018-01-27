@@ -41,9 +41,19 @@ OB.Playlist.advancedInit = function()
   // establish drop target for media (advanced playlist)
   $('#playlist_edit_advanced').droppable({
       drop: function(event, ui) {
+
+        var private_media_alert = false;
+        var playlist_owner_id = $('#playlist_owner_id').val();
+
         if($(ui.draggable).attr('data-mode')=='media')
         {
           $('.sidebar_search_media_selected').each(function(index,element) { 
+
+            if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
+            {
+              private_media_alert = true;
+              return true;
+            }
 
             if($(element).attr('data-type')=='image') var insert_duration = 15;
             else var insert_duration = parseFloat($(element).attr('data-duration'));
@@ -58,6 +68,8 @@ OB.Playlist.advancedInit = function()
             OB.Playlist.advancedAddItem(item);
 
           });
+
+          if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
 
           // unselect our media from our sidebar
           OB.Sidebar.mediaSelectNone();
@@ -80,10 +92,21 @@ OB.Playlist.advancedInit = function()
               $.each(playlist_data['items'], function(index, item) {
                 if(item.type=='dynamic') { not_supported_error = true; }
                 else if(item.type=='station_id') { not_supported_error = true;  }
+                else if(item.status=='private' && item.owner_id!=playlist_owner_id)
+                {
+                  private_media_alert = true;
+                  return true;
+                }
                 else OB.Playlist.advancedAddItem(item);
               });
 
-              if(not_supported_error) OB.UI.alert(['Playlist Edit', 'Advanced Playlist Dynamic Selection Not Supported']);
+              if(not_supported_error && private_media_alert) OB.UI.alert(OB.t(['Playlist Edit', 'Advanced Playlist Dynamic Selection Not Supported'])+"\n\n"+OB.t(['Playlist Edit','Cannot Use Private Item']));
+              
+              else
+              {
+                if(not_supported_error) OB.UI.alert(['Playlist Edit', 'Advanced Playlist Dynamic Selection Not Supported']);
+                if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
+              }
 
             });
 

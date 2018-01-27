@@ -28,9 +28,15 @@ OB.Help.initMenu = function()
 {
   OB.UI.addMenuItem(['Help Menu','Help'],'help',100);
   OB.UI.addSubMenuItem('help',['Help Menu','Documentation'],'documentation',OB.Help.documentation,10);
+  OB.UI.addSubMenuItem('help',['Help Menu','Updates'],'updates',OB.Help.update,15);
 }
 
 OB.Help.documentation = function()
 {
-  window.open('http://wiki.openbroadcaster.com/');
+  window.open('https://wiki.openbroadcaster.com/Observer');
+}
+
+OB.Help.update = function()
+{
+  window.open('http://support.openbroadcaster.com/observer-updates');
 }

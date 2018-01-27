@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -359,21 +359,35 @@ class UsersModel extends OBFModel
     $settings['language'] = $data['language'];
     $settings['theme'] = $data['theme'];
     $settings['dyslexia_friendly_font'] = !empty($data['dyslexia_friendly_font']) ? 1 : 0;
+    $settings['sidebar_display_left'] = !empty($data['sidebar_display_left']) ? 1 : 0;
     unset($data['language']);
     unset($data['theme']);
     unset($data['dyslexia_friendly_font']);
+    unset($data['sidebar_display_left']);
 
     $this->db->where('id',$user_id);
     $this->db->update('users',$data);
 
     foreach($settings as $setting=>$value)
     {
+      $this->db->where('user_id',$user_id);
+      $this->db->where('setting',$setting);
+      $this->db->delete('users_settings');
+
+      $data = array();
+      $data['user_id'] = $user_id;
+      $data['setting'] = $setting;
+      $data['value'] = $value;
+      $this->db->insert('users_settings',$data);
+
+      /*
       $this->db->query('INSERT INTO users_settings (user_id, setting, value) 
         VALUES (
           "'.$this->db->escape($user_id).'",
           "'.$this->db->escape($setting).'",
           "'.$this->db->escape($value).'"
         ) ON DUPLICATE KEY UPDATE value = "'.$this->db->escape($value).'"');
+      */
     }
 
   }

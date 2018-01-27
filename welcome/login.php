@@ -6,7 +6,7 @@
 
   <p id="login_message"></p>
 
-  <? /* form/submit tags used so browser offers to save password. does not function without javascript. */ ?>
+  <?php /* form/submit tags used so browser offers to save password. does not function without javascript. */ ?>
   <form method="post" action="index.php" onSubmit="return false;">
   <table>
   <tr>

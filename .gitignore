@@ -4,3 +4,5 @@ modules/*
 !modules/now_playing
 !modules/logger
 !modules/tutorial
+.*.swp
+.*.swo

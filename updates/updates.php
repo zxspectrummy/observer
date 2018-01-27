@@ -1,4 +1,4 @@
-<? 
+<?php 
 
 /*     
     Copyright 2013 OpenBroadcaster, Inc.
@@ -41,7 +41,7 @@ class OBFChecker
 
   public function php_mysql_extension()
   {
-    if(!extension_loaded('mysql')) return array('PHP MySQL extension', 'PHP MySQL extension not found.',2);
+    if(!extension_loaded('mysqli')) return array('PHP MySQL extension', 'PHP MySQL extension not found.',2);
     return array('PHP MySQL extension', 'PHP MySQL extension detected.',0);
   }
 
@@ -282,7 +282,7 @@ class OBFUpdates
     $updates = array();
     foreach($scandir as $file)
     {
-      if(!preg_match('/[0-9]{8}\.php/',$file)) continue;
+      if(!preg_match('/[0-9]{8}\.php$/',$file)) continue;
       $file_explode = explode('.',$file);
       $version = $file_explode[0];
 

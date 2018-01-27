@@ -1,4 +1,4 @@
-<?
+<?php
 
 require('../components.php');
 $db = OBFDB::get_instance();
@@ -32,19 +32,19 @@ else $version = 4;
 	<div id="container2">
 
 		<div class="section" id="login">
-			<? include('login.php'); ?>
+			<?php include('login.php'); ?>
 		</div>
 
 		<div class="section" id="forgotpass" style="display: none;">
-			<? include('forgotpass.php'); ?>
+			<?php include('forgotpass.php'); ?>
 		</div>
 
 		<div class="section" id="newaccount" style="display: none;">
-			<? include('newaccount.php'); ?>
+			<?php include('newaccount.php'); ?>
 		</div>
 
 		<p style="font-size: 0.9em; padding-top: 1em;">Running version <?=$version?>.<br>Browser support Firefox 36+, Chrome 41+, Safari 7+, IE 11+.</p>
-		<p style="font-size: 0.9em; padding-top: 1em;">OpenBroadcaster is released under Affero GPL v3 and may be downloaded at <a href="http://www.openbroadcaster.com/">openbroadcaster.com</a>.  View <a href="http://www.gnu.org/licenses/agpl.html">license</a>.</p>
+		<p style="font-size: 0.9em; padding-top: 1em;">OpenBroadcaster is released under Affero GPL v3 and may be downloaded at <a href="https://openbroadcaster.com/observer">openbroadcaster.com</a>.  View <a href="https://openbroadcaster.com/observer_licence">license</a>.</p>
 
 	</div>
 

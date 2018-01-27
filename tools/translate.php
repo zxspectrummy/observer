@@ -6,7 +6,7 @@
 
 <h1>OpenBroadcaster Translate</h1>
 
-<? 
+<?php 
 
 $tmp = scandir('../strings/default');
 $files = array();
@@ -124,7 +124,7 @@ if(!empty($_POST['submit']))
 <form method="post">
 
 <p>
-<textarea name="t" style="width: 600px; height: 400px;" wrap="off"><? if($_POST['t']) echo htmlspecialchars(trim($_POST['t'])); ?></textarea>
+<textarea name="t" style="width: 600px; height: 400px;" wrap="off"><?php if($_POST['t']) echo htmlspecialchars(trim($_POST['t'])); ?></textarea>
 </p>
 
 <p><input type="submit" value="Submit" name="submit"></p>

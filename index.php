@@ -1,4 +1,4 @@
-<?
+<?php
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
 
@@ -48,14 +48,14 @@ $image_files = $ui_model->image_files();
   <meta charset="utf-8">
   <title>OpenBroadcaster</title>
 
-  <? // TODO: need a way to add this to theme or default UI information elsewhere ... like prepend/append html HEAD function/variable/object? ?>
+  <?php // TODO: need a way to add this to theme or default UI information elsewhere ... like prepend/append html HEAD function/variable/object? ?>
   <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
   <link type="text/css" href="/extras/jquery-ui-themes/ui-darkness/jquery-ui-1.8.23.custom.css" rel="Stylesheet">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-  <? // TODO: don't require migrate... I think superfish is causing problems with newer jquery but we need to swap this plugin out anyway. ?>
+  <?php // TODO: don't require migrate... I think superfish is causing problems with newer jquery but we need to swap this plugin out anyway. ?>
   <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
 
   <script type="text/javascript" src="extras/jquery-ui-1.8.23.custom.min.js"></script>
@@ -72,20 +72,20 @@ $image_files = $ui_model->image_files();
 
   <link rel="stylesheet" type="text/css" href="extras/jquery-ui-timepicker-addon.css">
  
-  <? foreach($js_files as $file) { ?>
+  <?php foreach($js_files as $file) { ?>
     <script type="text/javascript" src="<?=$file?>?v=<?=urlencode($version)?>"></script>
-  <? } ?>
-  <? /* <script type="text/javascript" src="js-min/ob.min.js"></script> */ ?>
+  <?php } ?>
+  <?php /* <script type="text/javascript" src="js-min/ob.min.js"></script> */ ?>
 
   <script type="text/javascript" src="strings.php?v=<?=urlencode($version)?>"></script>
 
-  <? foreach($css_files as $file) { ?>
+  <?php foreach($css_files as $file) { ?>
     <link rel="stylesheet" type="text/css" href="<?=$file?>?v=<?=urlencode($version)?>">
-  <? } ?>
+  <?php } ?>
 
-  <? if(!empty($user->userdata['dyslexia_friendly_font'])) { ?>
+  <?php if(!empty($user->userdata['dyslexia_friendly_font'])) { ?>
     <link rel="stylesheet" type="text/css" href="opendyslexic/opendyslexic.css?v=<?=urlencode($version)?>">
-  <? } ?>
+  <?php } ?>
 
 </head>
 
@@ -94,9 +94,9 @@ $image_files = $ui_model->image_files();
 <div id="main_container"></div>
 
 <div id="preload_images" style="display: none;">
-  <? foreach($image_files as $file) { ?>
+  <?php foreach($image_files as $file) { ?>
     <img src="<?=$file?>">
-  <? } ?>
+  <?php } ?>
 </div>
 
 </body>

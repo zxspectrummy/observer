@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -144,7 +144,7 @@ class Remote
 
     // update our 'last connect' date
     $this->db->where('id',$this->device['id']);
-    $this->db->update('devices',array('last_connect'=>$this->localtime));
+    $this->db->update('devices',array('last_connect'=>$this->localtime,'last_ip_address'=>$_SERVER['REMOTE_ADDR']));
 
     // initialize xml stuff.
     $this->xml=new SimpleXMLElement('<?xml version=\'1.0\' standalone=\'yes\'?><obconnect></obconnect>');
@@ -154,6 +154,19 @@ class Remote
         if(!empty($_POST['version'])) 
         {
           $this->DevicesModel('update_version',$this->device['id'],$_POST['version']);
+	//add function to update location
+         if(!empty($_POST['longitude']) || !empty($_POST['latitude'])) 
+         {
+           $this->DevicesModel('update_location',$this->device['id'],$_POST['longitude'],$_POST['latitude']);
+         }
+  
+        }
+
+	if(is_file('VERSION'))
+        {
+          $version = trim(file_get_contents('VERSION'));
+          header ("content-type: application/json");
+          echo json_encode($version);
         }
     }
 
@@ -1153,13 +1166,13 @@ class Remote
     elseif($context!='show' && $context!='emerg' && $context!='fallback') 
       $error="Context is invalid.";
 
-    elseif($context=='emerg' && !ereg('^[0-9]+$',$emerg_id)) 
+    elseif($context=='emerg' && !preg_match('/^[0-9]+$/',$emerg_id)) 
       $error="Emergency broadcast ID is invalid or missing.";
 
-    elseif(!ereg('^[0-9]+$',$device_id))
+    elseif(!preg_match('/^[0-9]+$/',$device_id))
       $error="Device ID is invalid.";
 
-    elseif(!ereg('^[0-9]+$',$media_id))
+    elseif(!preg_match('/^[0-9]+$/',$media_id))
       $error="Media ID is invalid.";
 
     else {

@@ -21,6 +21,7 @@ OB.Account = new Object();
 
 OB.Account.username = '';
 OB.Account.user_id = 0;
+OB.Account.userdata = null;
 
 OB.Account.profile_upload_status = false;
 
@@ -45,15 +46,18 @@ OB.Account.getAccountStatus = function()
   post.push(['account','uid',{}]);
   post.push(['account','permissions',{}]);
   post.push(['account','groups',{}]);
+  post.push(['account','settings',{}]);
 
   OB.API.multiPost(post,function(data) { 
 
     var uid = data[0];
     var permissions = data[1];
     var groups = data[2];
+    var settings = data[3];
 
     OB.Account.user_id=uid.data.id;
     OB.Account.username=uid.data.username;
+    OB.Account.userdata=settings.data;
     
     OB.Account.updateAccountStatus();
 
@@ -190,6 +194,11 @@ OB.Account.settings = function()
     else dyslexia_friendly_font = 1;
     $('#account_dyslexia_friendly_font').val(dyslexia_friendly_font);
 
+    var sidebar_display_left = userdata['sidebar_display_left'];
+    if(!parseInt(sidebar_display_left)) sidebar_display_left = 0;
+    else sidebar_display_left = 1;
+    $('#account_sidebar_display_left').val(sidebar_display_left);
+
   });
 
 }
@@ -206,6 +215,7 @@ OB.Account.settingsSubmit = function()
   data['language'] = $('#account_language').val();
   data['theme'] = $('#account_theme').val();
   data['dyslexia_friendly_font'] = $('#account_dyslexia_friendly_font').val();
+  data['sidebar_display_left'] = $('#account_sidebar_display_left').val();
 
   OB.API.post('account','update_settings',data,function(response) {
     $('#account_settings_message').obWidget(response.status ? 'success' : 'error',response.msg);

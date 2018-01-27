@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012 OpenBroadcaster, Inc.
@@ -124,7 +124,7 @@ class OBFCallbacks
       if($callback_is_model)
       {
         $model = $this->load->model(substr($cbname_explode[0],0,-5));
-        $cb_return = $model->$cbname_explode[1]($hook,$position,$args);
+        $cb_return = $model->{$cbname_explode[1]}($hook,$position,$args);
       }
 
       else

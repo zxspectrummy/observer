@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -52,6 +52,7 @@ class Device extends OBFController
       if(!$this->user->check_permission('manage_devices')) // hide sensitive info unless we are a device manager.
       {
         unset($devices[$index]['ip_address']);
+        $devices[$index]['last_ip_address'] = '******';
       }
     }
 

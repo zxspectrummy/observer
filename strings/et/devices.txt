@@ -14,6 +14,7 @@ Device Manager
   Status: Seisund
 
   Version: Versioon
+  Last IP: Viimati IP
   All: Kõik
   Schedule: Ajakava
   Emergency: Prioriteet

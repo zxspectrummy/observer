@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -72,6 +72,8 @@ class PlaylistsModel extends OBFModel
     $this->db->what('media.type','media_type');
     $this->db->what('media.title','title');
     $this->db->what('media.artist','artist');
+    $this->db->what('media.owner_id','owner_id');
+    $this->db->what('media.status','status');
 
     $this->db->leftjoin('media','playlists_items.item_id','media.id');
 

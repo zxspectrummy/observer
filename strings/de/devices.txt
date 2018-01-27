@@ -14,6 +14,7 @@ Device Manager
   Status: Status
 
   Version: Version
+  Last IP: Letzte IP
   All: Alle
   Schedule: Zeitplan
   Emergency: Priorität

@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -116,6 +116,7 @@ class Account extends OBFController
     $data['language'] = trim($this->data('language'));
     $data['theme'] = trim($this->data('theme'));
     $data['dyslexia_friendly_font'] = trim($this->data('dyslexia_friendly_font'));
+    $data['sidebar_display_left'] = trim($this->data('sidebar_display_left'));
 
     $validation = $this->UsersModel('settings_validate',$user_id,$data);
     

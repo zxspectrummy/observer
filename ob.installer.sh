@@ -18,7 +18,7 @@
 # along with OpenBroadcaster Server. If not, see <http://www.gnu.org/licenses/>.
 
 ## install these packages before running this script:
-apt-get install imagemagick python-gst0.10 python-gobject gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly apg php5-mcrypt php5-gd mysql-server php5-mysql apache2 vorbis-tools festival libav-tools php5-imagick php5-curl
+apt-get install apache2 apg mysql-server libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-mbstring php7.0-xml php7.0-gd php7.0-curl php7.0-imagick imagemagick libav-tools vorbis-tools festival libavcodec-extra libavfilter-extra
 
 ## As root, run this script as an argument to the bash command, or by setting the executable bit.
 
@@ -190,7 +190,7 @@ echo "Site files are in place..."
 echo "*/5 * * * * $WEBUSER /usr/bin/php $WEBROOT/cron.php" > /etc/cron.d/openbroadcaster
 
 ## We need to create a file full of variables for OB to access the DB and such.  
-echo "<?" >> $WEBROOT/config.php
+echo "<?php" >> $WEBROOT/config.php
 echo "" >> $WEBROOT/config.php
 echo "const OB_HASH_SALT='$SALT';" >> $WEBROOT/config.php
 echo "const OB_DB_USER = '$OBDBUSER';" >> $WEBROOT/config.php
@@ -216,20 +216,23 @@ echo "	ServerName $OBFQDN" >> $CWD/ob.apache.conf
 echo "	DocumentRoot $WEBROOT" >> $CWD/ob.apache.conf
 echo "	<Directory $WEBROOT>" >> $CWD/ob.apache.conf
 echo "		Options Indexes FollowSymLinks MultiViews" >> $CWD/ob.apache.conf
-echo "		Order allow,deny" >> $CWD/ob.apache.conf
-echo "		allow from all" >> $CWD/ob.apache.conf
+echo "		Require	all granted" >> $CWD/ob.apache.conf
+echo "	</Directory>" >> $CWD/ob.apache.conf
+echo "	<Directory $WEBROOT/.git>" >> $CWD/ob.apache.conf
+echo "		Require all denied" >> $CWD/ob.apache.conf
 echo "	</Directory>" >> $CWD/ob.apache.conf
 echo "	<Directory $WEBROOT/tools>" >> $CWD/ob.apache.conf
-echo "		Order allow,deny" >> $CWD/ob.apache.conf
-echo "		deny from all" >> $CWD/ob.apache.conf
+echo "		Require all denied" >> $CWD/ob.apache.conf
 echo "	</Directory>" >> $CWD/ob.apache.conf
 echo "	<Directory $WEBROOT/db>" >> $CWD/ob.apache.conf
-echo "		Order allow,deny" >> $CWD/ob.apache.conf
-echo "		deny from all" >> $CWD/ob.apache.conf
+echo "		Require all denied" >> $CWD/ob.apache.conf
 echo "	</Directory>" >> $CWD/ob.apache.conf
 echo "ErrorLog /var/log/apache2/$OBFQDN/err.log" >> $CWD/ob.apache.conf
 echo "LogLevel warn" >> $CWD/ob.apache.conf
 echo "CustomLog /var/log/apache2/$OBFQDN/access.log combined" >> $CWD/ob.apache.conf
+echo "php_value upload_max_filesize 1000M" >> $CWD/ob.apache.conf
+echo "php_value post_max_size 1010M" >> $CWD/ob.apache.conf
+echo "php_value short_open_tag On" >> $CWD/ob.apache.conf
 echo "</VirtualHost>" >> $CWD/ob.apache.conf
 
 echo ""

@@ -99,7 +99,7 @@ class Upload extends OBFController
       // if missing information or duration is zero, not valid.
       if(empty($mediainfo->streams) || empty($mediainfo->format) || empty($mediainfo->format->duration)) return $return;
     
-      $has_video_steram = false;
+      $has_video_stream = false;
       $has_audio_stream = false;
 
       $possibly_audio = array_search($mediainfo->format->format_name, array('flac','mp3','ogg','wav'))!==false || $mediainfo->format->format_long_name=='QuickTime / MOV';
@@ -107,7 +107,7 @@ class Upload extends OBFController
       foreach($mediainfo->streams as $stream)
       {
         // ignore probable cover art
-        if($possibly_audio && $stream->codec_name=='mjpeg' && $stream->avg_frame_rate=='0/0') continue;    
+        if($possibly_audio && ($stream->codec_name=='mjpeg' || $stream->codec_name=='png') && $stream->avg_frame_rate=='0/0') continue;    
 
         if($stream->codec_type=='video') $has_video_stream = true;
         elseif($stream->codec_type=='audio') $has_audio_stream = true;
@@ -215,7 +215,17 @@ class Upload extends OBFController
 
     // get ID3 data.
     $id3=$this->getid3('assets/uploads/'.$id);
-    $result['info'] = array('comments'=>$id3['comments']);
+
+    // $result['info'] = array('comments'=>$id3['comments']);
+
+    // get only the data we need (this should be expanded). sometimes other data causes encoding problems? maybe re: thumbnail image.
+    $id3_data = array();
+    if(isset($id3['comments']['artist'])) $id3_data['artist'] = $id3['comments']['artist'];
+    if(isset($id3['comments']['album'])) $id3_data['album'] = $id3['comments']['album'];
+    if(isset($id3['comments']['title'])) $id3_data['title'] = $id3['comments']['title'];
+    if(isset($id3['comments']['comments'])) $id3_data['comments'] = $id3['comments']['comments'];
+    if(count($id3_data)>0) $result['info'] = array('comments'=>$id3_data);
+    else $result['info'] = array();
 
     // get some useful media information, insert it into the db with our file id/key.
     $media_info = $this->media_info('assets/uploads/'.$id);

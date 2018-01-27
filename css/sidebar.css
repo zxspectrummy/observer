@@ -107,11 +107,54 @@
 
 .sidebar_search_detailed
 {
-
   width: 900px;
   position: relative;
   left: -530px; 
+}
 
+.sidebar_display_left .sidebar_search_detailed
+{
+  left: auto;
+}
+
+#media_detailed_toggle_right
+{
+  display: none;
+}
+
+#media_detailed_toggle_left
+{
+  display: inline;
+}
+
+.sidebar_search_media_container_detailed #media_detailed_toggle_right
+{
+  display: inline;
+}
+
+.sidebar_search_media_container_detailed #media_detailed_toggle_left
+{
+  display: none;
+}
+
+.sidebar_display_left #media_detailed_toggle_right
+{
+  display: inline;
+}
+
+.sidebar_display_left #media_detailed_toggle_left
+{
+  display: none;
+}
+
+.sidebar_display_left .sidebar_search_media_container_detailed #media_detailed_toggle_right
+{
+  display: none;
+}
+
+.sidebar_display_left .sidebar_search_media_container_detailed #media_detailed_toggle_left
+{
+  display: inline;
 }
 
 
@@ -355,10 +398,14 @@
   width: 340px;
 }
 
+/* work for expanded view and collpased view, but a bit messy */
+/* TODO display is a bit glitchy? */
+/*
 .sidebar_search_noresults
 {
-  width: 900px; /* work for expanded view and collpased view, but a bit messy */
+  width: 900px;
 }
+*/
 
 .sidebar_search_media_artist
 {
@@ -413,6 +460,12 @@
   height: 40px;
   line-height: 40px;
   float: left;
+}
+
+.sidebar_display_left #sidebar_search_media_footer .details, .sidebar_display_left #sidebar_search_playlist_footer .details
+{
+  float: right;
+  text-align: right;
 }
 
 #sidebar_search_media_footer .results, #sidebar_search_playlist_footer .results

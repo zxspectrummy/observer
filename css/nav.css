@@ -38,7 +38,7 @@
 .sf-menu li.sfHover ul {
         left:                   0;
         bottom:                 2.7em; /* match top ul list item height */
-        z-index:                99;
+        z-index:                101;
 }
 
 ul.sf-menu li:hover li ul,
@@ -83,6 +83,7 @@ ul.sf-menu li li li.sfHover ul {
 }
 
 .sf-menu li ul {
+  border: 1px solid #eeeeec;
   border-radius: 5px;
   background-color: #555753;
 }

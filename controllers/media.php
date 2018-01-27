@@ -179,9 +179,13 @@ class Media extends OBFController
     // if all valid, proceed with media update (or create new)
     if($all_valid)
     {
+      $items = array();
+      foreach($media as $item)
+        {
+        $items[] = $this->MediaModel('save',$item);
+        }
+      return array(true,'Media Saved',$items);
 
-      foreach($media as $item) $this->MediaModel('save',$item);
-      return array(true);
     }
 
     else

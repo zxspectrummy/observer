@@ -37,7 +37,7 @@ Edit Media Form
   Language: Language
   Genre: Genre
   Comments: Comments
-  Copyright Owner: Are you the copyright owner
+  Copyright Owner: Are you the copyright owner and want this publically downloadable
   Media Approved: Is media approved
   Status: Status
   Dynamic Selections: Include in dynamic selections

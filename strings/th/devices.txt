@@ -14,6 +14,7 @@ Device Manager
   Status: สถานะ
 
   Version: รุ่น
+  Last IP: IP ล่าสุด
   All: ทั้งหมด
   Schedule: ตารางเวลา
   Emergency: ลำดับความสำคัญ

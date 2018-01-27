@@ -4,21 +4,22 @@ Check for updated installation info at http://wiki.openbroadcaster.com
 
 Dependencies are Debian/Ubuntu package names.
 
-- libav-tools (version 9 or later)
-- php5-mysql
-- php5-gd
-- php5-curl
-- php5-imagick
-- vorbis-tools
+- apache2
+- apg
 - festival
 - imagemagick
+- libav-tools
+- libavcodec-extra
+- libavfilter-extra
+- mysql-server
+- php7.0
+- php7.0-mysql
+- php7.0-mbstring
+- php7.0-xml
+- php7.0-gd
+- php7.0-curl
+- php7.0-imagick
+- vorbis-tools
 
-Codec dependencies for transcoding, etc:
 
-- libavcodec-extra-53
-- libavdevice-extra-53
-- libavfilter-extra-2
-- libavformat-extra-53
-- libavutil-extra-51
-- libpostproc-extra-52
-- libswscale-extra-2
+

@@ -294,7 +294,6 @@ OB.Device.settingsDeviceList = function()
 
     for(var i in devices)
     {
-
       var last_connect = devices[i].last_connect ? format_timestamp(devices[i].last_connect) : '<i data-t>never</i>';
       var last_connect_schedule = devices[i].last_connect_schedule ? format_timestamp(devices[i].last_connect_schedule) : '<i data-t>never</i>';
       var last_connect_playlog = devices[i].last_connect_playlog ? format_timestamp(devices[i].last_connect_playlog) : '<i data-t>never</i>';
@@ -311,6 +310,7 @@ OB.Device.settingsDeviceList = function()
           <div class="last_connect_error_media">&nbsp;</div><div class="last_connect_error_playlog">&nbsp;</div></td>\
           <td class="last_connect_time">\
           <div class="version"><span data-t>Version</span>: '+version+'</div>' +
+          '<div class="last_ip_address"><span data-t>Last IP</span>: '+devices[i].last_ip_address+'</div>' +
           '<div class="last_connect_all"><span data-t>All</span>: '+last_connect+'</div>' +
           '<div class="last_connect_schedule"><span data-t>Schedule</span>: '+last_connect_schedule+'</div>' +
           '<div class="last_connect_emergency"><span data-t>Emergency</span>: '+last_connect_emergency+'</div>' +

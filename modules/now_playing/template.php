@@ -1,4 +1,4 @@
-<?
+<?php
 /*     
     Copyright 2012 OpenBroadcaster, Inc.
 
@@ -31,13 +31,13 @@
 
 <body class="device-<?=$device['id']?>">
 
-<? 
+<?php 
 $device_description = ($device['description'] ? $device['description'] : $device['name']);
 ?>
 
-<? if(empty($data['show_time_left']) || $data['show_time_left']<1 || empty($data['media']['time_left']) || $data['media']['time_left']<1) { ?>
+<?php if(empty($data['show_time_left']) || $data['show_time_left']<1 || empty($data['media']['time_left']) || $data['media']['time_left']<1) { ?>
 <div id="now_playing" class="error">An error occurred while trying to determine what's playing.  Perhaps nothing is playing.</p>
-<? } else { ?>
+<?php } else { ?>
 <table id="now_playing">
 <tr>
 	<td class="label">Show:</td>
@@ -57,7 +57,7 @@ $device_description = ($device['description'] ? $device['description'] : $device
 	<td colspan="2">Powered by <a href="http://openbroadcaster.com/">OpenBroadcaster</a></td>
 </tr>
 </table>
-<? } ?>
+<?php } ?>
 
 </body>
 

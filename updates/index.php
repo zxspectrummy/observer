@@ -1,4 +1,4 @@
-<? 
+<?php 
 
 /*     
     Copyright 2013 OpenBroadcaster, Inc.
@@ -96,20 +96,20 @@ else $run=true;
 <h1>OpenBroadcaster Install Checker</h1>
 
 <table id="check_table">
-<? foreach($u->checker_results as $result) { ?>
-<tr class="check_<? if($result[2]==0) echo 'ok'; elseif($result[2]==1) echo 'warning'; else echo 'error'; ?>">
+<?php foreach($u->checker_results as $result) { ?>
+<tr class="check_<?php if($result[2]==0) echo 'ok'; elseif($result[2]==1) echo 'warning'; else echo 'error'; ?>">
   <td><?=htmlspecialchars($result[0])?></td>
-  <td><? if(is_array($result[1])) { $output = implode("\n\n",$result[1]); echo nl2br(htmlspecialchars($output)); } else echo nl2br(htmlspecialchars($result[1])); ?></td>
+  <td><?php if(is_array($result[1])) { $output = implode("\n\n",$result[1]); echo nl2br(htmlspecialchars($output)); } else echo nl2br(htmlspecialchars($result[1])); ?></td>
 </tr>
-<? } ?>
+<?php } ?>
 </table>
 
-<? if(!$u->checker_status) { ?><p style="font-weight: bold; padding-top: 25px;">Errors above (red) must be corrected before updates can be run.</p><? } ?>
+<?php if(!$u->checker_status) { ?><p style="font-weight: bold; padding-top: 25px;">Errors above (red) must be corrected before updates can be run.</p><?php } ?>
 
-<? if($u->checker_status) { ?>
+<?php if($u->checker_status) { ?>
   <h1>OpenBroadcaster Updates</h1>
 
-  <? $list = $u->updates(); 
+  <?php $list = $u->updates(); 
     //$list = array_reverse($list); // don't reverse list, causes updates to run in wrong order. will need to rework to do this. (new updates on top is nicer.)
   ?>
 
@@ -120,37 +120,37 @@ else $run=true;
   <p style="text-align: center; font-size: 1.1em; padding: 10px 0;"><a href="index.php?run=1">Run Updates Now</a></p>
 
 
-  <? foreach($list as $update) { ?>
+  <?php foreach($list as $update) { ?>
 
     <h2><?=$update->version?></h2>
 
-    <? if(!$update->needed) { ?>
+    <?php if(!$update->needed) { ?>
       <p style="font-weight: bold; color: #006;">This update is not needed or is already installed.</p>
-    <? } elseif($run) { 
+    <?php } elseif($run) { 
       $result = $u->run($update);
-      if($result==true) { ?><p style="font-weight: bold; color: #060;">This update has completed successfully.</p><? } 
+      if($result==true) { ?><p style="font-weight: bold; color: #060;">This update has completed successfully.</p><?php } 
       else
       {
         ?><p style="color: #a00; font-weight: bold;">An error occurred while attempting to make this update.</p>
-        <? if($update->error) echo '<p style="font-weight: bold;">'.htmlspecialchars($update->error).'</p>'; ?>
-        <p>This script will now terminate.</p><?
+        <?php if($update->error) echo '<p style="font-weight: bold;">'.htmlspecialchars($update->error).'</p>'; ?>
+        <p>This script will now terminate.</p><?php
         break;
       }
     } ?>  
 
-    <? 
+    <?php 
     $items = $update->items(); 
-    if(empty($items)) { ?><p>No description is available for this update.</p><? } else { ?>
+    if(empty($items)) { ?><p>No description is available for this update.</p><?php } else { ?>
       <ul>
-      <? foreach($items as $item) { ?>
+      <?php foreach($items as $item) { ?>
         <li><?=htmlspecialchars($item)?></li>
-      <? } ?>
+      <?php } ?>
       </ul>
-    <? } ?>
+    <?php } ?>
     <br>
 
-  <? } ?>
-<? } ?>
+  <?php } ?>
+<?php } ?>
 
 </div>
 

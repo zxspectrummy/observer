@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -22,9 +22,8 @@
 class MediaModel extends OBFModel
 {
   
-  public function get_init()  
+  public function get_init_what()
   {
-
     $this->db->what('media.id','id');
     $this->db->what('media.title','title');
     $this->db->what('media.artist','artist');
@@ -64,14 +63,21 @@ class MediaModel extends OBFModel
     $this->db->what('media.dynamic_select','dynamic_select');
 
     $this->db->what('users.display_name','owner_name');
+  }
 
+  public function get_init_join()
+  {
     $this->db->leftjoin('media_categories','media_categories.id','media.category_id');
     $this->db->leftjoin('media_languages','media.language_id','media_languages.id');
     $this->db->leftjoin('media_countries','media.country_id','media_countries.id');
     $this->db->leftjoin('media_genres','media.genre_id','media_genres.id');
-
     $this->db->leftjoin('users','media.owner_id','users.id');
+  }
 
+  public function get_init()  
+  {
+    $this('get_init_what');
+    $this('get_init_join');
   }
 
   public function get_by_id($id)
@@ -237,7 +243,9 @@ class MediaModel extends OBFModel
     // if we don't have "manage_media" permission, we can't view others' private media.
     if(!$device_id && !$this->user->check_permission('manage_media')) $where_array[] = '(status = "public" OR owner_id = "'.$this->db->escape($this->user->param('id')).'")';
 
-    $this('get_init');
+    //if($random_order) $this('get_init_join'); 
+    //else $this('get_init');
+    //if(!$random_order) $this('get_init');
 
     // limit by id?
     if(!empty($params['id'])) $where_array[] = 'media.id = "'.$this->db->escape($params['id']).'"';
@@ -268,26 +276,68 @@ class MediaModel extends OBFModel
     // put all the where data together.
     $this->db->where_string(implode(' AND ',$where_array));
 
-    if(!empty($params['offset'])) $this->db->offset($params['offset']);
-    if(!empty($params['limit'])) $this->db->limit($params['limit']);
-
-    // if remote mode, we need random order... (generating dynamic playlist)
-    if($random_order) $this->db->random_order();
-
-    // otherwise, if posted sort by data is valid, use that...
-    elseif( isset($params['sort_dir']) && ($params['sort_dir'] =='asc' || $params['sort_dir'] == 'desc') && array_search($params['sort_by'], array('artist','album','title','year','category_name','genre_name','country_name','language_name','duration','updated'))!==false )
+    if(!$random_order)
     {
-      $this->db->orderby($params['sort_by'],$params['sort_dir']);
+
+      if(!empty($params['offset'])) $this->db->offset($params['offset']);
+      if(!empty($params['limit'])) $this->db->limit($params['limit']);
+
+      // if remote mode, we need random order... (generating dynamic playlist)
+      // if($random_order) $this->db->random_order();
+
+      // otherwise, if posted sort by data is valid, use that...
+      if( isset($params['sort_dir']) && ($params['sort_dir'] =='asc' || $params['sort_dir'] == 'desc') && array_search($params['sort_by'], array('artist','album','title','year','category_name','genre_name','country_name','language_name','duration','updated'))!==false )
+      {
+        $this->db->orderby($params['sort_by'],$params['sort_dir']);
+      }
+
+      // otherwise, show the most recently updated first
+      else $this->db->orderby('updated','desc');
+
+      if(method_exists($this->db,'calc_found_rows')) $this->db->calc_found_rows();
+
+      $this->db->what('media.id');
+      $media = $this->db->get('media');
+
+      $total_media_found = $this->db->found_rows();
+
+      if(empty($media)) return array(array(), $total_media_found);
+
+      $ids = [];
+      foreach($media as $item) $ids[] = (int) $item['id'];
+
+      $this('get_init');  
+      $this->db->where_string('media.id IN('.implode(',',$ids).')');
+      $this->db->orderby_string('FIELD(media.id,'.implode(',',$ids).')');
+
+      return array($this->db->get('media'),$total_media_found);
     }
 
-    // otherwise, show the most recently updated first
-    else $this->db->orderby('updated','desc');
+    else
+    {
+      $this->db->what('media.id');
+      $media = $this->db->get('media');
 
-    if(method_exists($this->db,'calc_found_rows')) $this->db->calc_found_rows();
+      $total_media_found = count($media);
 
-    $media = $this->db->get('media');
+      if(!$total_media_found) return array(array(), 0);
 
-    return array($media,$this->db->found_rows());
+      if(!empty($params['limit']) && $params['limit']>0) $limit = min($params['limit'], $total_media_found);
+      else $limit = $total_media_found;
+
+      $media_keys = array_rand($media,$params['limit']);
+      if(!is_array($media_keys)) $media_keys = array($media_keys);
+      shuffle($media_keys); // array_rand does random selection, shuffle does random order.
+
+      $ids = [];
+      foreach($media_keys as $key) $ids[] = (int) $media[$key]['id'];
+
+      $this('get_init');  
+      $this->db->where_string('media.id IN('.implode(',',$ids).')');
+      $this->db->orderby_string('FIELD(media.id,'.implode(',',$ids).')');
+
+      return array($this->db->get('media'),$total_media_found);
+    }
 
   }
 
@@ -298,7 +348,7 @@ class MediaModel extends OBFModel
       if(is_object($filter)) $filter = get_object_vars($filter);
 
       // make sure our search field and comparison operator is valid
-      if(array_search($filter['filter'],array('comments','artist','title','album','year','type','category','country','language','genre','duration'))===false) return false;
+      if(array_search($filter['filter'],array('comments','artist','title','album','year','type','category','country','language','genre','duration','is_copyright_owner'))===false) return false;
       if(array_search($filter['op'],array('like','not_like','is','not','gte','lte'))===false) return false;
     }
 
@@ -328,6 +378,7 @@ class MediaModel extends OBFModel
       $column_array['genre']='genre_id';
       $column_array['duration']='duration';
       $column_array['comments']='comments';
+      $column_array['is_copyright_owner']='is_copyright_owner';
 
       // our possibile comparison operators
       $op_array = array();

@@ -1,12 +1,17 @@
 OpenBroadcaster - Server Installation Instructions
 
+More info at https://wiki.openbroadcaster.com
 
 These instructions are an alternative to using ob.installer.sh.
 
+*** Enable setting "short_open_tag = On" in your php.ini ***
+
+*** After install, log in as user with Admin privileges and then run https://YOUR_IP/updates ***
+
+Note: When using special characters in the password, they need to use single quotes instead of double quotes when they echo the string 
 
 1. See dependencies.txt for server dependencies.  Mostly PHP/MySQL related, but 
-   a few things (python/gstreamer) to support transcoding and media 
-   identification. 
+   a few things to support transcoding and media identification. 
 
 2. Copy server files to a web environment (web document root).
 
@@ -28,5 +33,31 @@ These instructions are an alternative to using ob.installer.sh.
 
 8. Log into OpenBroadcaster as admin, and access http://ob_install_url/updates/ to
    verify your installation and run any required updates.
+
+Password Login
+
+(installer might not create properly)
+
+First need the value of OB_HASH_SALT from the config file.
+
+Append that value to the password you wants. If the salt is aaaaaaaaaa and the password is password, the string he needs is aaaaaaaaaapassword
+
+from there, get the sha value like this:
+
+echo -n "aaaaaaaaaapassword" | openssl sha1 | cut -f 2 -d " "
+
+copy the string that this puts out.
+
+the log into mysql:
+
+mysql -u root -p
+
+select database:
+
+use openbroadcaster
+
+UPDATE users SET password='d8656d3f3823bce79e3a29253cf1106f6cfeee7c' WHERE username='admin';
+
+Now, assuming that the salt is set as aaaaaaaaaa in the config file, the password password will work.
 
 -EOF-

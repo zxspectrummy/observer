@@ -1,4 +1,4 @@
-<?
+<?php
 
 class OBUpdate20141121 extends OBUpdate
 {

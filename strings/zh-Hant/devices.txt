@@ -14,6 +14,7 @@ Device Manager
   Status: 狀態
 
   Version: 版本
+  Last IP: 最後IP
   All: 所有
   Schedule: 時間表
   Emergency: 優先

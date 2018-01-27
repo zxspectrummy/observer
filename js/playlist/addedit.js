@@ -29,6 +29,9 @@ OB.Playlist.newPage = function()
     $('#playlist_edit_heading').text( OB.t('Playlist New', 'Heading') );
     $('#playlist_edit_instructions').text( OB.t('Playlist New', 'Instructions') );
 
+    // need this to prevent adding other user's private media to this playlist.
+    $('#playlist_owner_id').val(OB.Account.user_id);
+
     OB.Playlist.addeditTypeChange();
 
     OB.Playlist.addeditInit();
@@ -67,6 +70,7 @@ OB.Playlist.editPage = function()
     $('#playlist_name_input').val(playlist_data['name']);
     $('#playlist_description_input').val(playlist_data['description']);
     $('#playlist_id').val($(playlist_local).attr('data-id'));
+    $('#playlist_owner_id').val($(playlist_local).attr('data-owner_id'));
 
     $('#playlist_status_input').val(playlist_data['status']);
     $('#playlist_type_input').val(playlist_data['type']);

@@ -20,4 +20,7 @@
   Collapse: Collapse
   Enabled: Enabled
   Disabled: Disabled
+  Left: Left
+  Right: Right
+
 

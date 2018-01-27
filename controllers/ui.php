@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2014 OpenBroadcaster, Inc.

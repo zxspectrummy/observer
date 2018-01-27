@@ -23,9 +23,19 @@ OB.Playlist.addeditInit = function()
   // establish drop target for media (station IDs)  
   $('#playlist_items').droppable({
       drop: function(event, ui) {
+
+        var private_media_alert = false;
+        var playlist_owner_id = $('#playlist_owner_id').val();
+
         if($(ui.draggable).attr('data-mode')=='media')
         {
           $('.sidebar_search_media_selected').each(function(index,element) { 
+
+            if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
+            {
+              private_media_alert = true;
+              return true;
+            }
 
             if($(element).attr('data-type')=='image') var insert_duration = 15;
             else var insert_duration = $(element).attr('data-duration');
@@ -33,6 +43,8 @@ OB.Playlist.addeditInit = function()
             OB.Playlist.addeditInsertItem($(element).attr('data-id'),$(element).attr('data-artist')+' - '+$(element).attr('data-title'),insert_duration,$(element).attr('data-type'));
           });
 
+          if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
+  
           // unselect our media from our sidebar
           OB.Sidebar.mediaSelectNone();
 
@@ -52,8 +64,15 @@ OB.Playlist.addeditInit = function()
               $.each(playlist_data['items'], function(index, item) {
                 if(item.type=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['dynamic_query'],item['dynamic_duration'],item['dynamic_name'],item['dynamic_num_items'],item['dynamic_image_duration']);
                 else if(item.type=='station_id') OB.Playlist.addeditInsertStationId();
+                else if(item.status=='private' && item.owner_id!=playlist_owner_id)
+                {
+                  private_media_alert = true;
+                  return true;
+                }
                 else OB.Playlist.addeditInsertItem(item['id'],item['artist']+' - '+item['title'],item['duration'],item['type']);
               });
+
+              if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
 
             });
 
@@ -65,7 +84,6 @@ OB.Playlist.addeditInit = function()
           // unselect our playlists from our sidebar
           OB.Sidebar.playlistSelectNone();
         }
-
       }
   });
 

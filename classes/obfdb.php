@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -28,6 +28,9 @@ class OBFDB
   private $result;
   private $last_query;
 
+  private $profiles = null;
+  private $profiling = false;
+
   // helper variables for higher-level functions
   private $hl_what;
   private $hl_where;
@@ -45,6 +48,23 @@ class OBFDB
     $this->connection = mysqli_connect(OB_DB_HOST, OB_DB_USER, OB_DB_PASS);
     mysqli_select_db($this->connection, OB_DB_NAME);
     mysqli_query($this->connection, 'SET NAMES \'utf8\'');
+
+
+    // remove session strict mode for now, until code and database are updated to support it.
+    // get current modes
+    $result = mysqli_query($this->connection, "SHOW SESSION VARIABLES LIKE 'sql_mode'");
+    $row = mysqli_fetch_assoc($result);
+
+    // explode current modes into array and remove strict modes
+    $modes = explode(',',$row['Value']);
+    foreach($modes as $index=>$mode)
+    {
+      if($mode=='STRICT_TRANS_TABLES' || $mode=='STRICT_ALL_TABLES') unset($modes[$index]);
+    }
+
+    // set new modes
+    $new_modes = implode(',',$modes);
+    mysqli_query($this->connection, "SET SESSION sql_mode = '".mysqli_real_escape_string($this->connection, $new_modes)."'");
   }
 
   static function &get_instance() {
@@ -60,6 +80,31 @@ class OBFDB
     return $instance;
 
   }
+
+  // basic profiling functionality.
+  public function enable_profiling()
+  {
+    $this->profiling = true;
+    $this->profiles = array();
+  }
+
+  public function disable_profiling()
+  {
+    $this->profiling = false;
+  }
+
+  public function get_profiles()
+  {
+    return $this->profiles;
+  }
+
+  public function add_profile($query, $duration)
+  {
+    if(!$this->profiling) return false;
+
+    $this->profiles[] = array('query'=>$query, 'duration'=>(float) $duration);
+    return true;
+  }
     
   // basic sql query
   public function query($sql) 
@@ -68,13 +113,14 @@ class OBFDB
 
     $start_time = microtime(true);
     $this->result = mysqli_query($this->connection, $sql);
-
-    if(defined('OB_LOG_SLOW_QUERIES') && OB_LOG_SLOW_QUERIES==TRUE)
+    $duration = round(((microtime(true)-$start_time)),4);
+    
+    if(defined('OB_LOG_SLOW_QUERIES') && OB_LOG_SLOW_QUERIES==TRUE && $duration>1)
     {
-      $duration = round(((microtime(true)-$start_time)),4);
-      if($duration > 1) error_log('SLOW SQL ('.$duration.'s): '.$sql);
+      error_log('SLOW SQL ('.$duration.'s): '.$sql);
     }
-  
+    if($this->profiling) $this->add_profile($sql, $duration);
+
     if($this->result) return true;
   }
 
@@ -267,6 +313,12 @@ class OBFDB
     if(!preg_match('/asc/i',$dir) && !preg_match('/desc/i',$dir)) $dir='asc';
 
     $this->hl_orderby = $this->format_table_column($column).' '.$dir;
+    return true;
+  }
+
+  public function orderby_string($string)
+  {
+    $this->hl_orderby = trim($string);
     return true;
   }
 

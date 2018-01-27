@@ -27,6 +27,11 @@ OB.Sidebar.init = function()
 OB.Sidebar.sidebarInit = function()
 {
 
+  if(parseInt(OB.Account.userdata.sidebar_display_left))
+  {
+    $('#main_container').addClass('sidebar_display_left');
+  }
+
   $('#sidebar_player').droppable({
     drop: function(event, ui) {
 
@@ -156,6 +161,7 @@ OB.Sidebar.mediaDetailedToggle = function()
 
   if($('#sidebar_search').hasClass('sidebar_search_detailed'))
   {
+    $('#main_container').removeClass('sidebar_expanded');
     $('#sidebar_search').removeClass('sidebar_search_detailed');
     $('#sidebar_search_media_container').addClass('sidebar_search_media_container_basic');
     $('#sidebar_search_media_container').removeClass('sidebar_search_media_container_detailed');
@@ -164,11 +170,12 @@ OB.Sidebar.mediaDetailedToggle = function()
     $('.sidebar_search_media_detailed_column').hide();
 
     // update detailed toggle link
-    $('#media_detailed_toggle').text('< '+OB.t('Sidebar','more'));
+    $('#media_detailed_toggle_text').text(OB.t('Sidebar','more'));
 
   }
 
   else {
+    $('#main_container').addClass('sidebar_expanded');
     $('#sidebar_search').addClass('sidebar_search_detailed');
     $('#sidebar_search_media_container').removeClass('sidebar_search_media_container_basic');
     $('#sidebar_search_media_container').addClass('sidebar_search_media_container_detailed');
@@ -177,7 +184,7 @@ OB.Sidebar.mediaDetailedToggle = function()
     $('.sidebar_search_media_detailed_column').show();
 
     // update detailed toggle link
-    $('#media_detailed_toggle').text(OB.t('Sidebar','less')+' >');
+    $('#media_detailed_toggle_text').text(OB.t('Sidebar','less'));
   }
 
   $('#sidebar_search_media_headings').width($('#sidebar_search_media_results').width());
@@ -1312,6 +1319,7 @@ OB.Sidebar.advancedSearchFilterChange = function()
   else if(val=='country') { $('#advanced_search_bool_options').show(); $('#advanced_search_country_options').show(); }
   else if(val=='language') { $('#advanced_search_bool_options').show(); $('#advanced_search_language_options').show(); }
   else if(val=='genre') { $('#advanced_search_bool_options').show(); $('#advanced_search_genre_options').show(); }
+  else if(val=='is_copyright_owner') { $('#advanced_search_bool_options').show(); $('#advanced_search_is_copyright_owner_options').show(); }
   else { $('#advanced_search_text_options').show(); $('#advanced_search_value').show(); $('#advanced_search_value').attr('size',25); }
 
 }

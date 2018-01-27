@@ -36,11 +36,24 @@ body
   height: calc(100vh - 61px); /* use browser height minus footer height */
 }
 
+.sidebar_display_left #layout_container
+{
+  flex-direction: row-reverse;
+}
+
 #layout_main_container
 {
   overflow-y: auto;
   -webkit-flex: auto;
   flex: auto;
+}
+
+@media (min-width: 1780px)
+{
+  .sidebar_display_left.sidebar_expanded #layout_main_container
+  {
+    padding-left: 512px;
+  }
 }
 
 #layout_main

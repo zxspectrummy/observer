@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*     
     Copyright 2012-2013 OpenBroadcaster, Inc.
@@ -295,6 +295,14 @@ class DevicesModel extends OBFModel
     $this->db->where('id',$id);
     $this->db->update('devices',array('version'=>$version));
   }
+
+// function to update device location 
+  public function update_location($id,$longitude,$latitude)
+  {
+    $this->db->where('id',$id);
+    $this->db->update('devices',array('longitude'=>$longitude,'latitude'=>$latitude));
+  }
+
 
   public function delete_check_permission($id)
   {

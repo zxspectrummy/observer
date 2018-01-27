@@ -39,6 +39,8 @@ Account Settings
   Enabled Option: Enabled
   Disabled Option: Disabled
 
+  Sidebar Display: Sidebar Display
+
   Settings Updated: Settings have been updated. User interface setting changes may require you refresh the application to take effect.
 
   Required Fields Not Filled: One or more required fields were not filled.

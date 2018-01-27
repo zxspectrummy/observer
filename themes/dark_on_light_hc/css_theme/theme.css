@@ -128,8 +128,6 @@ button.delete
 .sf-menu li ul {
   background-color: #ededf1; /**/
   border: 1px solid #000000; /**/
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 #sidebar_player

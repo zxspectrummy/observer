@@ -1,4 +1,4 @@
-<?
+<?php
 
 $languages['default'] = array(
   'description' => 'English',
