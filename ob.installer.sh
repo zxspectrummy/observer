@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright 2012-2013 OpenBroadcaster, Inc.
 
