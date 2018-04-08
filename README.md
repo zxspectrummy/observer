@@ -39,12 +39,18 @@ __OpenBroadcaster Server__ uses AJAX, Gstreamer, HTML5 and Javascript to deliver
  * Shopping malls In-store signage & sales
  * Point-of-purchase promotions
 
-OpenBroadcaster Server
+Open Broadcaster
 http://www.openbroadcaster.com/
 
 Copyright 2012-2018 OpenBroadcaster, Inc.
 
 Licensed under GNU AGPLv3.  See COPYING.
 
-Third-party software utilized by OpenBroadcaster is found in the "extras" directory.
+Third-party software utilized by Open Broadcaster is found in the "extras" directory.
 See files in "extras" directory for third-party software license information.
+
+Support Site
+
+http://support.openbroadcaster.com/server/
+
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/openbroadcaster/obplayer.svg?columns=all)](https://waffle.io/openbroadcaster/observer)
