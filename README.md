@@ -53,4 +53,4 @@ Support Site
 
 http://support.openbroadcaster.com/server/
 
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/openbroadcaster/obplayer.svg?columns=all)](https://waffle.io/openbroadcaster/observer)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/openbroadcaster/observer.svg?columns=all)](https://waffle.io/openbroadcaster/observer)
