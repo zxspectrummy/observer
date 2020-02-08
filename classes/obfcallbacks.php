@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -135,7 +135,7 @@ class OBFCallbacks
       }
 
       if(isset($cb_return->v)) $this->store_retval($hook,$cb->callback,$cb_return->v);
-      else $this->store_retval($hook,$cb->callback,$cb_return->v);
+      else $this->store_retval($hook,$cb->callback,null);
 
       // callback is forcing an early return.
       if(!empty($cb_return) && $cb_return->r)

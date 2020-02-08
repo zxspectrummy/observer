@@ -1,5 +1,5 @@
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -44,7 +44,7 @@ $(function(){
      * this swallows backspace keys on any non-input element.
      * stops backspace -> back
      */
-    var rx = /INPUT|SELECT|TEXTAREA/i;
+    var rx = /INPUT|SELECT|TEXTAREA|OB-TAG-INPUT/i;
 
     $(document).bind("keydown keypress", function(e){
         if( e.which == 8 ){ // 8 == backspace

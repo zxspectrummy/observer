@@ -2,14 +2,9 @@
 
 require('../components.php');
 $db = OBFDB::get_instance();
-
-$db->where('user_id',0);
-$db->where('client_name','obapp_web_client');
-$row = $db->get_one('client_storage');
-
-if($row) $global_client_settings = json_decode($row['data']);
-if(isset($global_client_settings->welcome_message)) $welcome_message = $global_client_settings->welcome_message;
-else $welcome_message = '';
+$db->where('name', 'client_login_message');
+$result = $db->get_one('settings');
+$welcome_message = $result ? $result['value'] : '';
 
 if(is_file('VERSION')) $version = trim(file_get_contents('VERSION'));
 else $version = 4;
@@ -52,4 +47,3 @@ else $version = 4;
 
 </body>
 </html>
-

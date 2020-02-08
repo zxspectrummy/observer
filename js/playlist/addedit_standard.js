@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -20,7 +20,7 @@
 // used by new / edit to establish playlist as 'droppable' target.
 OB.Playlist.addeditInit = function()
 {
-  // establish drop target for media (station IDs)  
+  // establish drop target for media (station IDs)
   $('#playlist_items').droppable({
       drop: function(event, ui) {
 
@@ -29,7 +29,7 @@ OB.Playlist.addeditInit = function()
 
         if($(ui.draggable).attr('data-mode')=='media')
         {
-          $('.sidebar_search_media_selected').each(function(index,element) { 
+          $('.sidebar_search_media_selected').each(function(index,element) {
 
             if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
             {
@@ -43,8 +43,9 @@ OB.Playlist.addeditInit = function()
             OB.Playlist.addeditInsertItem($(element).attr('data-id'),$(element).attr('data-artist')+' - '+$(element).attr('data-title'),insert_duration,$(element).attr('data-type'));
           });
 
-          if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
-  
+          //T A media item is marked as private. It can only be used in playlists created by the same owner.
+          if(private_media_alert) OB.UI.alert('A media item is marked as private. It can only be used in playlists created by the same owner.');
+
           // unselect our media from our sidebar
           OB.Sidebar.mediaSelectNone();
 
@@ -59,7 +60,7 @@ OB.Playlist.addeditInit = function()
 
               if(data.status==false) return;
 
-              var playlist_data = data.data;                
+              var playlist_data = data.data;
 
               $.each(playlist_data['items'], function(index, item) {
                 if(item.type=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['dynamic_query'],item['dynamic_duration'],item['dynamic_name'],item['dynamic_num_items'],item['dynamic_image_duration']);
@@ -72,7 +73,8 @@ OB.Playlist.addeditInit = function()
                 else OB.Playlist.addeditInsertItem(item['id'],item['artist']+' - '+item['title'],item['duration'],item['type']);
               });
 
-              if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
+              //T A media item is marked as private. It can only be used in playlists created by the same owner.
+              if(private_media_alert) OB.UI.alert('A media item is marked as private. It can only be used in playlists created by the same owner.');
 
             });
 
@@ -207,7 +209,8 @@ OB.Playlist.addeditItemDown = function()
 // used by new / edit to remove all items from playlist
 OB.Playlist.addeditRemoveAll = function(skip_confirm)
 {
-  if($('.playlist_addedit_item').length && (skip_confirm || confirm( OB.t('Playlist Edit','Clear Items Confirm') )))
+  //T Clear all items from the playlist?
+  if($('.playlist_addedit_item').length && (skip_confirm || confirm( OB.t('Clear all items from the playlist?') )))
   {
     $('.playlist_addedit_item').remove();
     $('#playlist_items_drag_help').show();
@@ -221,7 +224,7 @@ OB.Playlist.addeditTotalDuration = function()
   var total_duration = 0.00;
   var is_estimated = false;  // track whether this is just an estimate or not (i.e. dynamic selection or station id)
 
-  $('#playlist_items .playlist_addedit_item').each(function(index,element) { 
+  $('#playlist_items .playlist_addedit_item').each(function(index,element) {
     if(!isNaN(parseFloat($(element).attr('data-duration')))) {
       total_duration += parseFloat($(element).attr('data-duration'));
     }
@@ -231,7 +234,7 @@ OB.Playlist.addeditTotalDuration = function()
 
 
   $('#playlist_total_duration').text(secsToTime(total_duration));
-  if(is_estimated) 
+  if(is_estimated)
   {
     $('#playlist_total_duration').prepend('*');
     $('#playlist_edit_estimated_help').show();
@@ -246,7 +249,8 @@ OB.Playlist.addeditInsertDynamic = function(is_new,query,duration,selection_name
 
   OB.Playlist.addedit_item_last_id += 1;
 
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'">'+htmlspecialchars( OB.t('Playlist Edit','Dynamic Selection') )+': <span id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_name"></span><span class="playlist_addedit_duration" id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_duration"></span></div>');
+  //T Dynamic Selection
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'">'+htmlspecialchars( OB.t('Dynamic Selection') )+': <span id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_name"></span><span class="playlist_addedit_duration" id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_duration"></span></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-query',query);
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','dynamic');
@@ -256,12 +260,13 @@ OB.Playlist.addeditInsertDynamic = function(is_new,query,duration,selection_name
   // item select
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).click(OB.Playlist.addeditItemSelect);
 
-  if(is_new) 
+  if(is_new)
   {
     OB.Playlist.addeditItemProperties(OB.Playlist.addedit_item_last_id,'dynamic',true);
-    $('#dynamic_item_instructions').text( OB.t('Playlist Edit','Dynamic Selection Last Search Notice') );
+    //T The dynamic selection is based on your last media search.
+    $('#dynamic_item_instructions').text( OB.t('The dynamic selection is based on your last media search.') );
   }
-  else 
+  else
   {
     OB.Playlist.addeditSetDynamicItemProperties(OB.Playlist.addedit_item_last_id,duration,selection_name,(num_items ? num_items : 0),!num_items,image_duration);
   }
@@ -275,7 +280,8 @@ OB.Playlist.addeditInsertStationId = function()
 {
   OB.Playlist.addedit_item_last_id += 1;
 
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_duration">*'+secsToTime(OB.Playlist.station_id_avg_duration)+'</span><i>'+htmlspecialchars( OB.t('Playlist Edit','Station ID') )+'</i></div>');
+  //T Station ID
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_duration">*'+secsToTime(OB.Playlist.station_id_avg_duration)+'</span><i>'+htmlspecialchars( OB.t('Station ID') )+'</i></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','station_id');
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-duration',OB.Playlist.station_id_avg_duration);
@@ -294,7 +300,7 @@ OB.Playlist.addeditInsertStationId = function()
 OB.Playlist.addeditSetDynamicItemProperties = function(id,duration,selection_name,num_items,num_items_all,image_duration)
 {
   $('#playlist_dynamic_selection_'+id+'_name').text(selection_name);
-  $('#playlist_dynamic_selection_'+id+'_duration').text('*'+secsToTime(duration));          
+  $('#playlist_dynamic_selection_'+id+'_duration').text('*'+secsToTime(duration));
 
   $('#playlist_addedit_item_'+id).attr('data-duration',duration);
   $('#playlist_addedit_item_'+id).attr('data-image_duration',image_duration);
@@ -307,16 +313,16 @@ OB.Playlist.addeditGetItems = function()
 {
   var items = new Array();
 
-  $('#playlist_items').children().not('#playlist_items_drag_help').each(function(index,element) { 
+  $('#playlist_items').children().not('#playlist_items_drag_help').each(function(index,element) {
 
     // type can be dynamic, audio, video, or image.  the last 3 are merged into 'media' in terms of how they are stored into the playlist items table.
-    if($(element).attr('data-type')=='dynamic') items.push({ 
-      'type': 'dynamic', 
-      'num_items': $(element).attr('data-num_items'), 
+    if($(element).attr('data-type')=='dynamic') items.push({
+      'type': 'dynamic',
+      'num_items': $(element).attr('data-num_items'),
       'num_items_all': $(element).attr('data-num_items_all')=='true' ? true : false,
-      'image_duration': $(element).attr('data-image_duration'), 
-      'query': $(element).attr('data-query'), 
-      'name': $(element).attr('data-name') 
+      'image_duration': $(element).attr('data-image_duration'),
+      'query': $(element).attr('data-query'),
+      'name': $(element).attr('data-name')
     });
 
     else if($(element).attr('data-type')=='station_id') items.push( { 'type': 'station_id' });
@@ -351,4 +357,3 @@ OB.Playlist.addeditSortStop = function(event, ui)
 {
   $(ui.item).css('z-index','');
 }
-

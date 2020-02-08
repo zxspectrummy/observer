@@ -1,7 +1,7 @@
 <?php 
 
 /*     
-    Copyright 2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -157,7 +157,7 @@ class OBFChecker
         elseif(stripos($response,'OpenBroadcaster-Application: index')===false) $errors[] = 'OB_SITE (installation web address) does not appear to point to a valid OpenBroadcaster installation.';
       }
 
-      if(!PHPMailer::ValidateAddress(OB_EMAIL_REPLY)) $errors[] = 'OB_EMAIL_REPLY (email address used to send emails) is not valid.';
+      if(!PHPMailer\PHPMailer\PHPMailer::ValidateAddress(OB_EMAIL_REPLY)) $errors[] = 'OB_EMAIL_REPLY (email address used to send emails) is not valid.';
       if(trim(OB_EMAIL_FROM)=='')  $errors[] = 'OB_EMAIL_FROM (email name used to send emails) must not be blank.';
 
       if(defined('OB_MAGIC_FILE'))
@@ -188,11 +188,11 @@ class OBFChecker
 
   public function assets()
   {
-    if(!is_dir('assets')) return array('Assets directory','The assets directory does not exist.',2);
-    if(!is_writable('assets')) return array('Assets directory','The assets directory is not writable by the server.',2);
+    if(!is_dir(OB_ASSETS)) return array('Assets directory','The assets directory does not exist.',2);
+    if(!is_writable(OB_ASSETS)) return array('Assets directory','The assets directory is not writable by the server.',2);
 
-    if(!is_dir('assets/uploads')) return array('Assets directory','The assets/uploads directory does not exist.',2);
-    if(!is_writable('assets/uploads')) return array('Assets directory','The assets/uploads directory is not writable by the server.',2);
+    if(!is_dir(OB_ASSETS.'/uploads')) return array('Assets directory','The assets/uploads directory does not exist.',2);
+    if(!is_writable(OB_ASSETS.'/uploads')) return array('Assets directory','The assets/uploads directory is not writable by the server.',2);
   
     return array('Assets directory','Assets and assets/uploads directories exist and are writable by the server.',0);
   }

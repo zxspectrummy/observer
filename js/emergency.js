@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,7 +26,8 @@ OB.Emergency.init = function()
 
 OB.Emergency.initMenu = function()
 {
-  OB.UI.addSubMenuItem('schedules',['Schedules Menu','Emergencies'],'emergency',OB.Emergency.emergency,30,'manage_emergency_broadcasts');
+  //T Priority Broadcasts
+  OB.UI.addSubMenuItem('schedules', 'Priority Broadcasts', 'emergency', OB.Emergency.emergency, 30, 'manage_emergency_broadcasts');
 }
 
 OB.Emergency.device_id = null;
@@ -44,8 +45,9 @@ OB.Emergency.emergency = function()
       drop: function(event, ui) {
 
         if($(ui.draggable).attr('data-mode')=='media')
-        {         
-          if($('.sidebar_search_media_selected').length!=1) { OB.UI.alert(['Emergency','Only Schedule One Item']); return; }
+        {
+          //T You can schedule only one item at a time.
+          if($('.sidebar_search_media_selected').length!=1) { OB.UI.alert('You can schedule only one item at a time.'); return; }
 
           var item_id = $('.sidebar_search_media_selected').first().attr('data-id');
           var item_name = $('.sidebar_search_media_selected').first().attr('data-artist')+' - '+$('.sidebar_search_media_selected').first().attr('data-title');
@@ -60,7 +62,8 @@ OB.Emergency.emergency = function()
         else if($(ui.draggable).attr('data-mode')=='playlist')
         {
 
-          OB.UI.alert(['Emergency','Playlist Not Supported']);
+          //T Priority broadcast playlists are not supported at this time.
+          OB.UI.alert('Priority broadcast playlists are not supported at this time.');
 
         }
 
@@ -75,10 +78,15 @@ OB.Emergency.emergency = function()
 OB.Emergency.emergencyInit = function()
 {
 
-  OB.API.post('device','device_list', {}, function(data)
+  var post = [];
+  post.push(['device','device_list', {}]);
+  post.push(['emergency','emergencies_get_last_device', {}]);
+
+  OB.API.multiPost(post, function(responses)
   {
 
-    var devices = data.data;
+    var devices = responses[0].data;
+    var last_device = responses[1];
 
     $.each(devices,function(index,item) {
 
@@ -93,6 +101,12 @@ OB.Emergency.emergencyInit = function()
 
     });
 
+    if(last_device.status && $('#emergency_device_select option[value='+last_device.data+']').length)
+    {
+      $('#emergency_device_select').val(last_device.data);
+      OB.Emergency.device_id = last_device.data;
+    }
+
     OB.Emergency.loadEmergencies();
 
   });
@@ -102,7 +116,7 @@ OB.Emergency.emergencyInit = function()
 OB.Emergency.deviceChange = function()
 {
 
-  OB.Emergency.device_id = $('#emergency_device_select').val(); 
+  OB.Emergency.device_id = $('#emergency_device_select').val();
   OB.Emergency.loadEmergencies();
 
 }
@@ -110,17 +124,21 @@ OB.Emergency.deviceChange = function()
 OB.Emergency.loadEmergencies = function()
 {
 
-  OB.API.post('emergency','emergencies',{ 'device_id': OB.Emergency.device_id }, function(data)
+  var post = [];
+  post.push(['emergency','emergencies',{ 'device_id': OB.Emergency.device_id }]);
+  post.push(['emergency','emergencies_set_last_device', { 'device': OB.Emergency.device_id}]);
+
+  OB.API.multiPost(post, function(responses)
   {
 
-    if(data.status==true)
+    if(responses[0].status==true)
     {
 
-      var emergencies = data.data;
+      var emergencies = responses[0].data;
 
       $('#emergency_list tbody').children().not('#emergency_table_empty').remove();
 
-      if($(emergencies).length>0) 
+      if($(emergencies).length>0)
       {
 
         $('#emergency_table_empty').hide();
@@ -131,7 +149,7 @@ OB.Emergency.loadEmergencies = function()
           if(data.duration) var duration = Math.round(data.duration)+' seconds';
           else var duration = '';
 
-          $('#emergency_list tbody').append('<tr id="emergency_'+data.id+'"><td>'+htmlspecialchars(data.name)+'</td></td><td>'+format_timestamp(data.start)+'</td><td>'+format_timestamp(data.stop)+'</td><td>'+data.frequency+' '+OB.t("Emergency Edit","Seconds")+'</td><td>'+secsToTime(data.duration)+'</td><td>'+htmlspecialchars(data.item_name)+'</td>');
+          $('#emergency_list tbody').append('<tr id="emergency_'+data.id+'"><td>'+htmlspecialchars(data.name)+'</td></td><td>'+format_timestamp(data.start)+'</td><td>'+format_timestamp(data.stop)+'</td><td>'+data.frequency+' '+OB.t("seconds")+'</td><td>'+secsToTime(data.duration)+'</td><td>'+htmlspecialchars(data.item_name)+'</td>');
 
           $('#emergency_'+data.id).dblclick(function(eventObj)
           {
@@ -175,7 +193,7 @@ OB.Emergency.saveEmergency = function()
   fields.id = $('#emergency_id').val();
   fields.item_id = $('#emergency_item_id').val();
 
-  OB.API.post('emergency','save_emergency',fields,function(data) 
+  OB.API.post('emergency','save_emergency',fields,function(data)
   {
 
     if (data.status == true)
@@ -219,7 +237,7 @@ OB.Emergency.editEmergency = function(id)
       OB.Emergency.addeditEmergencyWindow();
       $('.edit_only').show();
 
-      if(emerg.item_type=='image') 
+      if(emerg.item_type=='image')
       {
         $('#emergency_duration').show();
 
@@ -240,7 +258,7 @@ OB.Emergency.editEmergency = function(id)
 
       var start_time = new Date(parseInt(emerg.start)*1000);
       var stop_time = new Date(parseInt(emerg.stop)*1000);
-    
+
       $('#emergency_start_date').val(start_time.getFullYear()+'-'+timepad(start_time.getMonth()+1)+'-'+timepad(start_time.getDate()));
       $('#emergency_start_time').val(timepad(start_time.getHours())+':'+timepad(start_time.getMinutes())+':'+timepad(start_time.getSeconds()));
 
@@ -257,7 +275,7 @@ OB.Emergency.editEmergency = function(id)
 
 OB.Emergency.addEmergency = function(item_id,item_name,item_type)
 {
-  
+
   OB.Emergency.addeditEmergencyWindow();
   $('.edit_only').hide();
 
@@ -295,15 +313,16 @@ OB.Emergency.deleteEmergency = function(confirm)
 
   else
   {
+    //T Are you sure you want to delete this priority broadcast?
+    //T Yes, Delete
+    //T No, Cancel
     OB.UI.confirm(
-      ['Emergency Edit','Delete Emergency Confirm'],
+      'Are you sure you want to delete this priority broadcast?',
       function() { OB.Emergency.deleteEmergency(true); },
-      ['Common','Yes Delete'],
-      ['Common','No Cancel'],
+      'Yes, Delete',
+      'No, Cancel',
       'delete'
     );
   }
 
 }
-
-

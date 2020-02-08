@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -27,11 +27,11 @@ OB.Media.init = function()
 
 OB.Media.initMenu = function()
 {
-  OB.UI.addMenuItem(['Media Menu','Media'],'media',20);
-  OB.UI.addSubMenuItem('media',['Media Menu','Upload'],'upload',OB.Media.uploadPage,10,'create_own_media');
+  OB.UI.addMenuItem('Media', 'media', 20);
+  OB.UI.addSubMenuItem('media', 'Upload Media', 'upload', OB.Media.uploadPage, 10, 'create_own_media');
 }
 
 OB.Media.initMenu2 = function()
 {
-  OB.UI.addSubMenuItem('admin',['Admin Menu','Media Settings'],'media_settings',OB.Media.settings,40,'manage_media_settings');
+  OB.UI.addSubMenuItem('admin', 'Media Settings', 'media_settings', OB.Media.settings, 40, 'manage_media_settings');
 }

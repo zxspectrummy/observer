@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -19,7 +19,7 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class OBFUser 
+class OBFUser
 {
 
   private $db;
@@ -38,10 +38,10 @@ class OBFUser
     $this->load = OBFLoad::get_instance();
   }
 
-  static function &get_instance() 
+  static function &get_instance()
   {
     static $instance;
-  
+
     if (isset( $instance )) {
       return $instance;
     }
@@ -86,12 +86,12 @@ class OBFUser
 
   // login a user. returns key if successful, false otherwise.
   // loads userdata into $this->userdata.
-  public function login($user,$pass) 
+  public function login($user,$pass)
   {
 
     // check username / password.
     $this->db->where('username',$user);
-    $this->db->where('enabled',1);    
+    $this->db->where('enabled',1);
     $result = $this->db->get_one('users');
 
     if($result && $result['password']=='')
@@ -124,17 +124,17 @@ class OBFUser
       setcookie('ob_auth_key',$key,0,'/',null,false,false);
 
       // return key data.
-      return array('id'=>$result['id'],'key'=>$key, 'key_expiry'=>$key_expiry);
+      return array(true,'Login successful.',array('id'=>$result['id'],'key'=>$key, 'key_expiry'=>$key_expiry));
     }
 
-    else 
+    else
     {
       return array(false,'The login or password you have provided is incorrect.');
-    } 
+    }
 
   }
 
-  // logout 
+  // logout
   public function logout()
   {
 
@@ -167,7 +167,7 @@ class OBFUser
     $result = $this->db->get_one('users');
 
     // session exists and key match?
-    if($result && $this->password_verify($key, $result['key'])) 
+    if($result && $this->password_verify($key, $result['key']))
     {
 
       // cache our userdata.
@@ -200,7 +200,7 @@ class OBFUser
   public function param($param)
   {
 
-    if(empty($this->userdata)) 
+    if(empty($this->userdata))
     {
       if($param=='id') return 0; // anonymous user ID.
       else return false;
@@ -211,10 +211,20 @@ class OBFUser
 
   }
 
+  public function is_public_api()
+  {
+    if(!isset($_POST['c']) || !isset($_POST['a'])) return false;
+
+    $controller_action = strtolower($_POST['c'].'.'.$_POST['a']);
+    if($this->param('id')==0 && defined('OB_PUBLIC_API') && array_search($controller_action,array_map('strtolower',OB_PUBLIC_API))!==FALSE) return true;
+    return false;
+  }
+
   public function require_authenticated()
   {
+    if($this->is_public_api()) return;
 
-    if($this->param('id')==0) 
+    if($this->param('id')==0)
     {
       $this->io->error(OB_ERROR_DENIED);
       die();
@@ -224,27 +234,69 @@ class OBFUser
 
   public function check_permission($permission)
   {
-
     if($this->is_admin) return true;
+    if (php_sapi_name() == 'cli') return true;
 
     $permissions = $this->load->model('Permissions');
 
     return $permissions('check_permission',$permission,$this->param('id'));
-
   }
 
   public function require_permission($permission)
   {
-
     if($this->is_admin) return true;
 
-    if($this->check_permission($permission)===FALSE) 
+    if($this->check_permission($permission)===FALSE)
     {
       $this->io->error(OB_ERROR_DENIED);
       die();
     }
+  }
 
+  public function get_group_ids()
+  {
+    if(!$this->param('id')) return false;
+
+    $ids = [];
+
+    $this->db->where('user_id',$this->param('id'));
+    $rows = $this->db->get('users_to_groups');
+
+    foreach($rows as $row) $ids[] = (int) $row['group_id'];
+
+    return $ids;
+  }
+
+  public function get_setting($name)
+  {
+    if(!$this->param('id')) return false;
+
+    $this->db->where('user_id',$this->param('id'));
+    $this->db->where('setting',$name);
+    $setting = $this->db->get_one('users_settings');
+
+    if(!$setting) return false;
+    else return $setting['value'];
+  }
+
+  public function set_setting($name,$value)
+  {
+    if(!$this->param('id')) return false;
+
+    $this->db->where('user_id',$this->param('id'));
+    $this->db->where('setting',$name);
+    if($setting = $this->db->get_one('users_settings'))
+    {
+      $this->db->where('id',$setting['id']);
+      $this->db->update('users_settings',['value'=>$value]);
+    }
+    else $this->db->insert('users_settings',[
+      'user_id'=>$this->param('id'),
+      'setting'=>$name,
+      'value'=>$value
+    ]);
+
+    return true;
   }
 
 }
-

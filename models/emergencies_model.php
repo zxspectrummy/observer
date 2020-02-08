@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -47,7 +47,7 @@ class EmergenciesModel extends OBFModel
 
     $this('get_init');
 
-    $this->db->where('emergencies.id',$id); 
+    $this->db->where('emergencies.id',$id);
 
     $emergency = $this->db->get_one('emergencies');
 
@@ -63,17 +63,17 @@ class EmergenciesModel extends OBFModel
     return $emergency;
 
   }
-  
+
   public function get_for_device($device_id)
   {
 
     $this('get_init');
-  
+
     $this->db->where('emergencies.device_id',$device_id);
 
     $emergencies = $this->db->get('emergencies');
 
-    foreach($emergencies as $index=>$emergency) 
+    foreach($emergencies as $index=>$emergency)
     {
       $emergencies[$index]['item_name']=$emergency['artist'].' - '.$emergency['title'];
       unset($emergencies[$index]['artist']);
@@ -96,32 +96,40 @@ class EmergenciesModel extends OBFModel
     if(empty($name) || empty($device_id) || empty($item_id) || empty($frequency) || empty($start) || empty($stop)) return array(false,'Required Field Missing');
 
     // check if ID is valid (if editing)
-    if(!empty($id)) 
+    if(!empty($id))
     {
-      if(!$this->db->id_exists('emergencies',$id)) return array(false,'Item Does Not Exist');
+      //T The item you are attempting to edit does not appear to exist.
+      if(!$this->db->id_exists('emergencies',$id)) return array(false,'The item you are attempting to edit does not appear to exist.');
     }
 
     // check if device ID is valid
-    if(!$this->db->id_exists('devices',$device_id)) return array(false,'Device Does Not Exist');
+    //T This player does not appear to exist.
+    if(!$this->db->id_exists('devices',$device_id)) return array(false,'This player does not appear to exist.');
 
     // check if media ID is valid
     if(empty($item_id)) return array(false,'Media Invalid');
     $this->db->where('id',$item_id);
     $media = $this->db->get_one('media');
     if(!$media) return array(false,'Media Invalid');
-    if($media['is_approved']==0) return array(false,'Media Not Approved');
-    if($media['is_archived']==1) return array(false,'Media Is Archived');
+    //T Media must be approved.
+    if($media['is_approved']==0) return array(false,'Media must be approved.');
+    //T Media must not be archived.
+    if($media['is_archived']==1) return array(false,'Media must not be archived.');
 
     // is frequency valid?
-    if(!preg_match('/^[0-9]+$/',$frequency) || $frequency < 1) return array(false,'Frequency Invalid');
+    //T The frequency is invalid.
+    if(!preg_match('/^[0-9]+$/',$frequency) || $frequency < 1) return array(false,'The frequency is invalid.');
 
     // is duration valid? only needed for images...
     if($media['type']=='image' && (!preg_match('/^[0-9]+$/',$duration) || $duration < 1)) return array(false,'Duration Invalid');
 
     // is start/stop valid?
-    if(!preg_match('/^[0-9]+$/',$start)) return array(false,'Start DateTime Invalid');
-    if(!preg_match('/^[0-9]+$/',$stop)) return array(false,'Stop DateTime Invalid');
-    if($start >= $stop) return array(false,'Stop Must Be After Start');
+    //T The start date/time is invalid.
+    if(!preg_match('/^[0-9]+$/',$start)) return array(false,'The start date/time is invalid.');
+    //T The stop date/time is invalid.
+    if(!preg_match('/^[0-9]+$/',$stop)) return array(false,'The stop date/time is invalid.');
+    //T The stop date/time must occur after the start date/time.
+    if($start >= $stop) return array(false,'The stop date/time must occur after the start date/time.');
 
     return array(true,'');
 

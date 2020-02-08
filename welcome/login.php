@@ -25,6 +25,11 @@
   </form>
 
   <p><a href="javascript: OB.Welcome.show('forgotpass');">Forgot password?</a></p>
-  <p><a href="javascript: OB.Welcome.show('newaccount');">Create new account.</a></p>
+  <?php
+  $load = OBFLoad::get_instance();
+  $user_model = $load->model('users');
+  if($user_model->user_registration_get()) { ?>
+    <p><a href="javascript: OB.Welcome.show('newaccount');">Create new account.</a></p>
+  <?php } ?>
 
 </div>

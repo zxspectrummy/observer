@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -39,7 +39,7 @@ class Modules extends OBFController
     return array(true,'Modules',$modules);
 
   }
-  
+
   public function install()
   {
 
@@ -47,7 +47,7 @@ class Modules extends OBFController
 
     $install = $this->ModulesModel('install',$module);
 
-    if($install) return array(true,'Module installed.');
+    if($install) return array(true,'Module installed. Refreshing the page may be required to update the user interface.');
     else return array(false,'An error occurred while attempting to install this module.');
 
   }
@@ -59,7 +59,7 @@ class Modules extends OBFController
 
     $uninstall = $this->ModulesModel('uninstall',$module);
 
-    if($uninstall) return array(true,'Module uninstalled.');
+    if($uninstall) return array(true,'Module uninstalled. Refreshing the page may be required to update the user interface.');
     else return array(false,'An error occurred while attempting to uninstall this module.');
 
   }

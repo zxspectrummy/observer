@@ -1,5 +1,5 @@
-/*     
-    Copyright 2014 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,5 +26,6 @@ OB.Admin.init = function()
 
 OB.Admin.initMenu = function()
 {
-  OB.UI.addMenuItem(['Admin Menu','Admin'],'admin',50);
+  //T Admin
+  OB.UI.addMenuItem('Admin', 'admin', 50);
 }

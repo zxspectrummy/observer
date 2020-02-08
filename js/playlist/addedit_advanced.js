@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -47,7 +47,7 @@ OB.Playlist.advancedInit = function()
 
         if($(ui.draggable).attr('data-mode')=='media')
         {
-          $('.sidebar_search_media_selected').each(function(index,element) { 
+          $('.sidebar_search_media_selected').each(function(index,element) {
 
             if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
             {
@@ -69,7 +69,8 @@ OB.Playlist.advancedInit = function()
 
           });
 
-          if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
+          //T A media item is marked as private. It can only be used in playlists created by the same owner.
+          if(private_media_alert) OB.UI.alert('A media item is marked as private. It can only be used in playlists created by the same owner.');
 
           // unselect our media from our sidebar
           OB.Sidebar.mediaSelectNone();
@@ -86,7 +87,7 @@ OB.Playlist.advancedInit = function()
 
               if(data.status==false) return;
 
-              var playlist_data = data.data;                
+              var playlist_data = data.data;
               var not_supported_error = false;
 
               $.each(playlist_data['items'], function(index, item) {
@@ -100,12 +101,16 @@ OB.Playlist.advancedInit = function()
                 else OB.Playlist.advancedAddItem(item);
               });
 
-              if(not_supported_error && private_media_alert) OB.UI.alert(OB.t(['Playlist Edit', 'Advanced Playlist Dynamic Selection Not Supported'])+"\n\n"+OB.t(['Playlist Edit','Cannot Use Private Item']));
-              
+              //T Dynamic selections and station IDs are not supported by advanced playlists. These items have been ignored.
+              //T A media item is marked as private. It can only be used in playlists created by the same owner.
+              if(not_supported_error && private_media_alert) OB.UI.alert(OB.t('Dynamic selections and station IDs are not supported by advanced playlists. These items have been ignored.')+"\n\n"+OB.t('A media item is marked as private. It can only be used in playlists created by the same owner.'));
+
               else
               {
-                if(not_supported_error) OB.UI.alert(['Playlist Edit', 'Advanced Playlist Dynamic Selection Not Supported']);
-                if(private_media_alert) OB.UI.alert(['Playlist Edit','Cannot Use Private Item']);
+                //T Dynamic selections and station IDs are not supported by advanced playlists. These items have been ignored.
+                //T A media item is marked as private. It can only be used in playlists created by the same owner.
+                if(not_supported_error) OB.UI.alert('Dynamic selections and station IDs are not supported by advanced playlists. These items have been ignored.');
+                if(private_media_alert) OB.UI.alert('A media item is marked as private. It can only be used in playlists created by the same owner.');
               }
 
             });
@@ -152,7 +157,7 @@ OB.Playlist.advancedAddItem = function(item,skip_display)
 }
 
 OB.Playlist.advancedItemUp = function(index)
-{ 
+{
   index=parseInt(index);
   if(index==0) return;
 
@@ -193,7 +198,8 @@ OB.Playlist.advancedRemoveItem = function(index)
 
 OB.Playlist.advancedRemoveAll = function(skip_confirm)
 {
-  if(OB.Playlist.advanced_items.length && (skip_confirm || confirm( OB.t('Playlist Edit', 'Clear Items Confirm') )))
+  //T Clear all items from the playlist?
+  if(OB.Playlist.advanced_items.length && (skip_confirm || confirm( OB.t('Clear all items from the playlist?') )))
   {
     OB.Playlist.advanced_items = [];
     OB.Playlist.advancedItemsDisplay();
@@ -227,7 +233,7 @@ OB.Playlist.advancedItemsDisplay = function()
 
   var last_audio_px_position = 0;
   var last_image_px_position = 0;
-  
+
   var total_width = $('#playlist_edit_advanced_items').width();
   var left_width = Math.ceil(total_width/2);
   var right_width = total_width - left_width;
@@ -237,11 +243,11 @@ OB.Playlist.advancedItemsDisplay = function()
 
     item.duration = parseFloat(item.duration);
 
-    if(item.type=='audio') 
-    { 
-      var position = last_audio_position; 
-      var left = '0'; 
-      var width = left_width-1; 
+    if(item.type=='audio')
+    {
+      var position = last_audio_position;
+      var left = '0';
+      var width = left_width-1;
 
       var start_px_pos = last_audio_px_position + 1;
       var end_px_pos = OB.Playlist.advancedItemOffset(position + item.duration);
@@ -249,11 +255,11 @@ OB.Playlist.advancedItemsDisplay = function()
       last_audio_position += item.duration;
       last_audio_px_position = end_px_pos;
     }
-    else if(item.type=='image') 
+    else if(item.type=='image')
     {
       var position = last_image_position;
-      var left = left_width; 
-      var width = right_width; 
+      var left = left_width;
+      var width = right_width;
 
       var start_px_pos = last_image_px_position + 1;
       var end_px_pos = OB.Playlist.advancedItemOffset(position + item.duration);
@@ -263,9 +269,9 @@ OB.Playlist.advancedItemsDisplay = function()
     }
     else
     {
-      var position = Math.max(last_audio_position, last_image_position); 
-      var left = '0'; 
-      var width = total_width; 
+      var position = Math.max(last_audio_position, last_image_position);
+      var left = '0';
+      var width = total_width;
 
       var start_px_pos = Math.max(last_audio_px_position, last_image_px_position) + 1;
       var end_px_pos = OB.Playlist.advancedItemOffset(position + item.duration);
@@ -348,15 +354,15 @@ OB.Playlist.advancedTimeIncrement = function()
       var time_increment = 5.0;
       break;
 
-    case 3: 
+    case 3:
       var time_increment = 10.0;
       break;
-  
+
     case 4:
       var time_increment = 30.0;
       break;
 
-    case 5: 
+    case 5:
       var time_increment = 60.0;
       break;
 
@@ -405,4 +411,3 @@ OB.Playlist.advancedTimes = function()
   $('#playlist_edit_advanced_times').css('height',required_cell_height+'px');
   $('#playlist_edit_advanced_times').css('width',required_cell_width+'px');
 }
-

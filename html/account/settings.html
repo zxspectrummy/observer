@@ -1,13 +1,13 @@
-<div data-tns="Account Settings">
+<div>
 
-  <h1 data-t>Form Heading</h1>
+  <h1 data-t>Account Settings</h1>
 
-  <p data-t>Form Help</p>
+  <p data-t>Edit the following account settings as needed.  Only enter a password if you wish to change your password.</p>
 
   <obwidget type="message" id="account_settings_message"></obwidget>
 
   <fieldset>
-  <legend data-t>Account Section</legend>
+  <legend data-t>Account</legend>
 
   <div class="fieldrow">
     <label class="required" data-tid="Username" data-t>Username</label>
@@ -23,14 +23,14 @@
     <label class="required" for="account_display_name_input" data-t>Display Name</label>
     <input id="account_display_name_input" type="text" name="name">
   </div>
-    
+
   <div class="fieldrow">
-    <label for="account_password_input" data-t>Password</label>
+    <label for="account_password_input" data-t>New Password</label>
     <input id="account_password_input" type="password" name="password">
   </div>
 
   <div class="fieldrow">
-    <label for="account_password_again_input" data-t>Password Again</label>
+    <label for="account_password_again_input" data-t>New Password (again)</label>
     <input id="account_password_again_input" type="password" name="password_again">
   </div>
 
@@ -42,10 +42,10 @@
   </fieldset>
 
   <fieldset>
-  <legend data-t>UI Section</legend>
+  <legend data-t>User Interface</legend>
 
   <div class="fieldrow">
-    <label for="account_user_results_per_page" data-t>Search Results Per Page</label>
+    <label for="account_user_results_per_page" data-t>Search Results Per Load</label>
     <select id="account_user_results_per_page">
       <option>5</option>
       <option>10</option>
@@ -61,6 +61,7 @@
   <div class="fieldrow">
     <label data-t>Language</label>
     <select id="account_language">
+      <option selected value="">English (default)</option>
     </select>
   </div>
 
@@ -73,16 +74,16 @@
   <div class="fieldrow">
     <label data-t>Dyslexia-Friendly Font</label>
     <select id="account_dyslexia_friendly_font">
-      <option value="1" data-t data-tns="Common">Enabled</option>
-      <option value="0" data-t data-tns="Common">Disabled</option>
+      <option value="1" data-t>Enabled</option>
+      <option value="0" data-t>Disabled</option>
     </select>
   </div>
 
   <div class="fieldrow">
     <label data-t>Sidebar Display</label>
     <select id="account_sidebar_display_left">
-      <option value="1" data-t data-tns="Common">Left</option>
-      <option value="0" data-t data-tns="Common">Right</option>
+      <option value="1" data-t>Left</option>
+      <option value="0" data-t>Right</option>
     </select>
   </div>
 
@@ -90,7 +91,7 @@
 
   <fieldset>
   <div class="fieldrow">
-    <button class="add" onclick="OB.Account.settingsSubmit();" data-t data-tns="Common">Save</button>
+    <button class="add" onclick="OB.Account.settingsSubmit();" data-t>Save</button>
   </div>
   </fieldset>
 

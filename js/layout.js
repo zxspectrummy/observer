@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -32,6 +32,14 @@ OB.Layout.layoutInit = function()
 OB.Layout.home = function()
 {
   OB.UI.replaceMain('main.html');
+
+	OB.API.post('clientsettings', 'get_welcome_page', {}, function (response) {
+		if (response.status) {
+			$('#main_page_content').html(response.data);
+		} else {
+			$('#main_page_content').text('Welcome to OpenBroadcaster.');
+		}
+	});
 }
 
 OB.Layout.tableFixedHeaders = function($headers,$table)

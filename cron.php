@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -41,7 +41,7 @@ $uploads = $db->get('uploads');
 
 foreach($uploads as $upload)
 {
-  unlink(OB_LOCAL.'/assets/uploads/'.$upload['id']);
+  unlink(OB_ASSETS.'/uploads/'.$upload['id']);
   $db->where('id',$upload['id']);
   $db->delete('uploads');
 }
@@ -89,7 +89,7 @@ foreach($connect_types as $type)
     foreach($notices as $notice)
     {
 
-      $mailer = new PHPMailer();
+      $mailer = new PHPMailer\PHPMailer\PHPMailer();
       $mailer->Body='This is a warning that device "'.$device['name'].'" has not connected for "'.$type.'" in the last hour.
 
 Please take steps to ensure this device is functioning properly.';

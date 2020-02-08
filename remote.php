@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -746,6 +746,10 @@ class Remote
     {
 
       $fullfilepath=$filerootdir.'/'.$media_item['file_location'][0].'/'.$media_item['file_location'][1].'/'.$media_item['filename'];
+      
+      // file not found, skip (will happen if item fully deleted)
+      if(!file_exists($fullfilepath)) return;
+      
       $filesize=filesize($fullfilepath);
 
       $itemxml->addChild('id',$media_item['id']);

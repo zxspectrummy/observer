@@ -1,4 +1,4 @@
-// see for more info re: append/prepend - http://stackoverflow.com/questions/9134686/adding-code-to-a-javascript-function-programatically 
+// see for more info re: append/prepend - http://stackoverflow.com/questions/9134686/adding-code-to-a-javascript-function-programatically
 // call function 'f2' at the beginning of 'f1'.
 function function_prepend(f1, f2)
 {
@@ -24,7 +24,7 @@ function function_append(f1, f2)
 }
 
 /*
-function htmlspecialchars(str) { 
+function htmlspecialchars(str) {
     if(typeof str == 'string') return $('<span>').text(str).html();
     else return '';
 }
@@ -33,8 +33,8 @@ function htmlspecialchars(str) {
 function htmlspecialchars(string, quote_style, charset, double_encode) {
     if(string==null) { return ''; }
 
-    // Convert special characters to HTML entities  
-    // 
+    // Convert special characters to HTML entities
+    //
     // version: 1101.3117
     // discuss at: http://phpjs.org/functions/htmlspecialchars    // +   original by: Mirek Slugen
     // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -58,7 +58,7 @@ function htmlspecialchars(string, quote_style, charset, double_encode) {
     if (double_encode !== false) { // Put this first to avoid double-encoding
         string = string.replace(/&/g, '&amp;');    }
     string = string.replace(/</g, '&lt;').replace(/>/g, '&gt;');
- 
+
     var OPTS = {
         'ENT_NOQUOTES': 0,        'ENT_HTML_QUOTE_SINGLE' : 1,
         'ENT_HTML_QUOTE_DOUBLE' : 2,
@@ -83,7 +83,7 @@ function htmlspecialchars(string, quote_style, charset, double_encode) {
     }    if (!noquotes) {
         string = string.replace(/"/g, '&quot;');
     }
- 
+
     return string;
 }
 
@@ -100,7 +100,7 @@ function secsToTime(d,format) {
   var sepm = '';
   var seps = '';
 
-  if(format=='hms') 
+  if(format=='hms')
   {
     seph = 'h';
     sepm = 'm';
@@ -116,13 +116,13 @@ function secsToTime(d,format) {
   if(format=='hms')
   {
     var v = '';
-    
+
     if(h>0) v = v+h+seph;
     if(m>0) v = v+m+sepm;
     if(s>0) v = v+s+seps;
 
   }
-  
+
   else
   {
 
@@ -147,6 +147,20 @@ function format_timestamp(unix_timestamp) {
 
 }
 
+// https://stackoverflow.com/questions/7327046/jquery-number-formatting
+function format_number(nStr)
+{
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
+
 // Numeric only control handler - http://stackoverflow.com/questions/995183/how-to-allow-only-numeric-0-9-in-html-inputbox-using-jquery
 jQuery.fn.ForceNumericOnly = function()
 {
@@ -157,7 +171,7 @@ jQuery.fn.ForceNumericOnly = function()
             var key = e.charCode || e.keyCode || 0;
             // allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
             return (
-                key == 8 || 
+                key == 8 ||
                 key == 9 ||
                 key == 46 ||
                 (key >= 37 && key <= 40) ||
@@ -178,7 +192,7 @@ function timepad(val)
 
 function month_name(number)
 {
-  
+
   var months = Array();
 
   months.push('January');
@@ -265,7 +279,7 @@ function dst_changes(year)
 
             var change = new Object();
             change.date = new Date(date.getTime());
-  
+
             if(new_offset > last_offset_2) change.type = 'back';
             else change.type = 'ahead';
 
@@ -308,7 +322,7 @@ function dst_changes(year)
 
       }
 
-    }   
+    }
 
 
     dst_cache[year]=changes;
@@ -346,14 +360,77 @@ function readCookie(name) {
 // http://stackoverflow.com/questions/2048720/get-all-attributes-from-a-html-element-with-javascript-jquery
 (function($) {
     $.fn.getAttributes = function() {
-        var attributes = {}; 
+        var attributes = {};
 
         if( this.length ) {
             $.each( this[0].attributes, function( index, attr ) {
                 attributes[ attr.name ] = attr.value;
-            } ); 
+            } );
         }
 
         return attributes;
     };
 })(jQuery);
+
+// https://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
+// move cursor to end of contenteditable
+function setEndOfContenteditable(contentEditableElement)
+{
+    var range,selection;
+    if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+    {
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    }
+    else if(document.selection)//IE 8 and lower
+    {
+        range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        range.select();//Select the range (make it the visible selection
+    }
+}
+
+/**
+ * https://ourcodeworld.com/articles/read/482/how-to-execute-a-function-from-its-string-name-execute-function-by-name-in-javascript
+ *
+ * Returns the function that you want to execute through its name.
+ * It returns undefined if the function || property doesn't exists
+ *
+ * @param functionName {String}
+ * @param context {Object || null}
+ */
+function getFunctionByName(functionName, context) {
+    // If using Node.js, the context will be an empty object
+    if(typeof(window) == "undefined") {
+        context = context || global;
+    }else{
+        // Use the window (from browser) as context if none providen.
+        context = context || window;
+    }
+
+    // Retrieve the namespaces of the function you want to execute
+    // e.g Namespaces of "MyLib.UI.alerti" would be ["MyLib","UI"]
+    var namespaces = functionName.split(".");
+
+    // Retrieve the real name of the function i.e alerti
+    var functionToExecute = namespaces.pop();
+
+    // Iterate through every namespace to access the one that has the function
+    // you want to execute. For example with the alert fn "MyLib.UI.SomeSub.alert"
+    // Loop until context will be equal to SomeSub
+    for (var i = 0; i < namespaces.length; i++) {
+        context = context[namespaces[i]];
+    }
+
+    // If the context really exists (namespaces), return the function or property
+    if(context){
+        return context[functionToExecute];
+    }else{
+        return undefined;
+    }
+}

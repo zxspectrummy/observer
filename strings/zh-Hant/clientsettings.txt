@@ -1,9 +1,0 @@
-﻿Admin Menu
-
-  Client Settings: 客戶端設置
-
-Client Settings
-
-  Heading: 客戶端設置
-  Welcome Message: 歡迎辭
-  Save Confirmation: 歡迎信息保存。

@@ -1,3 +1,0 @@
-<?php
-
-$themes['openbroadcaster'] = 'Tanzanite';

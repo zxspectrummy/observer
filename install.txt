@@ -4,8 +4,6 @@ More info at https://wiki.openbroadcaster.com
 
 These instructions are an alternative to using ob.installer.sh.
 
-*** Enable setting "short_open_tag = On" in your php.ini ***
-
 *** After install, log in as user with Admin privileges and then run https://YOUR_IP/updates ***
 
 Note: When using special characters in the password, they need to use single quotes instead of double quotes when they echo the string 
@@ -21,43 +19,15 @@ Note: When using special characters in the password, they need to use single quo
 
 5. Ensure media storage directories are writable by the web server.
 
-6. In the web document root, create 'assets', 'assets/profile_img', and
-   'assets/uploads' directories.  These directories should be writable by the
-   web server.
+6. In the web document root, create 'assets' and 'assets/uploads' directories.  
+   These directories should be writable by the web server.
 
 7. The database import includes one user.  The username is admin.  The password
-   is something you must set in the database as follows (PHP):
+   must be updated:
 
-   mysql_query('UPDATE users set password = "'.password_hash($new_password.OB_HASH_SALT, PASSWORD_DEFAULT).'"
-                where username = "admin"');
+   php tools/password_change.php admin newpassword
 
 8. Log into OpenBroadcaster as admin, and access http://ob_install_url/updates/ to
    verify your installation and run any required updates.
-
-Password Login
-
-(installer might not create properly)
-
-First need the value of OB_HASH_SALT from the config file.
-
-Append that value to the password you wants. If the salt is aaaaaaaaaa and the password is password, the string he needs is aaaaaaaaaapassword
-
-from there, get the sha value like this:
-
-echo -n "aaaaaaaaaapassword" | openssl sha1 | cut -f 2 -d " "
-
-copy the string that this puts out.
-
-the log into mysql:
-
-mysql -u root -p
-
-select database:
-
-use openbroadcaster
-
-UPDATE users SET password='d8656d3f3823bce79e3a29253cf1106f6cfeee7c' WHERE username='admin';
-
-Now, assuming that the salt is set as aaaaaaaaaa in the config file, the password password will work.
 
 -EOF-

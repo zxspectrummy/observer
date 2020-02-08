@@ -1,5 +1,5 @@
-/*     
-    Copyright 2014 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,9 +26,12 @@ OB.Help.init = function()
 
 OB.Help.initMenu = function()
 {
-  OB.UI.addMenuItem(['Help Menu','Help'],'help',100);
-  OB.UI.addSubMenuItem('help',['Help Menu','Documentation'],'documentation',OB.Help.documentation,10);
-  OB.UI.addSubMenuItem('help',['Help Menu','Updates'],'updates',OB.Help.update,15);
+  //T help
+  OB.UI.addMenuItem('Help', 'help', 100);
+  //T Documentation
+  OB.UI.addSubMenuItem('help', 'Documentation', 'documentation', OB.Help.documentation, 10);
+  //T Updates
+  OB.UI.addSubMenuItem('help', 'Updates', 'updates', OB.Help.update, 15);
 }
 
 OB.Help.documentation = function()

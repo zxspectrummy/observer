@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -33,6 +33,11 @@ chdir(OB_LOCAL);
 if(!file_exists('config.php')) die('Settings file (config.php) not found.');
 require('config.php');
 
+// set defaults if not set
+if(!defined('OB_ASSETS')) define('OB_ASSETS',OB_LOCAL.'/assets');
+if(!defined('OB_MEDIA_FILESIZE_LIMIT')) define('OB_MEDIA_FILESIZE_LIMIT',1024);
+if(!defined('OB_MEDIA_VERIFY')) define('OB_MEDIA_VERIFY',true);
+
 // most things are done in UTC.  sometimes the tz is set to the device's tz for a 'strtotime' +1month,etc. type calculation which considers DST.
 date_default_timezone_set('Etc/UTC'); 
 
@@ -42,9 +47,11 @@ require('classes/obfload.php');
 require('classes/obfio.php');
 require('classes/obfcontroller.php');
 require('classes/obfcallbacks.php');
+require('classes/obfhelpers.php');
 require('classes/obfmodel.php');
 require('classes/obfuser.php');
 require('classes/obfmodule.php');
 
 // load third party components
-require('extras/phpMailer/class.phpmailer.php');
+require('extras/PHPMailer/src/Exception.php');
+require('extras/PHPMailer/src/PHPMailer.php');

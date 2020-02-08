@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -365,10 +365,22 @@ class DevicesModel extends OBFModel
 
     foreach($params as $name=>$value) $$name=$value;
 
+    // get timestamps based on device timezone
+    $device = $this('get_one',$device_id);
+    if(!$device) return [false];
+    
+    $device_timezone = new DateTimeZone( $device['timezone'] );
+    if(!$device_timezone) return [false];
+    
+    $start_datetime = new DateTime($date_start.' 00:00:00',$device_timezone);
+    $end_datetime = new DateTime($date_end.' 00:00:00',$device_timezone);
+    if(!$start_datetime || !$end_datetime) return [false];
+    
+    // db lookup
     $this->db->where('device_id',$device_id);
-    $this->db->where('timestamp',$start,'>=');
-    $this->db->where('timestamp',$end,'<=');
-
+    $this->db->where('timestamp',$start_datetime->getTimestamp(),'>=');
+    $this->db->where('timestamp',$end_datetime->getTimestamp(),'<');
+    
     if($orderby) $this->db->orderby($orderby,(!empty($orderdesc) ? 'desc' : 'asc'));
     if($limit) $this->db->limit($limit);
     if($offset) $this->db->offset($offset);
@@ -391,10 +403,53 @@ class DevicesModel extends OBFModel
     $this->db->calc_found_rows();
 
     $results = $this->db->get('playlog');
+    
+    foreach($results as &$result)
+    {
+      $result['datetime'] = new DateTime('@'.round($result['timestamp']));
+      $result['datetime']->setTimezone($device_timezone);
+      $result['datetime'] = $result['datetime']->format('Y-m-d H:i:s');
+    }
+    
     $numrows = $this->db->found_rows();
 
     return array($results,$numrows);
 
+  }
+  
+  public function monitor_csv($results)
+  {  
+    if(empty($results)) return false;
+  
+    $fh = fopen('php://temp','w+');
+
+    // get our timezone from the device id
+    $device_id = $results[0]['device_id'];
+    $device = $this('get_one',$device_id);
+
+    // add our heading row
+    fputcsv($fh, ['Media ID','Artist','Title','Date/Time','Context','Notes']);
+    
+    // add data rows
+    foreach($results as $data)
+    {
+      fputcsv($fh, [
+        $data['media_id'],
+        $data['artist'],
+        $data['title'],
+        $data['datetime'],
+        $data['context'],
+        $data['notes']
+      ]); 
+    }
+    
+    // get csv contents
+    $csv = stream_get_contents($fh, -1, 0);
+    
+    // close
+    fclose($fh);
+    
+    return $csv;
   }
 
   public function now_playing($device_id)

@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -34,7 +34,7 @@ class SchedulesModel extends OBFModel
   {
 
     $timeslots = $this->SchedulesPermissionsModel('get_permissions',$start,$end,$device);
-    
+
     $schedule = array();
 
     foreach($timeslots as $timeslot)
@@ -50,12 +50,12 @@ class SchedulesModel extends OBFModel
     // TODO this doesn't yet consider where scheduled shows might overlap timeslots, or where we
     // might have more than one playlist mapped to a single timeslot.
 
-    usort($schedule,array($this,'order_schedule'));   
+    usort($schedule,array($this,'order_schedule'));
 
-    $shows = $this('get_shows',$start,$end,$device);  
-    
+    $shows = $this('get_shows',$start,$end,$device);
+
     if($shows)
-    { 
+    {
 
       $shows=$shows[2];
 
@@ -117,7 +117,7 @@ class SchedulesModel extends OBFModel
     }
 
     // fill in recurring data
-    $this->db->query('SELECT schedules_recurring.*,users.display_name AS user, schedules_recurring_expanded.start as single_start FROM schedules_recurring_expanded 
+    $this->db->query('SELECT schedules_recurring.*,users.display_name AS user, schedules_recurring_expanded.start as single_start FROM schedules_recurring_expanded
                         LEFT JOIN schedules_recurring ON schedules_recurring_expanded.recurring_id = schedules_recurring.id
                         LEFT JOIN users ON users.id = schedules_recurring.user_id
                         WHERE schedules_recurring.device_id = "'.$this->db->escape($device).'" AND
@@ -197,7 +197,7 @@ class SchedulesModel extends OBFModel
     // get item data
     $this->db->where('id',$row['item_id']);
     if($row['item_type']=='media')
-    { 
+    {
       $media = $this->db->get_one('media');
       $row['item_name'] = $media['artist'].' - '.$media['title'];
     }
@@ -206,7 +206,7 @@ class SchedulesModel extends OBFModel
     {
       $playlist = $this->db->get_one('playlists');
       $row['item_name'] = $playlist['name'];
-    }   
+    }
 
     return $row;
 
@@ -266,19 +266,21 @@ class SchedulesModel extends OBFModel
   {
 
     // make sure data is valid.
-    if(empty($data['device_id']) || empty($data['mode']) || empty($data['start']) 
+    if(empty($data['device_id']) || empty($data['mode']) || empty($data['start'])
         || (       empty($data['x_data']) && ( $data['mode']=='xdays' || $data['mode']=='xweeks' || $data['mode']=='xmonths' )     )
-        || (       $data['mode']!='once' && empty($data['stop'])     ) 
+        || (       $data['mode']!='once' && empty($data['stop'])     )
         || (       empty($id) && (empty($data['item_type']) || ($data['item_type']!='linein' && empty($data['item_id'])))          )
     )
 
-    return array(false,'Required Field Missing');
+    //T One or more required fields were not filled.
+    return array(false,'One or more required fields were not filled.');
 
     // check if device is valid.
     $this->db->where('id',$data['device_id']);
     $device_data = $this->db->get_one('devices');
 
-    if(!$device_data) return array(false,'Device Not Found');
+    //T This player no longer exists.
+    if(!$device_data) return array(false,'This player no longer exists.');
 
     // set our timezone based on device settings.  this makes sure 'strtotime' advancing by days, weeks, months will account for DST propertly.
     date_default_timezone_set($device_data['timezone']);
@@ -288,8 +290,9 @@ class SchedulesModel extends OBFModel
     {
 
       if($data['item_type']!='playlist' && $data['item_type']!='media' && $data['item_type']!='linein') return array(false,'Item Invalid');
-      
-      if(empty($data['item_id']) && $data['item_type']!='linein') return array(false,'Item Invalid');
+
+      //T The item you are attempting to schedule is not valid.
+      if(empty($data['item_id']) && $data['item_type']!='linein') return array(false,'The item you are attempting to schedule is not valid.');
 
       if($data['item_type']=='playlist')
       {
@@ -297,7 +300,8 @@ class SchedulesModel extends OBFModel
         $this->db->where('id',$data['item_id']);
         $playlist = $this->db->get_one('playlists');
 
-        if(!$playlist) return array(false,'Item Does Not Exist');
+        //T The item you are attempting to schedule does not exist.
+        if(!$playlist) return array(false,'The item you are attempting to schedule does not exist.');
 
         // don't allow use of private playlist unless playlist manager or owner of this playlist.
         if($playlist['status']=='private' && $playlist['owner_id']!=$this->user->param('id')) $this->user->require_permission('manage_playlists');
@@ -306,43 +310,52 @@ class SchedulesModel extends OBFModel
 
       elseif($data['item_type']=='media')
       {
-    
+
         $this->db->where('id',$data['item_id']);
         $media = $this->db->get_one('media');
 
-        if(!$media) return array(false,'Item Does Not Exist');
+        //T The item you are attempting to schedule does not exist.
+        if(!$media) return array(false,'The item you are attempting to schedule does not exist.');
 
         // don't allow use of private media unless media manage or owner of this media.
         if($media['status']=='private' && $media['owner_id']!=$this->user->param('id')) $this->user->require_premission('manage_media');
 
-        if($media['is_approved']==0) return array(false,'Media Must Be Approved');
-        if($media['is_archived']==1) return array(false,'Media Must Not Be Archived');
+        //T The media must be approved.
+        if($media['is_approved']==0) return array(false,'The media must be approved.');
+        //T The media must not be archived.
+        if($media['is_archived']==1) return array(false,'The media must not be archived.');
 
       }
 
       elseif($data['item_type']=='linein')
       {
         // make sure linein scheduling is supported by this device.
-        if(empty($device_data['support_linein'])) return array(false,'Item Invalid');
+        //T The item you are attempting to schedule is not valid.
+        if(empty($device_data['support_linein'])) return array(false,'The item you are attempting to schedule is not valid.');
       }
 
     }
 
     // check valid scheduling mode
+    //T The selected scheduling mode is not valid.
     if(array_search($data['mode'],array('once','daily','weekly','monthly','xdays','xweeks','xmonths'))===false)
-      return array(false,'Scheduling Mode Not Valid');
+      return array(false,'The selected scheduling mode is not valid.');
 
     // check if start date is valid.
-    if(!preg_match('/^[0-9]+$/',$data['start'])) return array(false,'Start Date/Time Not Valid');
+    //T The start date/time is not valid.
+    if(!preg_match('/^[0-9]+$/',$data['start'])) return array(false,'The start date/time is not valid.');
 
     // check if the stop date is valid.
-    if($data['mode']!='once' && !preg_match('/^[0-9]+$/',$data['stop'])) return array(false,'Stop Date/Time Not Valid');
-    if($data['mode']!='once' && $data['start']>=$data['stop']) return array(false,'Stop Date/Time Not Valid');
+    //T The stop (last) date is not valid and must come after the start date/time.
+    if($data['mode']!='once' && !preg_match('/^[0-9]+$/',$data['stop'])) return array(false,'The stop (last) date is not valid and must come after the start date/time.');
+    //T The stop (last) date is not valid and must come after the start date/time.
+    if($data['mode']!='once' && $data['start']>=$data['stop']) return array(false,'The stop (last) date is not valid and must come after the start date/time.');
 
 
     // check if x data is valid.
+    //T The recurring frequency is not valid.
     if(!empty($data['x_data']) && (!preg_match('/^[0-9]+$/',$data['x_data']) || $data['x_data']>65535))
-      return array(false,'Recurring Frequency Not Valid');
+      return array(false,'The recurring frequency is not valid.');
 
     return array(true,'Valid.');
 
@@ -352,7 +365,7 @@ class SchedulesModel extends OBFModel
   public function collision_permission_check($data,$id=false,$edit_recurring=false)
   {
 
-    if(!empty($id)) $not_entry = array('id'=>$id,'recurring'=>$edit_recurring); 
+    if(!empty($id)) $not_entry = array('id'=>$id,'recurring'=>$edit_recurring);
     else $not_entry = false;
 
     $collision_check = array();
@@ -364,13 +377,18 @@ class SchedulesModel extends OBFModel
     else
     {
 
-      if($duration > 2419200) return array(false,'Recurring Show Too Long');
+      //T Recurring shows cannot be longer than 28 days.
+      if($duration > 2419200) return array(false,'Recurring shows cannot be longer than 28 days.');
 
       // this is a recurring item.  make sure we don't collide with ourselves.
-      if($data['mode']=='daily' && $duration > 86400) return array(false,'Daily Show Too Long');
-      if($data['mode']=='weekly' && $duration > 604800) return array(false,'Weekly Show Too Long');
-      if($data['mode']=='xdays' && $duration > 86400*$data['x_data']) return array(false,'XDay Show Too Long');
-      if($data['mode']=='xweeks' && $duration > 604800*$data['x_data']) return array(false,'XWeek Show Too Long');
+      //T A show scheduled daily cannot be longer than a day.
+      if($data['mode']=='daily' && $duration > 86400) return array(false,'A show scheduled daily cannot be longer than a day.');
+      //T A show scheduled weekly cannot be longer than a week.
+      if($data['mode']=='weekly' && $duration > 604800) return array(false,'A show scheduled weekly cannot be longer than a week.');
+      //T A show cannot be longer than its frequency.
+      if($data['mode']=='xdays' && $duration > 86400*$data['x_data']) return array(false,'A show cannot be longer than its frequency.');
+      //T A show cannot be longer than its frequency.
+      if($data['mode']=='xweeks' && $duration > 604800*$data['x_data']) return array(false,'A show cannot be longer than its frequency.');
 
 
       // this is a recurring item.  set up times to check for collisions
@@ -388,18 +406,19 @@ class SchedulesModel extends OBFModel
 
         $collision_check[]=$tmp_time;
         $tmp_time = strtotime($interval,$tmp_time);
-    
+
       }
 
     }
 
-    foreach($collision_check as $check) 
+    foreach($collision_check as $check)
     {
 
       $collision_data = $this('get_shows',$check,$check + $duration, $data['device_id'], $not_entry);
       $collision_data = $collision_data;
 
-      if(!is_array($collision_data) || count($collision_data)>0) return array(false,'Show Conflict');  
+      //T This show conflicts with another on the schedule.
+      if(!is_array($collision_data) || count($collision_data)>0) return array(false,'This show conflicts with another on the schedule.');
 
     }
 
@@ -428,13 +447,13 @@ class SchedulesModel extends OBFModel
         foreach($permissions as $index=>$permission)
         {
 
-          if($index==0) 
+          if($index==0)
           {
             $permission_last_end = $permission['start'] + $permission['duration'];
             continue;
           }
 
-          if($permission['start'] > $permission_last_end) 
+          if($permission['start'] > $permission_last_end)
           {
             $permission_check_failed = true;
             break;
@@ -442,8 +461,9 @@ class SchedulesModel extends OBFModel
 
         }
 
-        if($permission_check_failed) return array(false,'Schedule Permission Required');
-      
+        //T You do not have permission to schedule an item at the specified time(s).
+        if($permission_check_failed) return array(false,'You do not have permission to schedule an item at the specified time(s).');
+
       }
 
     }
@@ -537,12 +557,12 @@ class SchedulesModel extends OBFModel
         $this->db->insert('schedules_recurring_expanded',$expanded_data);
 
         $tmp_time = strtotime($interval,$tmp_time);
-    
+
       }
 
     }
 
-    else 
+    else
     {
       $dbdata['end']=$dbdata['start']+$dbdata['duration']; // we also add 'end' data, which is used to speed up show searching
       $this->db->insert('schedules',$dbdata);

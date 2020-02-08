@@ -6,3 +6,6 @@ modules/*
 !modules/tutorial
 .*.swp
 .*.swo
+.well-known
+tools/stream/transcode.log
+**/.sass-cache

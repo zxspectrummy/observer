@@ -1,33 +1,33 @@
-<div data-tns="Schedule">
+<div>
 
 <h1 id="schedule_heading"></h1>
 
-<p id="schedule_for"><span data-t>Schedule For</span><select onchange="OB.Schedule.deviceChange();" id="schedule_device_select"></select></p>
+<p id="schedule_for"><span data-t>Schedule For:</span><select onchange="OB.Schedule.deviceChange();" id="schedule_device_select"></select></p>
 
 <div id="schedule_details" class="hidden">
 <table>
 <tr>
-  <td data-t>Details Name</td>
+  <td data-t>Name</td>
   <td id="schedule_details_name"></td>
 </tr>
 <tr>
-  <td data-t>Details Owner</td>
+  <td data-t>Owner</td>
   <td id="schedule_details_owner"></td>
 </tr>
 <tr>
-  <td data-t>Details DateTime</td>
+  <td data-t>Date/Time</td>
   <td id="schedule_details_datetime"></td>
 </tr>
 <tr>
-  <td data-t>Details Duration</td>
+  <td data-t>Duration</td>
   <td id="schedule_details_duration"></td>
 </tr>
 <tr>
-  <td data-t>Details Scheduled By</td>
+  <td data-t>Scheduled By</td>
   <td id="schedule_details_user"></td>
 </tr>
 <tr>
-  <td data-t>Details Description</td>
+  <td data-t>Description</td>
   <td id="schedule_details_description"></td>
 </tr>
 </table>
@@ -39,9 +39,9 @@
 
 <table id="schedule_date_select">
   <tr>
-    <td><a href="javascript: OB.Schedule.prevWeek();">&lt; <span data-t>Previous Week</span></a></td>
+    <td><a href="javascript: OB.Schedule.prevWeek();">&lt; <span data-t>Prev</span></a></td>
     <td id="schedule_date_range"></td>
-    <td><a href="javascript: OB.Schedule.nextWeek();"><span data-t>Next Week</span> &gt;</a></td>
+    <td><a href="javascript: OB.Schedule.nextWeek();"><span data-t>Next</span> &gt;</a></td>
   </tr>
 </table>
 
@@ -49,13 +49,13 @@
   <thead>
   <tr id="schedule_days">
     <th>&nbsp;</th>
-    <th><span data-t>Sunday</span> <span id="schedule_days_0"></span></th>
-    <th><span data-t>Monday</span> <span id="schedule_days_1"></span></th>
-    <th><span data-t>Tueday</span> <span id="schedule_days_2"></span></th>
-    <th><span data-t>Wednesday</span> <span id="schedule_days_3"></span></th>
-    <th><span data-t>Thursday</span> <span id="schedule_days_4"></span></th>
-    <th><span data-t>Friday</span> <span id="schedule_days_5"></span></th>
-    <th><span data-t>Saturday</span> <span id="schedule_days_6"></span></th>
+    <th><span data-t>Sun</span> <span id="schedule_days_0"></span></th>
+    <th><span data-t>Mon</span> <span id="schedule_days_1"></span></th>
+    <th><span data-t>Tue</span> <span id="schedule_days_2"></span></th>
+    <th><span data-t>Wed</span> <span id="schedule_days_3"></span></th>
+    <th><span data-t>Thu</span> <span id="schedule_days_4"></span></th>
+    <th><span data-t>Fri</span> <span id="schedule_days_5"></span></th>
+    <th><span data-t>Sat</span> <span id="schedule_days_6"></span></th>
   </tr>
   </thead>
 
@@ -329,7 +329,5 @@
 </table>
 
 </div>
-
-</fieldset>
 
 </div>

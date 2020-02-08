@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -22,10 +22,42 @@
 class UsersModel extends OBFModel
 {
 
+  public function user_registration_set($value)
+  {
+    // figure out if we have the setting row already
+    $this->db->where('name','new_user_registration');
+    $setting = $this->db->get_one('settings');
+
+    $value = $value ? 1 : 0;
+
+    if($setting)
+    {
+      $this->db->where('name','new_user_registration');
+      $this->db->update('settings',['value'=>$value]);
+    }
+    else
+    {
+      $this->db->insert('settings',['name'=>'new_user_registration','value'=>$value]);
+    }
+
+    return true;
+  }
+
+  public function user_registration_get()
+  {
+    $this->db->where('name','new_user_registration');
+    $setting = $this->db->get_one('settings');
+
+    // default is true/enabled if not set.
+    if(!$setting || $setting['value']==1) return true;
+    else return false;
+  }
+
   public function user_list()
   {
     $this->db->what('display_name');
     $this->db->what('id');
+    $this->db->what('email');
     $rows = $this->db->get('users');
 
     return $rows;
@@ -50,7 +82,7 @@ class UsersModel extends OBFModel
     // get user groups
     foreach($rows as $index=>$row)
     {
-    
+
       $rows[$index]['groups']=array();
 
       $this->db->where('user_id',$row['id']);
@@ -68,32 +100,59 @@ class UsersModel extends OBFModel
 
   }
 
+  public function user_manage_list_set_sort($sort_col,$sort_dir)
+  {
+    // make sure sort col is value.
+    if(array_search($sort_col,array('display_name','email','created','last_access'))===false) return false;
+
+    // force sort dir to be value
+    $sort_dir = (bool) $sort_dir;
+
+    $setting_value = json_encode([$sort_col,$sort_dir]);
+    $this->user->set_setting('user_manage_list_sort',$setting_value);
+    return true;
+  }
+
+  public function user_manage_list_get_sort()
+  {
+    $sort = $this->user->get_setting('user_manage_list_sort');
+    if(!$sort) return ['display_name',false];
+    else return json_decode($sort);
+  }
+
   public function user_validate($data,$id=null)
   {
 
     foreach($data as $key=>$value) $$key=$value;
 
-    // basic validation 
-    if(empty($name) || empty($email) || empty($username) || empty($display_name)) return array(false,['User Edit', 'Required Not Filled']);
+    // basic validation
+    //T One or more required fields were not filled.
+    if(empty($name) || empty($email) || empty($username) || empty($display_name)) return array(false,['User Edit', 'One or more required fields were not filled.']);
 
-    if(empty($id) && (empty($password) || empty($password_confirm))) return array(false,['User Edit', 'Required Not Filled']);
+    //T One or more required fields were not filled.
+    if(empty($id) && (empty($password) || empty($password_confirm))) return array(false,['User Edit', 'One or more required fields were not filled.']);
 
     // email validation
-    if(!PHPMailer::ValidateAddress($email)) return array(false,['User Edit', 'Invalid Email']);
+    //T The email address you have provided is not valid.
+    if(!PHPMailer\PHPMailer\PHPMailer::ValidateAddress($email)) return array(false,['User Edit', 'The email address you have provided is not valid.']);
 
     // make sure email not in use
     $this->db->where('email',$email);
     if(!empty($id)) $this->db->where('id',$id,'!=');
-    if($this->db->get_one('users')) return array(false,['User Edit', 'Email In Use']);
+    //T The email address you have provided is already in use by another account.
+    if($this->db->get_one('users')) return array(false,['User Edit', 'The email address you have provided is already in use by another account.']);
 
     // make sure username not in use.
     $this->db->where('username',$username);
     if(!empty($id)) $this->db->where('id',$id,'!=');
-    if($this->db->get_one('users')) return array(false,['User Edit', 'Username In Use']);
+    //T The username you have selected is already in use.
+    if($this->db->get_one('users')) return array(false,['User Edit', 'The username you have selected is already in use.']);
 
     // make sure passwords match.
-    if(!empty($password) && $password!=$password_confirm) return array(false,['User Edit', 'Password Mismatch']);
-    if(!empty($password) && strlen($password)<6) return array(false,['User Edit', 'Password Short']);
+    //T The passwords do not match.
+    if(!empty($password) && $password!=$password_confirm) return array(false,['User Edit', 'The passwords do not match.']);
+    //T The password must be at least 6 characters.
+    if(!empty($password) && strlen($password)<6) return array(false,['User Edit', 'The password must be at least 6 characters.']);
 
     return array(true,'Valid');
 
@@ -115,7 +174,7 @@ class UsersModel extends OBFModel
       $this->db->update('users',$dbdata);
     }
 
-    else 
+    else
     {
       $dbdata['created']=time();
       $insert_id = $this->db->insert('users',$dbdata);
@@ -129,7 +188,7 @@ class UsersModel extends OBFModel
     }
 
     else $id = $insert_id;
-    
+
     $group_data = array();
     $group_data['user_id']=$id;
 
@@ -161,11 +220,11 @@ class UsersModel extends OBFModel
 
   }
 
-  public function group_list()
+  public function group_list($hide_permissions = false)
   {
     $groups = $this->db->get('users_groups');
 
-    foreach($groups as $index=>$group) 
+    if(!$hide_permissions) foreach($groups as $index=>$group)
     {
       if($group['id']==1) continue; // administrator has all permissions and not found in table.
 
@@ -176,12 +235,12 @@ class UsersModel extends OBFModel
       $this->db->what('users_permissions_to_groups.item_id');
 
       $this->db->where('group_id',$group['id']);
-      
+
       $this->db->leftjoin('users_permissions','users_permissions_to_groups.permission_id','users_permissions.id');
 
       $permissions = $this->db->get('users_permissions_to_groups');
 
-      foreach($permissions as $permission) 
+      foreach($permissions as $permission)
       {
         $groups[$index]['permissions'][]=$permission['name'].($permission['item_id'] ? ':'.$permission['item_id'] : '');
       }
@@ -205,7 +264,7 @@ class UsersModel extends OBFModel
     foreach($permissions as $permission)
     {
 
-      if($permission['category']=='device') 
+      if($permission['category']=='device')
       {
         foreach($devices as $device)
         {
@@ -249,20 +308,24 @@ class UsersModel extends OBFModel
     foreach($data as $key=>$value) $$key=$value;
 
     // we require a name
-    if($name=='') return array(false,['Permissions Edit','Group Name Required']);
+    //T A group name is required.
+    if($name=='') return array(false,['Permissions Edit','A group name is required.']);
 
     // we require valid permissions
-    if(!is_array($permissions)) return array(false,['Permissions Edit','Permission Invalid']);
+    //T One or more permissions is invalid.
+    if(!is_array($permissions)) return array(false,['Permissions Edit','One or more permissions is invalid.']);
 
     foreach($permissions as $pname)
     {
       $pname_array = explode(':',$pname);
       $this->db->where('name',$pname_array[0]);
-      if(!$this->db->get_one('users_permissions')) return array(false,['Permissions Edit','Permission Invalid']);
+      //T One or more permissions is invalid.
+      if(!$this->db->get_one('users_permissions')) return array(false,['Permissions Edit','One or more permissions is invalid.']);
     }
 
     // we can't edit the admin group
-    if($id==1) return array(false,['Permissions Edit','Cannot Delete Admin']);
+    //T You cannot edit or delete the administrator group.
+    if($id==1) return array(false,['Permissions Edit','You cannot edit or delete the administrator group.']);
 
     return array(true,'Valid.');
 
@@ -320,28 +383,35 @@ class UsersModel extends OBFModel
   public function settings_validate($user_id,$data)
   {
 
-    if(empty($data['name']) || empty($data['email']) || empty($data['display_name'])) return array(false,'Required Fields Not Filled');
-    if(!PHPMailer::ValidateAddress($data['email'])) return array(false,'Email Address Invalid');
+    //T One or more required fields were not filled.
+    if(empty($data['name']) || empty($data['email']) || empty($data['display_name'])) return array(false,'One or more required fields were not filled.');
+    //T The email address you have provided is not valid.
+    if(!PHPMailer\PHPMailer\PHPMailer::ValidateAddress($data['email'])) return array(false,'The email address you have provided is not valid.');
 
     // make sure email not in use
     $this->db->where('id',$user_id,'!=');
     $this->db->where('email',$data['email']);
-    if($this->db->get_one('users')) return array(false,'Email Address In Use');
+    //T The email address you have provided is already in use by another account.
+    if($this->db->get_one('users')) return array(false,'The email address you have provided is already in use by another account.');
 
     // verify password.
     if(isset($data['password']) && $data['password']!='') {
-      if($data['password']!=$data['password_again']) return array(false,'Passwords Do Not Match');
-      elseif(strlen($data['password'])<6) return array(false,'Password Not Long Enough');
+      //T The passwords you have provided do not match.
+      if($data['password']!=$data['password_again']) return array(false,'The passwords you have provided do not match.');
+      //T Your password must be at least 6 characters long.
+      elseif(strlen($data['password'])<6) return array(false,'Your password must be at least 6 characters long.');
     }
 
     // make sure language is valid
     $ui_model = $this->load->model('ui');
     $languages = array_keys($ui_model->get_languages());
-    if(array_search($data['language'],$languages)===false) return array(false,'Language Not Valid');
+    //T The language selected is not valid.
+    if($data['language']!=='' && array_search($data['language'],$languages)===false) return array(false,'The language selected is not valid.');
 
     // make sure theme is valid
     $themes = array_keys($ui_model->get_themes());
-    if(array_search($data['theme'],$themes)===false) return array(false,'Theme Not Valid');
+    //T The theme selected is not valid.
+    if(array_search($data['theme'],$themes)===false) return array(false,'The theme selected is not valid.');
 
     return array(true,'');
 
@@ -381,7 +451,7 @@ class UsersModel extends OBFModel
       $this->db->insert('users_settings',$data);
 
       /*
-      $this->db->query('INSERT INTO users_settings (user_id, setting, value) 
+      $this->db->query('INSERT INTO users_settings (user_id, setting, value)
         VALUES (
           "'.$this->db->escape($user_id).'",
           "'.$this->db->escape($setting).'",
@@ -405,7 +475,7 @@ class UsersModel extends OBFModel
     return array(true,'');
 
   }
-  
+
   public function forgotpass_process($email)
   {
 
@@ -430,9 +500,9 @@ class UsersModel extends OBFModel
     $email = $data['email'];
     $username = $data['username'];
 
-    // basic validation 
+    // basic validation
     if(empty($name) || empty($email) || empty($username)) return array(false,'One or more required fields were not filled.');
-    if(!PHPMailer::ValidateAddress($email)) return array(false,'The email address you have provided is not valid.');
+    if(!PHPMailer\PHPMailer\PHPMailer::ValidateAddress($email)) return array(false,'The email address you have provided is not valid.');
 
     // make sure email not in use
     $this->db->where('email',$email);
@@ -478,7 +548,7 @@ class UsersModel extends OBFModel
   public function email_username_password($email,$username,$password)
   {
 
-    $mailer = new PHPMailer();
+    $mailer = new PHPMailer\PHPMailer\PHPMailer();
 
     $mailer->Body='Here is your username and new password for OpenBroadcaster.  You should immediately log in and reset your password.
 
@@ -497,6 +567,11 @@ Login at '.OB_SITE;
 
     $mailer->Send();
 
+  }
+
+  public function get_by_id ($id) {
+    $this->db->where('users.id', $id);
+    return $this->db->get_one('users');
   }
 
 }

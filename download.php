@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -50,7 +50,7 @@ class ObDownload
     $media = $this->db->get_one('media');
     if(empty($media)) die();
 
-    if(!$media['is_copyright_owner']) die();
+    if(!$media['is_public']) die();
     if($media['status'] != 'public') die();
 
     if($media['is_archived']==1) $filedir=OB_MEDIA_ARCHIVE;
@@ -62,7 +62,8 @@ class ObDownload
     $fullpath=$filedir.'/'.$media['filename'];
 
     if(!file_exists($fullpath)) die();
-
+    
+    header("Access-Control-Allow-Origin: *");
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header("Content-Transfer-Encoding: binary"); 

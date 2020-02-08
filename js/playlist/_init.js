@@ -1,5 +1,5 @@
-/*     
-    Copyright 2014 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -31,8 +31,8 @@ OB.Playlist.init = function()
 
 OB.Playlist.initMenu = function()
 {
-  OB.UI.addMenuItem(['Playlists Menu','Playlists'],'playlists',30);
-  OB.UI.addSubMenuItem('playlists',['Playlists Menu','New'],'new',OB.Playlist.newPage,10,'create_own_playlists');
+  OB.UI.addMenuItem('Playlists', 'playlists',30);
+  OB.UI.addSubMenuItem('playlists', 'New Playlist', 'new', OB.Playlist.newPage, 10, 'create_own_playlists');
 }
 
 OB.Playlist.station_id_avg_duration = null;

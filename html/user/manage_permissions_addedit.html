@@ -1,13 +1,13 @@
 <obwidget id="permissions_addedit_message" type="message"></obwidget>
 
-<div data-tns="Permissions Edit">
+<div>
 
   <fieldset>
 
-    <legend data-t>Heading</legend>
+    <legend data-t>Edit Permissions For Group</legend>
 
     <div class="fieldrow" id="permissions_addedit_name">
-      <label class="required" data-t>Name</label>
+      <label class="required" data-t>Group Name</label>
       <input type="text" id="group_name_input">
 
     </div>
@@ -17,9 +17,9 @@
 
   <fieldset>
     <div class="fieldrow">
-      <button class="add" id="item_properties_save" onclick="OB.User.managePermissionsSave();" data-t data-tns="Common">Save</button>
-      <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.managePermissionsDelete(false);" data-t data-tns="Common">Delete</button>
-      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+      <button class="add" id="item_properties_save" onclick="OB.User.managePermissionsSave();" data-t>Save</button>
+      <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.managePermissionsDelete(false);" data-t>Delete</button>
+      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t>Cancel</button>
     </div>
   </fieldset>
 

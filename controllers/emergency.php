@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -19,13 +19,13 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Emergency extends OBFController 
+class Emergency extends OBFController
 {
 
   public function __construct()
   {
     parent::__construct();
-    
+
     $this->user->require_authenticated();
 
     $this->EmergenciesModel = $this->load->model('Emergencies');
@@ -36,25 +36,52 @@ class Emergency extends OBFController
   {
 
     $id = trim($this->data('id'));
-  
+
     $device_id = trim($this->data('device_id'));
 
-    if(!empty($id)) 
+    if(!empty($id))
     {
 
       $emergency = $this->EmergenciesModel('get_one',$id);
-      if(!$emergency) return array(false,['Emergency','Not Found']);
+      //T Priority
+      //T Priority broadcast not found.
+      if(!$emergency) return array(false,['Priority','Priority broadcast not found.']);
 
       $this->user->require_permission('manage_emergency_broadcasts:'.$emergency['device_id']);
-      return array(true,'Emergency broadcast.',$emergency);
+      //T Priority Broadcast
+      return array(true,'Priority Broadcast',$emergency);
 
     }
-    else 
+    else
     {
       $this->user->require_permission('manage_emergency_broadcasts:'.$device_id);
-      return array(true,'Emergency broadcasts.',$this->EmergenciesModel('get_for_device',$device_id));
+      //T Priority Broadcast
+      return array(true,'Emergency Broadcasts',$this->EmergenciesModel('get_for_device',$device_id));
     }
 
+  }
+
+  public function emergencies_set_last_device()
+  {
+    $device_id = $this->data('device');
+
+    $this->db->where('id',$device_id);
+    $device_data = $this->db->get_one('devices');
+
+    if($device_data)
+    {
+      $this->user->set_setting('last_emergencies_device',$device_id);
+      return array(true,'Set last emergencies device.');
+    }
+    //T This player no longer exists.
+    else return array(false,'This player no longer exists.');
+  }
+
+  public function emergencies_get_last_device()
+  {
+    $device_id = $this->user->get_setting('last_emergencies_device');
+    if($device_id) return array(true,'Last emergencies device.',$device_id);
+    else return array(false,'Last emergencies device not found.');
   }
 
   public function save_emergency()
@@ -71,11 +98,12 @@ class Emergency extends OBFController
     $data['duration'] = trim($this->data('duration'));
     $data['start'] = trim($this->data('start'));
     $data['stop'] = trim($this->data('stop'));
-    
+
     $data['user_id']=$this->user->param('id');
 
     $validation = $this->EmergenciesModel('validate',$data,$id);
-    if($validation[0]==false) return array(false,['Emergency',$validation[1]]);
+    //T Priority
+    if($validation[0]==false) return array(false,['Priority',$validation[1]]);
 
     // check permission on this device.
     $this->user->require_permission('manage_emergency_broadcasts:'.$data['device_id']);
@@ -93,13 +121,13 @@ class Emergency extends OBFController
 
     $emergency = $this->EmergenciesModel('get_one',$id);
     if(!$emergency) return array(false,'Emergency broadcast not found.');
-  
+
     // check permission on appropriate device.
     $this->user->require_permission('manage_emergency_broadcasts:'.$emergency['device_id']);
 
     $this->EmergenciesModel('delete',$id);
 
-    return array(true,'Emergency deleted.');    
+    return array(true,'Emergency deleted.');
 
   }
 

@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -31,7 +31,7 @@ class Account extends OBFController
 
   }
 
-  public function login() 
+  public function login()
   {
 
     $username = trim($this->data('username'));
@@ -39,10 +39,10 @@ class Account extends OBFController
 
     $login = $this->user->login($username,$password);
 
-    if($login==false) return array(false,'Login Failed.');
+    if($login==false) return array(false,'Login Failed');
     elseif(is_array($login) && $login[0]===false) return array(false,$login[1]);
 
-    else return array(true,'Login Successful',$login);
+    else return array(true,'Login Successful',$login[2]);
   }
 
   public function uid()
@@ -57,11 +57,12 @@ class Account extends OBFController
   {
 
     $permissions = $this->PermissionsModel('get_user_permissions',$this->user->param('id'));
+    //T Permissions
     return array(true,'Permissions',$permissions);
 
     /*
     $permissions = array();
-    $permission_list = $this->db->get('users_permissions'); 
+    $permission_list = $this->db->get('users_permissions');
 
     foreach($permission_list as $check) $permissions[$check['name']]=$this->user->check_permission($check['name']);
 
@@ -73,6 +74,7 @@ class Account extends OBFController
   public function groups()
   {
     $groups = $this->PermissionsModel('get_user_groups',$this->user->param('id'));
+    //T Groups
     return array(true,'Groups',$groups);
   }
 
@@ -80,6 +82,7 @@ class Account extends OBFController
   {
     $logout = $this->user->logout();
 
+    //T Logged Out
     if($logout) return array(true,'Logged Out');
     else return array(false,'Unable to log out, an unknown error occurred.');
 
@@ -104,7 +107,7 @@ class Account extends OBFController
   {
 
     $this->user->require_authenticated();
-  
+
     $user_id = $this->user->param('id');
 
     $data = array();
@@ -119,12 +122,13 @@ class Account extends OBFController
     $data['sidebar_display_left'] = trim($this->data('sidebar_display_left'));
 
     $validation = $this->UsersModel('settings_validate',$user_id,$data);
-    
-    if($validation[0]==false) return array(false,array('Account Settings',$validation[1]));
-  
+
+    if($validation[0]==false) return [false,$validation[1]];
+
     $this->UsersModel('settings_update',$user_id,$data);
 
-    return array(true,array('Account Settings','Settings Updated'));
+    //T Settings have been updated. User interface setting changes may require you refresh the application to take effect.
+    return [true,'Settings have been updated. User interface setting changes may require you refresh the application to take effect.'];
 
   }
 
@@ -134,7 +138,7 @@ class Account extends OBFController
     $email = trim($this->data('email'));
 
     $validation = $this->UsersModel('forgotpass_validate',$email);
-    
+
     if($validation[0]==false) return $validation;
 
     $this->UsersModel('forgotpass_process',$email);
@@ -145,6 +149,11 @@ class Account extends OBFController
 
   public function newaccount()
   {
+
+    if(!$this->UsersModel->user_registration_get())
+    {
+      return array(false,'New account registration is currently disabled.');
+    }
 
     $data = array();
     $data['name'] = trim($this->data('name'));

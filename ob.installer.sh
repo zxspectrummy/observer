@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-# Copyright 2012-2013 OpenBroadcaster, Inc.
+# Copyright 2012-2020 OpenBroadcaster, Inc.
 
 # This file is part of OpenBroadcaster Server.
 

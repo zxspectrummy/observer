@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,9 +26,12 @@ OB.Schedule.init = function()
 
 OB.Schedule.initMenu = function()
 {
-  OB.UI.addMenuItem(['Schedules Menu','Schedules'],'schedules',40);
-  OB.UI.addSubMenuItem('schedules',['Schedules Menu','Shows'],'shows',OB.Schedule.schedule);
-  OB.UI.addSubMenuItem('schedules',['Schedules Menu','Permissions'],'permissions',OB.Schedule.schedulePermissions,20,'manage_schedule_permissions');
+  //T Schedules
+  OB.UI.addMenuItem('Schedules', 'schedules', 40);
+  //T Schedule Shows
+  OB.UI.addSubMenuItem('schedules', 'Schedule Shows', 'shows', OB.Schedule.schedule);
+  //T Schedule Permissions
+  OB.UI.addSubMenuItem('schedules', 'Schedule Permissions', 'permissions', OB.Schedule.schedulePermissions, 20, 'manage_schedule_permissions');
 }
 
 
@@ -50,10 +53,12 @@ OB.Schedule.schedule = function()
   OB.Schedule.setScheduleDates();
   OB.Schedule.scheduleInit();
 
-  $('#schedule_heading').text(OB.t('Schedule','Schedule Shows Heading'));
-  $('#schedule_welcome').text(OB.t('Schedule','Schedule Shows Instructions'));
+  //T Schedule Shows
+  $('#schedule_heading').text(OB.t('Schedule Shows'));
+  //T Drag media or playlist onto schedule. Double-click show to edit.
+  $('#schedule_welcome').text(OB.t('Drag media or playlist onto schedule. Double-click show to edit.'));
   $('#schedule_welcome').prepend('<span id="schedule_linein" class="hidden"><button onclick="OB.Schedule.addShowWindow(\'linein\');"></button> &nbsp; </span>');
-  $('#schedule_linein button').text(OB.t('Schedule','Schedule Line-In'));
+  $('#schedule_linein button').text(OB.t('Schedule Line-In'));
 
   // setup schedule table as drop area for playlists and media
   $('#schedule_container').addClass('droppable_target_media');
@@ -62,9 +67,9 @@ OB.Schedule.schedule = function()
   $('#schedule_container').droppable({
       drop: function(event, ui) {
         if($(ui.draggable).attr('data-mode')=='media')
-        {         
-
-          if($('.sidebar_search_media_selected').length!=1) { OB.UI.alert(['Schedule','Schedule Only One']); return; }
+        {
+          //T You can schedule only one item at a time.
+          if($('.sidebar_search_media_selected').length!=1) { OB.UI.alert('You can schedule only one item at a time.'); return; }
 
           var item_type = 'media';
           var item_id = $('.sidebar_search_media_selected').first().attr('data-id');
@@ -73,8 +78,8 @@ OB.Schedule.schedule = function()
 
         else if($(ui.draggable).attr('data-mode')=='playlist')
         {
-
-          if($('.sidebar_search_playlist_selected').length!=1) { OB.UI.alert(['Schedule','Schedule Only One']); return; }
+          //T You can schedule only one item at a time.
+          if($('.sidebar_search_playlist_selected').length!=1) { OB.UI.alert('You can schedule only one item at a time.'); return; }
 
           var item_type = 'playlist';
           var item_id = $('.sidebar_search_playlist_selected').first().attr('data-id');
@@ -101,15 +106,18 @@ OB.Schedule.schedulePermissions = function()
 
   $('.sf-submenu').hide();
   OB.UI.replaceMain('schedule/schedule.html');
-  
+
   OB.Schedule.schedule_mode = 'permissions';
   OB.Schedule.setScheduleDates();
   OB.Schedule.scheduleInit();
 
-  $('#schedule_heading').text(OB.t('Schedule','Schedule Permissions Heading'));
+  //T Schedule Permissions
+  $('#schedule_heading').text(OB.t('Schedule Permissions'));
 
-  var add_text = htmlspecialchars(OB.t('Schedule','Schedule Permissions Add Button'));
-  var instructions_text = htmlspecialchars(OB.t('Schedule','Schedule Permissions Instructions'));
+  //T Add Permission
+  var add_text = htmlspecialchars(OB.t('Add Permission'));
+  //T or double-click a box to edit/delete.
+  var instructions_text = htmlspecialchars(OB.t('or double-click a box to edit/delete.'));
 
   $('#schedule_welcome').html('<button onclick="OB.Schedule.addPermissionWindow();">'+add_text+'</button> '+instructions_text);
 }
@@ -117,10 +125,16 @@ OB.Schedule.schedulePermissions = function()
 OB.Schedule.scheduleInit = function()
 {
 
-  OB.API.post('device','device_list', {}, function(data)
-  {
+  var post = [];
+  post.push(['device','device_list', {}]);
 
-    var devices = data.data;
+  if(OB.Schedule.schedule_mode=='permissions') post.push(['schedule','permissions_get_last_device', {}]);
+  else post.push(['schedule','shows_get_last_device', {}]);
+
+  OB.API.multiPost(post, function(responses)
+  {
+    var devices = responses[0].data;
+    var last_device = responses[1];
 
     $.each(devices,function(index,item) {
 
@@ -134,6 +148,13 @@ OB.Schedule.scheduleInit = function()
       $('#schedule_device_select').append('<option value="'+item.id+'" data-linein="'+item.support_linein+'">'+htmlspecialchars(item.name)+'</option>');
 
     });
+
+    // if we have a valid last device for this schedule, set that.
+    if(last_device.status && $('#schedule_device_select option[value='+last_device.data+']').length)
+    {
+      $('#schedule_device_select').val(last_device.data);
+      OB.Schedule.device_id = last_device.data;
+    }
 
     OB.Schedule.loadSchedule();
 
@@ -174,7 +195,16 @@ OB.Schedule.deleteShow = function(confirm)
 
   else
   {
-    OB.UI.confirm(['Schedule Edit','Delete Show Confirm'],function() { OB.Schedule.deleteShow(true); }, ['Common','Yes Delete'], ['Common','No Cancel'], 'delete');
+    //T Delete this show?
+    //T Yes, Delete
+    //T No, Cancel
+    OB.UI.confirm(
+      'Delete this show?',
+      function () { OB.Schedule.deleteShow(true); },
+      'Yes, Delete',
+      'No, Cancel',
+      'delete'
+    );
   }
 
 }
@@ -205,21 +235,30 @@ OB.Schedule.deletePermission = function(confirm)
 
   else
   {
-    OB.UI.confirm(['Schedule Edit','Delete Permission Confirm'],function() { OB.Schedule.deletePermission(true); }, ['Common','Yes Delete'], ['Common','No Cancel'], 'delete');
+    //T Delete this permission?
+    //T Yes, Delete
+    //T No, Cancel
+    OB.UI.confirm(
+      'Delete this permission?',
+      function () { OB.Schedule.deletePermission(true); },
+      'Yes, Delete',
+      'No, Cancel',
+      'delete'
+    );
   }
 
 }
 
 OB.Schedule.saveShow = function()
 {
- 
+
   fields = new Object();
 
   fields.id = $('#show_id').val();
   fields.edit_recurring = $('#show_edit_recurring').val();
 
   fields.mode = $('#show_mode').val();
-  fields.x_data = $('#show_x_data').val();  
+  fields.x_data = $('#show_x_data').val();
 
   var start_date_array = $('#show_start_date').val().split('-');
   var start_time_array = $('#show_start_time').val().split(':');
@@ -237,7 +276,7 @@ OB.Schedule.saveShow = function()
   {
 
     var stop_date_array = $('#show_stop_date').val().split('-');
-    var stop_date = new Date(parseInt(stop_date_array[0]),parseInt(stop_date_array[1]-1),parseInt(stop_date_array[2]),23,59,59,0);  
+    var stop_date = new Date(parseInt(stop_date_array[0]),parseInt(stop_date_array[1]-1),parseInt(stop_date_array[2]),23,59,59,0);
 
     fields.stop = Math.round(stop_date.getTime()/1000)+'';
 
@@ -299,7 +338,7 @@ OB.Schedule.savePermission = function()
   {
 
     var stop_date_array = $('#permissions_stop_date').val().split('-');
-    var stop_date = new Date(parseInt(stop_date_array[0]),parseInt(stop_date_array[1]-1),parseInt(stop_date_array[2]),23,59,59,0);  
+    var stop_date = new Date(parseInt(stop_date_array[0]),parseInt(stop_date_array[1]-1),parseInt(stop_date_array[2]),23,59,59,0);
 
     fields.stop = Math.round(stop_date.getTime()/1000)+'';
 
@@ -333,7 +372,7 @@ OB.Schedule.addeditModeChange = function(where)
 {
     var val = $('#'+where+'_mode').val();
 
-    if(val=='once') 
+    if(val=='once')
     {
 
       $('#'+where+'_addedit_x_data').hide();
@@ -344,13 +383,16 @@ OB.Schedule.addeditModeChange = function(where)
     }
 
     $('#'+where+'_addedit_stop').show();
-  
+
     if(val=='xweeks' || val=='xmonths' || val=='xdays') $('#'+where+'_addedit_x_data').show();
     else $('#'+where+'_addedit_x_data').hide();
 
-    if(val=='xweeks') $('#'+where+'_addedit_x_data_interval').text('Weeks');
-    if(val=='xdays') $('#'+where+'_addedit_x_data_interval').text('Days');
-    if(val=='xmonths') $('#'+where+'_addedit_x_data_interval').text('Months');
+    //T Weeks
+    if(val=='xweeks') $('#'+where+'_addedit_x_data_interval').text(OB.t('Weeks'));
+    //T Days
+    if(val=='xdays') $('#'+where+'_addedit_x_data_interval').text(OB.t('Days'));
+    //T Months
+    if(val=='xmonths') $('#'+where+'_addedit_x_data_interval').text(OB.t('Months'));
 }
 
 OB.Schedule.addeditShowWindow = function(timeslots)
@@ -359,7 +401,8 @@ OB.Schedule.addeditShowWindow = function(timeslots)
   // no advanced schedule and no timeslots for user? display alert instead.
   if(timeslots.length==0 && OB.Settings.permissions.indexOf('advanced_show_scheduling')==-1)
   {
-    OB.UI.alert(['Schedule Edit','No Timeslots Available']);
+    //T You do not have any timeslots available for the selected week.
+    OB.UI.alert('You do not have any timeslots available for the selected week.');
     return;
   }
 
@@ -371,7 +414,7 @@ OB.Schedule.addeditShowWindow = function(timeslots)
   {
 
     var start = new Date(slot.start*1000);
-    var description = slot.description+': '+OB.t('Schedule',month_name(start.getMonth()))+' '+start.getDate()+', '+timepad(start.getHours())+':'+timepad(start.getMinutes())+':'+timepad(start.getSeconds())+' ('+secsToTime(slot.duration,'hms')+')';
+    var description = slot.description+': '+OB.t(month_name(start.getMonth()))+' '+start.getDate()+', '+timepad(start.getHours())+':'+timepad(start.getMinutes())+':'+timepad(start.getSeconds())+' ('+secsToTime(slot.duration,'hms')+')';
 
     var date = start.getFullYear()+'-'+timepad(start.getMonth()+1)+'-'+timepad(start.getDate());
 
@@ -419,7 +462,7 @@ OB.Schedule.addeditShowWindowTimeslotChange = function()
 
 
   var duration = $(selected).attr('data-duration');
-  
+
   var seconds = duration%60;
   duration = (duration-seconds)/60;
   var minutes = duration%60;
@@ -452,7 +495,7 @@ OB.Schedule.addShowWindow = function(type,id,name,duration)
     OB.Schedule.addeditShowWindow(permissions.data);
     $('.edit_only').hide();
 
-    // if not using advanced permissions, the selected timeslot will be the first one.  
+    // if not using advanced permissions, the selected timeslot will be the first one.
     // run the timeslot change callback so that the start/duration is filled out.
     if(OB.Settings.permissions.indexOf('advanced_show_scheduling')==-1)
     {
@@ -480,9 +523,10 @@ OB.Schedule.addShowWindow = function(type,id,name,duration)
 
     }
 
-    if(type=='linein') 
+    if(type=='linein')
     {
-      $('#show_item_info').text(OB.t('Schedule Edit','Line-In'));
+      //T Line-In
+      $('#show_item_info').text(OB.t('Line-In'));
     }
     else $('#show_item_info').text(name+' ('+type+' #'+id+')');
 
@@ -520,9 +564,10 @@ OB.Schedule.editShowWindow = function(id,recurring)
 
         $('.edit_only').show();
 
-        if(show.item_type=='linein') 
+        if(show.item_type=='linein')
         {
-          $('#show_item_info').text(OB.t('Schedule Edit','Line-In'));
+          //T Line-In
+          $('#show_item_info').text(OB.t('Line-In'));
         }
         else $('#show_item_info').text(show.item_name+' ('+show.item_type+' #'+show.item_id+')');
 
@@ -532,7 +577,7 @@ OB.Schedule.editShowWindow = function(id,recurring)
         else { $('#show_mode').val(show.mode); $('#show_edit_recurring').val(1); }
 
         var start_time = new Date(parseInt(show.start)*1000);
-    
+
         $('#show_start_date').val(start_time.getFullYear()+'-'+timepad(start_time.getMonth()+1)+'-'+timepad(start_time.getDate()));
         $('#show_start_time').val( timepad(start_time.getHours()) +':'+ timepad(start_time.getMinutes()) +':'+ timepad(start_time.getSeconds()));
 
@@ -542,7 +587,7 @@ OB.Schedule.editShowWindow = function(id,recurring)
           var stop_date = new Date(parseInt(show.stop)*1000);
           $('#show_stop_date').val(stop_date.getFullYear()+'-'+timepad(stop_date.getMonth()+1)+'-'+timepad(stop_date.getDate()));
         }
-  
+
         var duration_tmp = show.duration;
         var duration_seconds = duration_tmp%60;
         duration_tmp = (duration_tmp-duration_seconds)/60;
@@ -598,11 +643,11 @@ OB.Schedule.addeditPermissionWindow = function()
   $('#permissions_mode').change(function() { OB.Schedule.addeditModeChange('permissions'); });
 
 }
-  
-OB.Schedule.addPermissionWindow = function() 
+
+OB.Schedule.addPermissionWindow = function()
 {
 
-  OB.API.post('users','user_list',{}, function(data) 
+  OB.API.post('users','user_list',{}, function(data)
   {
 
     OB.Schedule.user_list = data.data;
@@ -636,7 +681,7 @@ OB.Schedule.editPermissionWindow = function(id,recurring)
     $('#permissions_user_id').val(permission.user_id);
 
     var start_time = new Date(parseInt(permission.start)*1000);
-    
+
     $('#permissions_start_date').val(start_time.getFullYear()+'-'+timepad(start_time.getMonth()+1)+'-'+timepad(start_time.getDate()));
     $('#permissions_start_time').val( timepad(start_time.getHours()) +':'+ timepad(start_time.getMinutes()) +':'+ timepad(start_time.getSeconds()) );
 
@@ -646,7 +691,7 @@ OB.Schedule.editPermissionWindow = function(id,recurring)
       $('#permissions_stop_date').val(stop_date.getFullYear()+'-'+timepad(stop_date.getMonth()+1)+'-'+timepad(stop_date.getDate()));
     }
 
-    
+
     var duration_tmp = permission.duration;
     var duration_seconds = duration_tmp%60;
     duration_tmp = (duration_tmp-duration_seconds)/60;
@@ -708,10 +753,10 @@ OB.Schedule.prevWeek = function()
 OB.Schedule.dateRangeText = function()
 {
 
-  $('#schedule_date_range').html( htmlspecialchars(OB.t('Schedule',month_name(OB.Schedule.schedule_start.getMonth()))) +' '+OB.Schedule.schedule_start.getDate()+', '+OB.Schedule.schedule_start.getFullYear()+' &nbsp; - &nbsp; '+htmlspecialchars(OB.t('Schedule',month_name(OB.Schedule.schedule_end.getMonth())))+' '+OB.Schedule.schedule_end.getDate()+', '+OB.Schedule.schedule_end.getFullYear() );
+  $('#schedule_date_range').html( htmlspecialchars(OB.t(month_name(OB.Schedule.schedule_start.getMonth()))) +' '+OB.Schedule.schedule_start.getDate()+', '+OB.Schedule.schedule_start.getFullYear()+' &nbsp; - &nbsp; '+htmlspecialchars(OB.t(month_name(OB.Schedule.schedule_end.getMonth())))+' '+OB.Schedule.schedule_end.getDate()+', '+OB.Schedule.schedule_end.getFullYear() );
 
   var tmp_date = new Date(OB.Schedule.schedule_start.getTime());
-  
+
   for(var count=0;count<7;count++)
   {
 
@@ -732,36 +777,33 @@ OB.Schedule.loadSchedule = function()
 
   if(OB.Schedule.schedule_mode == 'permissions')
   {
+    var post = [];
+    post.push(['schedule','permissions', { 'start': String(Math.round(OB.Schedule.schedule_start.getTime()/1000)), 'end': String(Math.round(OB.Schedule.schedule_end.getTime()/1000)), 'device': OB.Schedule.device_id }]);
+    post.push(['schedule','permissions_set_last_device', { 'device': OB.Schedule.device_id}]);
 
-    OB.API.post('schedule','permissions', { 'start': String(Math.round(OB.Schedule.schedule_start.getTime()/1000)), 'end': String(Math.round(OB.Schedule.schedule_end.getTime()/1000)), 'device': OB.Schedule.device_id }, function(data) {
-
-      if(data.status==true)
+    OB.API.multiPost(post, function(responses) {
+      if(responses[0].status==true)
       {
-
-        OB.Schedule.schedule_data = data.data;
+        OB.Schedule.schedule_data = responses[0].data;
         OB.Schedule.refreshData();
-
       }
-
     });
-
   }
 
   else if(OB.Schedule.schedule_mode == 'schedule')
   {
+    var post = [];
+    post.push(['schedule','shows', { 'start': String(Math.round(OB.Schedule.schedule_start.getTime()/1000)), 'end': String(Math.round(OB.Schedule.schedule_end.getTime()/1000)), 'device': OB.Schedule.device_id }]);
+    post.push(['schedule','shows_set_last_device', { 'device': OB.Schedule.device_id}]);
 
-    OB.API.post('schedule','shows', { 'start': String(Math.round(OB.Schedule.schedule_start.getTime()/1000)), 'end': String(Math.round(OB.Schedule.schedule_end.getTime()/1000)), 'device': OB.Schedule.device_id }, function(data) {
-
-      if(data.status==true)
+    OB.API.multiPost(post, function(responses) {
+      if(responses[0].status==true)
       {
         $('#schedule_linein').toggle( $('#schedule_device_select option:selected').attr('data-linein')=='1' );
-
-        OB.Schedule.schedule_data = data.data;
+        OB.Schedule.schedule_data = responses[0].data;
         OB.Schedule.refreshData();
       }
-
     });
-
   }
 
 }
@@ -773,7 +815,7 @@ OB.Schedule.refreshData = function()
 
   // create a copy of our schedule data (since we will be manipulating it for proper display)
   var schedule_data = new Array();
-  
+
   $.each(OB.Schedule.schedule_data,function(index,data) {
 
     schedule_data.push(new CloneObject(data));
@@ -797,7 +839,8 @@ OB.Schedule.refreshData = function()
         var hour_update = data.date.getHours() + 1;
         var day_update = data.date.getDay() + 1;
 
-        $('#schedule_row_'+hour_update).children().eq(day_update).html('<div class="schedule_dst_info">* '+htmlspecialchars(OB.t('Schedule','DST Spring Ahead'))+'*</div>');
+        //T DST Spring Ahead
+        $('#schedule_row_'+hour_update).children().eq(day_update).html('<div class="schedule_dst_info">* '+htmlspecialchars(OB.t('DST Spring Ahead'))+'*</div>');
 
       }
 
@@ -827,7 +870,7 @@ OB.Schedule.refreshData = function()
     // spans multiple days, need to split up.
     if(end_seconds_from_midnight > 86400)
     {
-          
+
       data.block_offset = start_seconds_from_midnight;
       data.block_duration = 86400 - start_seconds_from_midnight;
       data.day = start.getDay();
@@ -842,7 +885,7 @@ OB.Schedule.refreshData = function()
 
       var count=1;
 
-      while(seconds_over_midnight > 0 && ( start.getTime()+count*(86400*1000) ) <= OB.Schedule.schedule_end.getTime() ) 
+      while(seconds_over_midnight > 0 && ( start.getTime()+count*(86400*1000) ) <= OB.Schedule.schedule_end.getTime() )
       {
 
         var new_data = new CloneObject(data);
@@ -925,10 +968,10 @@ OB.Schedule.refreshData = function()
 
         overlap_end = Math.min(zoom_minute_val_end,(block_offset + block_duration));
         overlap_start = Math.max(zoom_minute_val_start,block_offset);
-        overlap_amount = overlap_end - overlap_start;   
+        overlap_amount = overlap_end - overlap_start;
 
         block_offset += 59*(overlap_start - zoom_minute_val_start);
-        block_duration += 59*(overlap_amount);  
+        block_duration += 59*(overlap_amount);
 
       }
 
@@ -944,7 +987,7 @@ OB.Schedule.refreshData = function()
     {
 
       block_offset += 212400;
-  
+
       if(zoom_minute_val_start!=null) block_offset += 212400;
 
     }
@@ -962,16 +1005,18 @@ OB.Schedule.refreshData = function()
     else if(OB.Schedule.schedule_mode=='schedule')
     {
 
-      if(parseInt(data.user_id) != parseInt(OB.Account.user_id) && OB.Settings.permissions.indexOf('manage_schedule_permissions')==-1) var dblclick="OB.UI.alert(['Schedule','No Edit Permission']);";
+      //T You do not have permission to edit this item.
+      if(parseInt(data.user_id) != parseInt(OB.Account.user_id) && OB.Settings.permissions.indexOf('manage_schedule_permissions')==-1) var dblclick="OB.UI.alert('You do not have permission to edit this item.');";
       else var dblclick='clearSelection(); OB.Schedule.editShowWindow('+data.id+','+recurring+');';
 
-      $('#schedule_data_'+data.day).append('<div class="schedule_datablock" data-id="'+data.id+'" ondblclick="'+dblclick+'" style="top: '+Math.round(block_offset/60*interval_height)+'px; height: '+Math.round(block_duration/60*interval_height)+'px; overflow: hidden;">'+htmlspecialchars(data.type=='linein' ? OB.t('Schedule','Line-In') : data.name)+'</div>');
+      //T Line-In
+      $('#schedule_data_'+data.day).append('<div class="schedule_datablock" data-id="'+data.id+'" ondblclick="'+dblclick+'" style="top: '+Math.round(block_offset/60*interval_height)+'px; height: '+Math.round(block_duration/60*interval_height)+'px; overflow: hidden;">'+htmlspecialchars(data.type=='linein' ? OB.t('Line-In') : data.name)+'</div>');
 
     }
 
     $('.schedule_datablock[data-id='+data.id+']').data('details',data);
 
-    $('.schedule_datablock[data-id='+data.id+']').hover(function(e) { OB.Schedule.scheduleDetails(e,data.id); }, function(e) { $('#schedule_details').hide(); }); 
+    $('.schedule_datablock[data-id='+data.id+']').hover(function(e) { OB.Schedule.scheduleDetails(e,data.id); }, function(e) { $('#schedule_details').hide(); });
 
   });
 
@@ -998,14 +1043,16 @@ OB.Schedule.scheduleDetails = function(e,id)
 
   $('#schedule_details').show();
 
-  if(OB.Schedule.schedule_mode=='schedule') 
+  if(OB.Schedule.schedule_mode=='schedule')
   {
       $('#schedule_details_name').text(data.name + ' (' + data.item_type+' #'+data.item_id+')');
-      $('#schedule_details_user').parent().find('td:first-child').text(OB.t('Schedule','Details Scheduled By'));
+      //T Scheduled By
+      $('#schedule_details_user').parent().find('td:first-child').text(OB.t('Scheduled By'));
   }
-  else 
+  else
   {
-    $('#schedule_details_user').parent().find('td:first-child').text(OB.t('Schedule','Details Scheduled For'));
+    //T Schedule For
+    $('#schedule_details_user').parent().find('td:first-child').text(OB.t('Scheduled For'));
     $('#schedule_details_name').text(data.description);
   }
 
@@ -1033,7 +1080,8 @@ OB.Schedule.scheduleDetails = function(e,id)
 
   if(OB.Schedule.schedule_mode=='schedule' && data.item_type=='linein')
   {
-    $('#schedule_details_name').text(OB.t('Schedule','Line-In'));
+    //T Line-In
+    $('#schedule_details_name').text(OB.t('Line-In'));
   }
 
 }
@@ -1046,13 +1094,13 @@ OB.Schedule.zoomHour = function(hour)
 
   OB.Schedule.zoom_minute_val = null;
 
-  if(OB.Schedule.zoom_hour_val !== null) 
+  if(OB.Schedule.zoom_hour_val !== null)
   {
     $('#schedule_time_'+OB.Schedule.zoom_hour_val).html('');
     $('.schedule_time_minute_select').remove();
   }
 
-  if(hour != OB.Schedule.zoom_hour_val)  
+  if(hour != OB.Schedule.zoom_hour_val)
   {
 
     $('#schedule_time_'+hour).append('<div id="schedule_time_'+hour+'_0"></div>');
@@ -1069,7 +1117,7 @@ OB.Schedule.zoomHour = function(hour)
     OB.Schedule.zoom_hour_val = hour;
   }
 
-  else 
+  else
   {
     OB.Schedule.zoom_hour_val = null;
   }
@@ -1109,4 +1157,3 @@ OB.Schedule.zoomMinute = function(minute)
   OB.Schedule.refreshData();
 
 }
-

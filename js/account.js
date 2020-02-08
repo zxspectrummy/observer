@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -34,9 +34,12 @@ OB.Account.init = function()
 
 OB.Account.initMenu = function()
 {
-  OB.UI.addMenuItem(['Account Menu','Account'],'account',10);
-  OB.UI.addSubMenuItem('account',['Account Menu','Settings'],'settings',OB.Account.settings,10);
-  OB.UI.addSubMenuItem('account',['Account Menu','Logout'],'logout',OB.Account.logout,30);
+  //T Account
+  OB.UI.addMenuItem('Account', 'account', 10);
+  //T Account Settings
+  OB.UI.addSubMenuItem('account', 'Account Settings','settings', OB.Account.settings, 10);
+  //T Logout
+  OB.UI.addSubMenuItem('account', 'Logout', 'logout', OB.Account.logout, 30);
 }
 
 OB.Account.getAccountStatus = function()
@@ -48,7 +51,7 @@ OB.Account.getAccountStatus = function()
   post.push(['account','groups',{}]);
   post.push(['account','settings',{}]);
 
-  OB.API.multiPost(post,function(data) { 
+  OB.API.multiPost(post,function(data) {
 
     var uid = data[0];
     var permissions = data[1];
@@ -58,7 +61,7 @@ OB.Account.getAccountStatus = function()
     OB.Account.user_id=uid.data.id;
     OB.Account.username=uid.data.username;
     OB.Account.userdata=settings.data;
-    
+
     OB.Account.updateAccountStatus();
 
 		// reload to direct user back to welcome screen if they are not logged in for some reason.
@@ -97,9 +100,10 @@ OB.Account.login = function()
 
   OB.API.post('account','login', { 'username': username, 'password': password },function(data) {
 
-    if(data.status==false) 
+    if(data.status==false)
     {
-      $('#account_login_message').obWidget('error',['Account Login','Password Incorrect']);
+      //T The password you have provided is incorrect.
+      $('#account_login_message').obWidget('error', 'The password you have provided is incorrect.');
 
       $('#account_login_username').focus();
       $('#account_login_username').select();
@@ -132,6 +136,7 @@ OB.Account.logout = function()
     }
 
     else {
+      //T Unable to log out.
       OB.UI.alert('Unable to log out.');
     }
   });
@@ -140,7 +145,8 @@ OB.Account.logout = function()
 
 OB.Account.updateAccountStatus = function()
 {
-  $('#footer_account_username').html(OB.t('Layout','Logged In As',OB.Account.username));
+  //T Logged in as: %1
+  $('#footer_account_username').html(OB.t('Logged in as: %1', OB.Account.username));
   $('#footer_box_left').show();
   $('#footer_box_right').show();
 }
@@ -153,7 +159,7 @@ OB.Account.settings = function()
   post.push(['ui','get_languages',{}]);
   post.push(['ui','get_themes',{}]);
 
-  OB.API.multiPost(post,function(data) { 
+  OB.API.multiPost(post,function(data) {
 
     var settings = data[0];
     var languages = data[1];
@@ -170,20 +176,19 @@ OB.Account.settings = function()
 
     // user settings
     $('#account_user_results_per_page').val(OB.ClientStorage.get('results_per_page'));
-    
+
     if(languages && languages.data) $.each(languages.data, function(value,language)
     {
-      $('#account_language').append('<option value="'+value+'">'+htmlspecialchars(language.description)+'</option>');
+      $('#account_language').append('<option value="'+language.code+'">'+htmlspecialchars(language.name)+'</option>');
     });
-    
+
     if(themes && themes.data) $.each(themes.data, function(value,theme)
     {
-      $('#account_theme').append('<option value="'+value+'">'+htmlspecialchars(OB.t('Account Settings',theme))+'</option>');
+      $('#account_theme').append('<option value="'+value+'">'+htmlspecialchars(theme)+'</option>');
     });
 
     var language = userdata['language'];
-    if(!language) language='default';
-    $('#account_language').val(language);
+    if (!language == '') $('#account_language').val(language);
 
     var theme = userdata['theme'];
     if(!theme) theme = 'default';
@@ -228,4 +233,3 @@ OB.Account.settingsSubmit = function()
   OB.ClientStorage.store(settings,function() {});
 
 }
-

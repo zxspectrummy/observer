@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -23,7 +23,7 @@ OB.Settings = new Object();
 
 OB.Settings.init = function()
 {
-	OB.Callbacks.add('ready',-70,OB.Settings.getMediaSettings);
+	OB.Callbacks.add('ready', -70, OB.Settings.getSettings);
 }
 
 OB.Settings.categories = new Array();
@@ -34,14 +34,16 @@ OB.Settings.genres = new Array();
 OB.Settings.permissions = null;
 OB.Settings.groups = null;
 
-OB.Settings.getMediaSettings = function()
+OB.Settings.getSettings = function(callback)
 {
   var post = [];
-  post.push(['settings','country_list', {}]);
-  post.push(['settings','language_list', {}]);
-  post.push(['settings','genre_list', {}]);
-  post.push(['settings','category_list', {}]);
-  post.push(['settings','get_ob_version', {}]);
+  post.push(['settings', 'country_list', {}]);
+  post.push(['settings', 'language_list', {}]);
+  post.push(['settings', 'genre_list', {}]);
+  post.push(['settings', 'category_list', {}]);
+  post.push(['settings', 'media_metadata_fields', {}]);
+  post.push(['settings', 'get_ob_version', {}]);
+  post.push(['settings', 'media_get_fields', {}]);
 
   OB.API.multiPost(post,function(response)
   {
@@ -49,10 +51,10 @@ OB.Settings.getMediaSettings = function()
     OB.Settings.languages = response[1].data;
     OB.Settings.genres = response[2].data;
     OB.Settings.categories = response[3].data;
-    OB.version = response[4].data;
+    OB.Settings.media_metadata = response[4].data;
+    OB.version = response[5].data;
+    OB.Settings.media_required_fields = response[6].data;
+
+    if(callback) callback();
   },'sync');
 }
-
-
-
-

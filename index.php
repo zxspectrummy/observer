@@ -1,6 +1,6 @@
 <?php
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -20,7 +20,7 @@
 
 // used by install checker to check whether this is an OB application index file.
 // might be used by other things as well.
-header('OpenBroadcaster-Application: index'); 
+header('OpenBroadcaster-Application: index');
 
 require('components.php');
 
@@ -47,55 +47,54 @@ $image_files = $ui_model->image_files();
 <head>
   <meta charset="utf-8">
   <title>OpenBroadcaster</title>
+  
+  <script type="text/javascript" src="extras/jquery.min.js?v=<?=filemtime('extras/jquery.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery-migrate.min.js?v=<?=filemtime('extras/jquery-migrate.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery-ui.min.js?v=<?=filemtime('extras/jquery-ui.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery-ui-timepicker-addon.js?v=<?=filemtime('extras/jquery-ui-timepicker-addon.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.ba-dotimeout.min.js?v=<?=filemtime('extras/jquery.ba-dotimeout.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.json.js?v=<?=filemtime('extras/jquery.json.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.DOMWindow.js?v=<?=filemtime('extras/jquery.DOMWindow.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.scrollTo.min.js?v=<?=filemtime('extras/jquery.scrollTo.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.visible.min.js?v=<?=filemtime('extras/jquery.visible.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.mousewheel.min.js?v=<?=filemtime('extras/jquery.mousewheel.min.js')?>"></script>
+  <script type="text/javascript" src="extras/jquery.contextMenu.js?v=<?=filemtime('extras/jquery.contextMenu.js')?>"></script>
+  <script type="text/javascript" src="extras/dateformat.js?v=<?=filemtime('extras/dateformat.js')?>"></script>
+  <script type="text/javascript" src="extras/tinymce/js/tinymce/tinymce.min.js?v=<?=filemtime('extras/tinymce/js/tinymce/tinymce.min.js')?>"></script>
 
-  <?php // TODO: need a way to add this to theme or default UI information elsewhere ... like prepend/append html HEAD function/variable/object? ?>
-  <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="extras/simplebar/simplebar.min.js?v=<?=filemtime('extras/simplebar/simplebar.min.js')?>"></script>
+  <link rel="stylesheet" type="text/css" href="extras/simplebar/simplebar.min.css?v=<?=filemtime('extras/simplebar/simplebar.min.css')?>">
 
-  <link type="text/css" href="/extras/jquery-ui-themes/ui-darkness/jquery-ui-1.8.23.custom.css" rel="Stylesheet">
+  <link type="text/css" href="extras/opensans/opensans.css?v=<?=filemtime('extras/opensans/opensans.css')?>" rel="stylesheet">
+  <link type="text/css" href="extras/jquery-ui-darkness/jquery-ui.min.css?v=<?=filemtime('extras/jquery-ui-darkness/jquery-ui.min.css')?>" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="extras/jquery-ui-timepicker-addon.css?v=<?=filemtime('extras/jquery-ui-timepicker-addon.css')?>">
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-  <?php // TODO: don't require migrate... I think superfish is causing problems with newer jquery but we need to swap this plugin out anyway. ?>
-  <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
-
-  <script type="text/javascript" src="extras/jquery-ui-1.8.23.custom.min.js"></script>
-  <script type="text/javascript" src="extras/jquery-ui-timepicker-addon.js"></script>
-  <script type="text/javascript" src="extras/jquery.ba-dotimeout.min.js"></script>
-  <script type="text/javascript" src="extras/jquery.json.js"></script>
-  <script type="text/javascript" src="extras/jquery.DOMWindow.js"></script>
-  <script type="text/javascript" src="extras/jquery.superfish.js"></script>
-  <script type="text/javascript" src="extras/jquery.scrollTo.min.js"></script>
-  <script type="text/javascript" src="extras/jquery.visible.min.js"></script>
-  <script type="text/javascript" src="extras/jquery.mousewheel.min.js"></script>
-  <script type="text/javascript" src="extras/jquery.contextMenu.js"></script>
-  <script type="text/javascript" src="extras/dateformat.js"></script>
-
-  <link rel="stylesheet" type="text/css" href="extras/jquery-ui-timepicker-addon.css">
- 
   <?php foreach($js_files as $file) { ?>
-    <script type="text/javascript" src="<?=$file?>?v=<?=urlencode($version)?>"></script>
+    <script type="text/javascript" src="<?=$file?>?v=<?=filemtime($file)?>"></script>
   <?php } ?>
-  <?php /* <script type="text/javascript" src="js-min/ob.min.js"></script> */ ?>
-
-  <script type="text/javascript" src="strings.php?v=<?=urlencode($version)?>"></script>
+  
+  <?php /* TODO should have a "last updated" time for strings */ ?>
+  <script type="text/javascript" src="strings.php?v=<?=time()?>"></script>
 
   <?php foreach($css_files as $file) { ?>
-    <link rel="stylesheet" type="text/css" href="<?=$file?>?v=<?=urlencode($version)?>">
+    <link rel="stylesheet" type="text/css" href="<?=$file?>?v=<?=filemtime($file)?>">
   <?php } ?>
 
   <?php if(!empty($user->userdata['dyslexia_friendly_font'])) { ?>
-    <link rel="stylesheet" type="text/css" href="opendyslexic/opendyslexic.css?v=<?=urlencode($version)?>">
+    <link rel="stylesheet" type="text/css" href="extras/opendyslexic/opendyslexic.css?v=<?=urlencode($version)?>">
   <?php } ?>
+
+  <link rel="stylesheet" type="text/css" href="extras/fontawesome-free-5.9.0-web/css/all.css?v=<?=filemtime('extras/fontawesome-free-5.9.0-web/css/all.css')?>">
 
 </head>
 
-<body>
+<body class="font-<?=(!empty($user->userdata['dyslexia_friendly_font']) ? 'opendyslexic' : 'default')?>">
 
 <div id="main_container"></div>
 
 <div id="preload_images" style="display: none;">
   <?php foreach($image_files as $file) { ?>
-    <img src="<?=$file?>">
+    <img src="<?=$file?>?v=<?=filemtime($file)?>">
   <?php } ?>
 </div>
 

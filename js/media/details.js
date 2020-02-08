@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2014 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -21,73 +21,106 @@
 OB.Media.detailsPage = function(id)
 {
 
-  OB.UI.replaceMain('media/details.html');
+  var post = [];
+  post.push(['media', 'get', {'id': id}]);
+  post.push(['media', 'get_details', {'id': id}]);
 
-  OB.API.post('media', 'get', { 'id': id }, function(data) {
-  
-    if(data.status==false) { $('#media_details_message').text(OB.t('Media Details','Media not found')); return; }
-    var item = data.data;
+  OB.API.multiPost(post, function(response)
+  {
+    if(response[0].status==false) return;
 
-    OB.API.post('media','get_details',{'id': id}, function(data) {
+    OB.UI.replaceMain('media/details.html');
 
-      var used = data.data;
+    var item = response[0].data;
+    var used = response[1].data;
 
-      $('#media_details_id').text(id);
+    // handle buttons
 
-      $('#media_details_artist').text(item.artist);
-      $('#media_details_title').text(item.title);
-      $('#media_details_album').text(item.album);
-      $('#media_details_year').text(item.year);
-      $('#media_details_category').text(OB.t('Media Categories',item.category_name));
-      $('#media_details_country').text(OB.t('Media Countries',item.country_name));
-      $('#media_details_language').text(OB.t('Media Languages',item.language_name));
-      $('#media_details_genre').text(OB.t('Media Genres',item.genre_name));
-      $('#media_details_comments').text(item.comments);
+    // we can download if we're the owner, or we have the download_media permission
+    if(OB.Account.user_id==item.owner_id || OB.Settings.permissions.indexOf('download_media')!=-1) $('#media_details_download').show().click(function() { OB.Media.download(id); });
 
-      if(item.is_archived==1) $('#media_details_approval').text(OB.t('Media Details','Archived'));
-      else if(item.is_approved==1) $('#media_details_approval').text(OB.t('Media Details','Approved'));
-      else $('#media_details_approval').text(OB.t('Media Details','Not approved'));
+    // we can edit if we have manage_media (manage all media), or we're the owner and can create our own media
+    if(item.can_edit)
+    {
+      $('#media_details_edit').show().click(function() { OB.Media.editPage(id); });
 
-      if(item.is_copyright_owner==1) $('#media_details_copyright').text(OB.t('Common','Yes'));
-      else $('#media_details_copyright').text(OB.t('Common','No'));
+      // we can also manage versions if we additionally have manage_media_versions
+      if(OB.Settings.permissions.indexOf('manage_media_versions')!=-1) $('#media_details_versions').show().click(function() { OB.Media.versionPage(id, item.title); });
 
-      if(item.status=='private') $('#media_details_visibility').text(OB.t('Media Details','Private'));
-      else $('#media_details_visibility').text(OB.t('Media Details','Public'));
+      // if regular approved media, we can delete. if not, we need manage_media to delete.
+      if( (item.is_archived==0 && item.is_approved==1) || OB.Settings.permissions.indexOf('manage_media')!=-1) $('#media_details_delete').show().click(function() { OB.Media.deletePage(id); });
+    }
 
-      if(item.dynamic_select==1) $('#media_details_dynamic').text(OB.t('Common','Yes'));
-      else $('#media_details_dynamic').text(OB.t('Common','No'));
+    // we can restore if this is already archived
+    if(item.is_archived==1 && OB.Settings.permissions.indexOf('manage_media')!=-1) $('#media_details_restore').show().click(function() { OB.Media.unarchivePage(id); });
 
-      $('#media_details_created').text(format_timestamp(item.created));
-      $('#media_details_updated').text(format_timestamp(item.updated));
 
-      $('#media_details_uploader').text(item.owner_name);
+    // handle metadata
+    $('#media_details_id').text(id);
+    $('#media_details_artist').text(item.artist);
+    $('#media_details_title').text(item.title);
+    $('#media_details_album').text(item.album);
+    $('#media_details_year').text(item.year);
+    $('#media_details_category').text(item.category_name);
+    $('#media_details_country').text(item.country_name);
+    $('#media_details_language').text(item.language_name);
+    $('#media_details_genre').text(item.genre_name);
+    $('#media_details_comments').text(item.comments);
 
-      // handle 'where used';
+    //T Archived
+    if(item.is_archived==1) $('#media_details_approval').text(OB.t('Archived'));
+    //T Approved
+    else if(item.is_approved==1) $('#media_details_approval').text(OB.t('Approved'));
+    else $('#media_details_approval').text(OB.t('Not Approved'));
 
-      if(used.length==0) $('#media_details_used').append(OB.t('Media Details','Media is not in use'));
+    //T Yes
+    if(item.is_copyright_owner==1) $('#media_details_copyright').text(OB.t('Yes'));
+    //T No
+    else $('#media_details_copyright').text(OB.t('No'));
 
-      else
-      {
-        $.each(used,function(index,used_detail) {
-          if(used_detail.where=='playlist') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('Media Where Used','playlist'))+': <a href="javascript: OB.Playlist.detailsPage('+used_detail.id+');">'+htmlspecialchars(used_detail.name)+'</a></li>');
-          if(used_detail.where=='playlist_dynamic') $('#media_details_used ul').append('<li>*'+htmlspecialchars(OB.t('Media Where Used','playlist_dynamic'))+': <a href="javascript: OB.Playlist.detailsPage('+used_detail.id+');">'+htmlspecialchars(used_detail.name)+'</a></li>');
-          if(used_detail.where=='device') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('Media Where Used','device'))+': '+htmlspecialchars(used_detail.name)+'</li>');
-          if(used_detail.where=='emergency') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('Media Where Used','emergency'))+': '+htmlspecialchars(used_detail.name)+'</li>');
-          if(used_detail.where=='schedule' || used_detail.where=='recurring schedule') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('Media Where Used','schedule'))+': '+htmlspecialchars(used_detail.name)+'</li>');
-        });
+    //T Private
+    if(item.status=='private') $('#media_details_visibility').text(OB.t('Private'));
+    //T Public
+    else $('#media_details_visibility').text(OB.t('Public'));
 
-        $('#media_details_used').append('<p>* '+htmlspecialchars(OB.t('Media Details','Possible Dynamic Selection'))+'</p>');
+    //T Yes
+    if(item.dynamic_select==1) $('#media_details_dynamic').text(OB.t('Yes'));
+    //T No
+    else $('#media_details_dynamic').text(OB.t('No'));
 
-      }
+    $('#media_details_created').text(format_timestamp(item.created));
+    $('#media_details_updated').text(format_timestamp(item.updated));
 
-      $('#media_details_message').html('');
+    $('#media_details_uploader').text(item.owner_name);
 
-      $('#media_details_table').show();
-      $('#media_details_used').show();
+    // handle 'where used';
 
-    });
+    //T Media is not in use.
+    if(used.length==0) $('#media_details_used').append(OB.t('Media is not in use'));
 
-  }); 
+    else
+    {
+      $.each(used,function(index,used_detail) {
+        //T playlist
+        if(used_detail.where=='playlist') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('playlist'))+': <a href="javascript: OB.Playlist.detailsPage('+used_detail.id+');">'+htmlspecialchars(used_detail.name)+'</a></li>');
+        //T dynamic playlist
+        if(used_detail.where=='playlist_dynamic') $('#media_details_used ul').append('<li>*'+htmlspecialchars(OB.t('dynamic playlist'))+': <a href="javascript: OB.Playlist.detailsPage('+used_detail.id+');">'+htmlspecialchars(used_detail.name)+'</a></li>');
+        //T station ID
+        if(used_detail.where=='device') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('station ID'))+': '+htmlspecialchars(used_detail.name)+'</li>');
+        //T priority broadcast
+        if(used_detail.where=='emergency') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('priority broadcast'))+': '+htmlspecialchars(used_detail.name)+'</li>');
+        //T schedule for player
+        if(used_detail.where=='schedule' || used_detail.where=='recurring schedule') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('schedule for player'))+': '+htmlspecialchars(used_detail.name)+'</li>');
+      });
+
+      //T Indicates possible dynamic selection.
+      $('#media_details_used').append('<p>* '+htmlspecialchars(OB.t('Indicates possible dynamic selection.'))+'</p>');
+
+    }
+
+    $('#media_details_table').show();
+    $('#media_details_used').show();
+
+  });
 
 }
-

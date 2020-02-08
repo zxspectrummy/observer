@@ -1,9 +1,20 @@
+<div>
 
-<div data-tns="User List">
+<h1 data-t>User Management</h1>
 
-<h1 data-t>Heading</h1>
+<fieldset>
+<legend data-t>New Users</legend>
+<div class="fieldrow">
+  <input value="1" type="checkbox" id="users_allow_registration_checkbox">
+  <span data-t>Allow new user registration from the welcome screen.</span>
+</div>
+<div class="fieldrow">
+  <button onclick="OB.User.manageUsersNew();" data-t id="users_new_user_button">Add a User</button>
+</div>
+</fieldset>
 
-<p><button onclick="OB.User.manageUsersNew();" data-t id="users_new_user_button">Add a User</button></p>
+<fieldset>
+<legend data-t>Existing Users</legend>
 
 <table class="table" id="user_list_table">
 <thead>
@@ -17,5 +28,7 @@
 <tbody>
 </tbody>
 </table>
+
+</fieldset>
 
 </div>

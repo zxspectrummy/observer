@@ -1,3 +1,0 @@
-﻿Admin Menu
-
-  Admin: 管理員

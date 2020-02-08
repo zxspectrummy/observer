@@ -1,14 +1,20 @@
-<h1 id="media_heading" data-t data-tns="Media Details">Media Details</h1>
+<h1 id="media_heading" data-t>Media Details</h1>
 
-<p data-t data-tns="Media Details" id="media_details_message">Loading media details...</p>
+<p>
+  <button data-t id="media_details_download" class="hidden add">Download</button>
+  <button data-t id="media_details_edit" class="hidden edit">Edit</button>
+  <button data-t id="media_details_restore" class="hidden">Restore</button>
+  <button data-t id="media_details_delete" class="hidden delete">Delete</button>
+  <button data-t id="media_details_versions" class="hidden">Versions</button>
+</p>
 
 <fieldset>
-<legend data-t data-tns="Media Details">Details</legend>
+<legend data-t>Details</legend>
 
-<div class="hidden" id="media_details_table" data-tns="Edit Media Form">
+<div class="hidden" id="media_details_table">
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">ID</label>
+  <label data-t>ID</label>
   <span id="media_details_id"></span>
 </div>
 
@@ -58,27 +64,27 @@
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Uploader</label>
+  <label data-t>Uploader</label>
   <span id="media_details_uploader"></span>
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Created</label>
+  <label data-t>Created</label>
   <span id="media_details_created"></span>
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Last Updated</label>
+  <label data-t>Last Updated</label>
   <span id="media_details_updated"></span>
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Copyright</label>
+  <label data-t>Copyright</label>
   <span id="media_details_copyright"></span>
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Approval</label>
+  <label data-t>Approval</label>
   <span id="media_details_approval"></span>
 </div>
 
@@ -88,7 +94,7 @@
 </div>
 
 <div class="fieldrow">
-  <label data-t data-tns="Media Details">Dynamic Selections</label>
+  <label data-t>Dynamic Selections</label>
   <span id="media_details_dynamic"></span>
 </div>
 
@@ -96,7 +102,7 @@
 
 </fieldset>
 
-<fieldset data-tns="Media Details">
+<fieldset>
 <legend data-t>Where is this media used?</legend>
 
 <div class="hidden" id="media_details_used">

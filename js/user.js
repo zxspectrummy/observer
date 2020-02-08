@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,8 +26,10 @@ OB.User.init = function()
 
 OB.User.initMenu = function()
 {
-  OB.UI.addSubMenuItem('admin',['Admin Menu','Permissions'],'user_permissions',OB.User.managePermissions,60,'manage_permissions');
-  OB.UI.addSubMenuItem('admin',['Admin Menu','User Management'],'user_manage',OB.User.manageUsers,70,'manage_users');
+  //T Permissions
+  OB.UI.addSubMenuItem('admin', 'Permissions', 'user_permissions', OB.User.managePermissions, 60, 'manage_permissions');
+  //T User Management
+  OB.UI.addSubMenuItem('admin', 'User Management', 'user_manage', OB.User.manageUsers, 70, 'manage_users');
 }
 
 OB.User.manageUsers = function()
@@ -36,10 +38,21 @@ OB.User.manageUsers = function()
 
   OB.UI.replaceMain('user/manage_users.html');
 
+  OB.API.post('users','user_registration_get',{},function(response) {
+    if(response.data==true) $('#users_allow_registration_checkbox').prop('checked',true);
+  });
+
+  $('#users_allow_registration_checkbox').change(OB.User.allowRegistrationToggle);
   OB.User.manageUsersList();
 }
 
-OB.User.manage_users_sort_col = 'display_name';
+OB.User.allowRegistrationToggle = function()
+{
+  var checked = $('#users_allow_registration_checkbox').is(':checked');
+  OB.API.post('users','user_registration_set',{'user_registration': checked}, function(response) { });
+}
+
+OB.User.manage_users_sort_col = false;
 OB.User.manage_users_sort_desc = false;
 
 OB.User.manageUsersSort = function(column)
@@ -74,7 +87,10 @@ OB.User.manageUsersList = function()
 
     if(data.status!=true) return false;
 
-    $.each(data.data,function(index,userdata)
+    OB.User.manage_users_sort_col = data.data[1];
+    OB.User.manage_users_sort_desc = data.data[2];
+
+    $.each(data.data[0],function(index,userdata)
     {
 
       var $html = $('<tr></tr>');
@@ -86,7 +102,8 @@ OB.User.manageUsersList = function()
       $html.append('<td>'+format_timestamp(userdata.last_access)+'</td>');
 
       $html.append('<td class="user_groups"></td>');
-      $html.append('<td><button onclick="OB.User.manageUsersEdit('+userdata.id+');" >'+OB.t("Common","Edit")+'</button></td>');
+      //T Edit
+      $html.append('<td><button onclick="OB.User.manageUsersEdit('+userdata.id+');" >'+OB.t("Edit")+'</button></td>');
 
       $html.attr('id','user_'+userdata.id);
       $html.attr('data-id',userdata.id);
@@ -118,7 +135,7 @@ OB.User.manageUsersGroupList = function(callback)
 
   OB.API.post('users','group_list',{},function(data)
   {
-  
+
     groups = data.data;
 
     $.each(groups,function(index,group) {
@@ -166,7 +183,7 @@ OB.User.manageUsersEdit = function(id)
   $('.edit_only').show();
 
   OB.User.manageUsersGroupList(function() {
-  
+
     $user.find('.user_groups').children().each(function(index,element)
     {
       $('#user_addedit_group_list input[value='+$(element).attr('data-group_id')+']').attr('checked',true);
@@ -197,10 +214,10 @@ OB.User.manageUsersSave = function()
 
   fields.group_ids = new Array();
 
-  $('#user_addedit_group_list input:checked').each(function(index,element) 
+  $('#user_addedit_group_list input:checked').each(function(index,element)
   {
 
-    fields.group_ids.push($(element).val());  
+    fields.group_ids.push($(element).val());
 
   });
 
@@ -237,11 +254,14 @@ OB.User.manageUsersDelete = function(confirm)
 deletemeifworks
 */
 
+    //T Are you sure you want to delete this user?
+    //T Yes, Delete
+    //T No, Cancel
     OB.UI.confirm(
-        ['User Edit','Delete User Confirm'],
+        'Are you sure you want to delete this user?',
         function() { OB.User.manageUsersDelete(true); },
-        ['Common','Yes Delete'],
-        ['Common','No Cancel'],
+        'Yes, Delete',
+        'No, Cancel',
         'delete'
     );
   }
@@ -289,14 +309,15 @@ OB.User.managePermissions = function()
 
     groups = groups.data;
     $thead = $('<thead></thead>');
-    $thead.append('<th>&nbsp;</th>'); 
+    $thead.append('<th>&nbsp;</th>');
 
     $.each(groups,function(index,group)
     {
       $thead.append('<th id="group_permissions_'+group.id+'" ' +
         'data-name="'+htmlspecialchars(group.name)+'"> '+
         (group.id!=1 ? '<button onclick="OB.User.managePermissionsEdit('+group.id+');">' +
-        OB.t('Common','Edit') +
+        //T Edit
+        OB.t('Edit') +
         '</button>' : '')+
         '<br>'+htmlspecialchars(group.name)+
         '</th>');
@@ -310,8 +331,8 @@ OB.User.managePermissions = function()
     // attach group data to th for later use.
     $.each(groups,function(index,group)
     {
-      if(group.permissions) { 
-        $('#group_permissions_'+group.id).data('permissions',group.permissions); 
+      if(group.permissions) {
+        $('#group_permissions_'+group.id).data('permissions',group.permissions);
       }
     });
 
@@ -323,14 +344,15 @@ OB.User.managePermissions = function()
       $.each(categories,function(category,permissions)
       {
 
-        if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('Permissions List','Device Category')+': ');
-        else var category_translated = OB.t('Permissions List',category);
+        //T player
+        if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('player')+': ');
+        else var category_translated = category; // no dynamic variable translation for now
 
         $('#permissions_table tbody').append('<tr class="permission-category" ><th colspan="1000">'+ htmlspecialchars(category_translated)+'</th></tr>');
 
         $.each(permissions,function(index,permission)
         {
-          $('#permissions_table tbody').append('<tr data-permission="'+htmlspecialchars(permission.name)+'" ><td>'+ htmlspecialchars(OB.t('Permissions List',permission.description))+'</td><td class="center"><span class="checkmark">&#10003;</span></td></tr>');
+          $('#permissions_table tbody').append('<tr data-permission="'+htmlspecialchars(permission.name)+'" ><td>'+ htmlspecialchars(permission.description)+'</td><td class="center"><span class="checkmark">&#10003;</span></td></tr>');
 
 
           $.each(groups,function(index,group)
@@ -381,11 +403,14 @@ OB.User.managePermissionsDelete = function(confirm)
 
   else
   {
+    //T Are you sure you want to delete this group?
+    //T Yes, Delete
+    //T No, Cancel
     OB.UI.confirm(
-        ['Permissions Edit','Delete Group Confirm'],
+        'Are you sure you want to delete this group?',
         function() { OB.User.managePermissionsDelete(true); },
-        ['Common','Yes Delete'],
-        ['Common','No Cancel'],
+        'Yes, Delete',
+        'No, Cancel',
         'delete'
     );
   }
@@ -417,7 +442,7 @@ OB.User.managePermissionsSave = function()
       OB.User.managePermissions();
     }
 
-    else 
+    else
     {
       $('#permissions_addedit_message').obWidget('error', data.msg)
 
@@ -431,7 +456,8 @@ OB.User.managePermissionsNew = function()
 {
   OB.UI.openModalWindow('user/manage_permissions_addedit.html');
 
-  $('#permissions_addedit_heading').text('New Group');
+  //T New Group
+  $('#permissions_addedit_heading').text(OB.t('New Group'));
 
   $('.edit_only').hide();
 
@@ -443,7 +469,8 @@ OB.User.managePermissionsEdit = function(id)
 {
   OB.UI.openModalWindow('user/manage_permissions_addedit.html');
 
-  $('#permissions_addedit_heading').text('Edit Group/Permissions');
+  //T Edit Group/Permissions
+  $('#permissions_addedit_heading').text(OB.t('Edit Group/Permissions'));
   $('#group_addedit_id').val(id);
   $('#group_name_input').val($('#group_permissions_'+id).attr('data-name'));
 
@@ -462,9 +489,9 @@ OB.User.managePermissionsForm = function(id)
 
   $.each(OB.User.manage_permissions_list,function(category,permissions)
   {
-
-    if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('Permissions List','Device Category')+': ');
-    else var category_translated = OB.t('Permissions List',category);
+    //T player
+    if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('player')+': ');
+    else var category_translated = category;
 
     var $fieldset = $('<fieldset><legend data-t >'+htmlspecialchars(category_translated)+'</legend></fieldset>');
 
@@ -474,7 +501,7 @@ OB.User.managePermissionsForm = function(id)
 
       $fieldrow.append(
         '<label data-t>'+
-        OB.t('Permissions List',htmlspecialchars(permission.description)) +
+        htmlspecialchars(permission.description) +
         '</label>'+
         '<input class="permission_checkbox" data-name="'+permission.name+'" type="checkbox"> '
       );
@@ -494,4 +521,3 @@ OB.User.managePermissionsForm = function(id)
 
 
 }
-

@@ -1136,7 +1136,8 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 (1, 'audio_formats', 'flac,mp3,ogg'),
 (2, 'video_formats', 'avi,mpg,ogg'),
 (3, 'image_formats', 'jpg,png'),
-(5, 'dbver', '20160409');
+(5, 'dbver', '20160409'),
+(8, 'core_metadata', '{"artist":"required","album":"required","year":"required","category_id":"required","country_id":"enabled","language_id":"enabled","comments":"enabled"}');
 
 -- --------------------------------------------------------
 

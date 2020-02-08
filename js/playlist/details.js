@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -20,93 +20,106 @@
 // playlist details page
 OB.Playlist.detailsPage = function(id)
 {
+  var post = [];
+  post.push(['device','station_id_avg_duration', {}]);
+  post.push(['playlist', 'get', { 'id': id }]);
+  post.push(['playlist','get_details',{'id': id}]);
 
-  OB.UI.replaceMain('playlist/details.html');
+  OB.API.multiPost(post, function(response)
+  {
+    OB.UI.replaceMain('playlist/details.html');
 
-  OB.API.post('device','station_id_avg_duration', {}, function(data) { OB.Playlist.station_id_avg_duration=data.data;
+    OB.Playlist.station_id_avg_duration=response[0].data;
 
-  OB.API.post('playlist', 'get', { 'id': id }, function(data) {
-  
-    if(data.status==false) { $('#playlist_details_message').text(OB.t('Playlist Details','Playlist not found')); return; }
-    var pldata = data.data;
+    if(response[1].status==false) return;
+    var pldata = response[1].data;
+    var used = response[2].data;
 
-    OB.API.post('playlist','get_details',{'id': id}, function(data) {
+    // if we have permission, show edit/delete buttons.
+    if(pldata.can_edit)
+    {
+      $('#playlist_details_edit').show().click(function() { OB.Playlist.editPage(pldata.id); });
+      $('#playlist_details_delete').show().click(function() { OB.Playlist.deletePage(pldata.id); });
+    }
 
-      var used = data.data;
+    $('#playlist_details_id').text(id);
 
-      $('#playlist_details_id').text(id);
+    $('#playlist_details_name').text(pldata.name);
+    $('#playlist_details_description').text(pldata.description);
 
-      $('#playlist_details_name').text(pldata.name);
-      $('#playlist_details_description').text(pldata.description);
+    //T Private
+    if(OB.Playlist.status=='private') $('#playlist_details_visibility').text(OB.t('Private'));
+    //T Public
+    else $('#playlist_details_visibility').text(OB.t('Public'));
 
-      if(OB.Playlist.status=='private') $('#playlist_details_visibility').text(OB.t('Playlist Details','Private'));
-      else $('#playlist_details_visibility').text(OB.t('Playlist Details','Public'));
+    $('#playlist_details_created').text(format_timestamp(pldata.created));
+    $('#playlist_details_updated').text(format_timestamp(pldata.updated));
 
-      $('#playlist_details_created').text(format_timestamp(pldata.created));
-      $('#playlist_details_updated').text(format_timestamp(pldata.updated));
+    $('#playlist_details_owner').text(pldata.owner_name);
 
-      $('#playlist_details_owner').text(pldata.owner_name);
+    // handle playlist items
+    //T No playlist items found
+    if(typeof(pldata.items)=='undefined' || pldata.items.length==0) $('#playlist_details_items_table').replaceWith(htmlspecialchars(OB.t('No playlist items found')));
 
-      // handle playlist items
-      if(typeof(pldata.items)=='undefined' || pldata.items.length==0) $('#playlist_details_items_table').replaceWith(htmlspecialchars(OB.t('Playlist Details','No playlist items found')));
+    else {
 
-      else { 
+      var pl_item_time_estimated = false;
+      var pl_item_time_total = 0;
 
-        var pl_item_time_estimated = false;   
-        var pl_item_time_total = 0;
+      $.each(pldata.items, function(index,item) {
 
-        $.each(pldata.items, function(index,item) {
+        if(item.type=='station_id')
+        {
+          //T Station ID
+          //T estimated
+          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Station ID'))+'</td><td>'+secsToTime(OB.Playlist.station_id_avg_duration)+' ('+htmlspecialchars(OB.t('estimated'))+')</td></tr>');
+          pl_item_time_estimated = true;
+          pl_item_time_total += parseFloat(OB.Playlist.station_id_avg_duration);
+        }
 
-          if(item.type=='station_id') 
-          {
-            $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Playlist Edit','Station ID'))+'</td><td>'+secsToTime(OB.Playlist.station_id_avg_duration)+' ('+htmlspecialchars(OB.t('Playlist Details','estimated'))+')</td></tr>');
-            pl_item_time_estimated = true;
-            pl_item_time_total += parseFloat(OB.Playlist.station_id_avg_duration);
-          }
+        else if(item.type=='breakpoint')
+        {
+          //T Breakpoint
+          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Breakpoint'))+'</td><td>00:00</td></tr>');
+        }
 
-          else if(item.type=='breakpoint') 
-          {
-            $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Playlist Edit','Breakpoint'))+'</td><td>00:00</td></tr>');
-          }
+        else if(item.type=='dynamic')
+        {
+          //T Dynamic Selection
+          //T estimated
+          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Dynamic Selection'))+': '+htmlspecialchars(item.dynamic_name)+'</td><td>'+secsToTime(item.dynamic_duration)+' ('+htmlspecialchars(OB.t('estimated'))+')</td></tr>');
+          pl_item_time_estimated = true;
+          pl_item_time_total += parseFloat(item.dynamic_duration);
+        }
 
-          else if(item.type=='dynamic') 
-          {
-            $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Playlist Edit','Dynamic Selection'))+': '+htmlspecialchars(item.dynamic_name)+'</td><td>'+secsToTime(item.dynamic_duration)+' ('+htmlspecialchars(OB.t('Playlist Details','estimated'))+')</td></tr>');
-            pl_item_time_estimated = true;
-            pl_item_time_total += parseFloat(item.dynamic_duration);
-          }
+        else
+        {
+          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(item.artist+' - '+item.title)+'</td><td>'+secsToTime(item.duration)+'</td></tr>');
+          pl_item_time_total += parseFloat(item.duration);
+        }
 
-          else 
-          {
-            $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(item.artist+' - '+item.title)+'</td><td>'+secsToTime(item.duration)+'</td></tr>');
-            pl_item_time_total += parseFloat(item.duration);
-          }
+      });
 
-        });
+      //T Total Duration
+      //T estimated
+      $('#playlist_details_items_table').append('<tr><td colspan="2" ><span>'+htmlspecialchars(OB.t('Total Duration'))+':</span> '+secsToTime(pl_item_time_total)+(pl_item_time_estimated ? ' ('+htmlspecialchars(OB.t('estimated'))+')' : '')+'</td></tr>');
 
-        $('#playlist_details_items_table').append('<tr><td colspan="2" ><span>'+htmlspecialchars(OB.t('Playlist Edit','Total Duration'))+':</span> '+secsToTime(pl_item_time_total)+(pl_item_time_estimated ? ' ('+htmlspecialchars(OB.t('Playlist Details','estimated'))+')' : '')+'</td></tr>');
+    }
 
-      }
 
-      
 
-      // handle 'where used';
-      if(used.length==0) $('#playlist_details_used').append(OB.t('Playlist Where Used','Playlist is not in use'));
+    // handle 'where used';
+    //T Playlist is not in use.
+    if(used.length==0) $('#playlist_details_used').append(OB.t('Playlist is not in use.'));
 
-      else
-      {
-        $.each(used,function(index,used_detail) {
-          $('#playlist_details_used ul').append('<li>'+htmlspecialchars(OB.t('Playlist Where Used',used_detail.where))+': '+htmlspecialchars(used_detail.name)+'</li>');
-        });
-      }
+    else
+    {
+      $.each(used,function(index,used_detail) {
+        $('#playlist_details_used ul').append('<li>'+htmlspecialchars(used_detail.where)+': '+htmlspecialchars(used_detail.name)+'</li>');
+      });
+    }
 
-      $('#playlist_details_message').html('');
-      $('#playlist_details').show();
-
-    });
-
-  }); 
+    $('#playlist_details').show();
 
   });
-
 }

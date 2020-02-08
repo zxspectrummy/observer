@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -32,7 +32,7 @@ class Device extends OBFController
   {
 
     $this->user->require_authenticated();
-  
+
     $params['filters'] = $this->data('filters');
     $params['orderby'] = $this->data('orderby');
     $params['orderdesc'] = $this->data('orderdesc');
@@ -81,7 +81,7 @@ class Device extends OBFController
 
     $data['timezone'] = trim($this->data('timezone'));
     $data['station_id_image_duration'] = trim($this->data('station_id_image_duration'));
-    $data['default_playlist_id'] = $this->data('default_playlist'); 
+    $data['default_playlist_id'] = $this->data('default_playlist');
 
     $data['parent_device_id'] = $this->data('parent_device_id');
     if(!empty($data['parent_device_id']))
@@ -92,7 +92,7 @@ class Device extends OBFController
       $data['use_parent_playlist'] = (int) $this->data('use_parent_playlist');
       $data['use_parent_emergency'] = (int) $this->data('use_parent_emergency');
 
-      if($data['use_parent_ids']) 
+      if($data['use_parent_ids'])
       {
         $data['station_ids'] = array();
         $data['station_id_image_duration'] = 15; // this field will be hidden, set to default. it doesn't matter but needs to be valid.
@@ -115,7 +115,8 @@ class Device extends OBFController
 
     $id = $this->DevicesModel('save',$data,$id);
 
-    return array(true,['Device Manager','Saved Message', $id]);
+    //T Player saved.
+    return array(true,['Player Manager','Player saved.', $id]);
 
   }
 
@@ -135,6 +136,7 @@ class Device extends OBFController
 
     $this->DevicesModel('delete',$id);
 
+    //T Device deleted.
     return array(true,'Device deleted.');
 
   }
@@ -160,8 +162,9 @@ class Device extends OBFController
       return array(true,'Device data',$device);
     }
 
-    else return array(false,'Device not found.');
-    
+    //T This player no longer exists.
+    else return array(false,'This player no longer exists.');
+
   }
 
   public function station_id_avg_duration()
@@ -175,8 +178,8 @@ class Device extends OBFController
   {
 
     $data['device_id'] = $this->data('device_id');
-    $data['start'] = $this->data('start_timestamp');
-    $data['end'] = $this->data('end_timestamp');
+    $data['date_start'] = $this->data('date_start');
+    $data['date_end'] = $this->data('date_end');
 
     $data['orderby'] = $this->data('orderby');
     $data['orderdesc'] = $this->data('orderdesc');
@@ -187,7 +190,7 @@ class Device extends OBFController
     $data['offset'] = $this->data('offset');
 
     if(!$data['orderby']) { $data['orderby'] = 'timestamp'; $data['orderdesc'] = true; }
-    
+
     // validate device_id, check permission.
     if(!preg_match('/^[0-9]+$/',$data['device_id'])) return array(false,'Invalid device ID.');
     $this->user->require_permission('view_device_monitor:'.$data['device_id']);
@@ -196,7 +199,7 @@ class Device extends OBFController
 
     if($result[0] === false) return array(false,'An unknown error occurred while searching the playlog.');
 
-    return array(true,'Playlog search results.',array('results'=>$result[0],'total_rows'=>$result[1]));
+    return array(true,'Playlog search results.',array('results'=>$result[0],'total_rows'=>$result[1], 'csv'=>$this->DevicesModel('monitor_csv',$result[0])));
 
   }
 

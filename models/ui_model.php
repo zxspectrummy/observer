@@ -1,6 +1,7 @@
 <?php
-/*     
-    Copyright 2014 OpenBroadcaster, Inc.
+
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -40,8 +41,10 @@ class UIModel extends OBFModel
 
   // get core, theme, and enabled-module CSS files.
   public function css_files()
-  {
-    $css_files = $this->find_files('css','css', $this->theme ? 'themes/'.$this->theme.'/css_core' : false);
+  {    
+    if($this->theme && file_exists('themes/'.$this->theme.'/style.css')) $css_files[] = 'themes/'.$this->theme.'/style.css';
+    else $css_files[] = 'themes/default/style.css';
+    
     if($this->theme) $css_files = array_merge($css_files,$this->find_files('themes/'.$this->theme.'/css_theme','css'));
     foreach($this->modules as $module) $css_files = array_merge($css_files,$this->find_files('modules/'.$module['dir'].'/css','css'));
     return $css_files;
@@ -76,37 +79,55 @@ class UIModel extends OBFModel
   {
     $dirs = scandir('themes');
 
-    $themes = array();
-
-    $themes['default'] = 'Light On Dark (Lower Contrast)';
+    $themes = [];
 
     foreach($dirs as $dir)
     {
       if($dir[0]=='.' && !is_dir($dir)) continue;
-      if(!file_exists('themes/'.$dir.'/theme.php')) continue;
+      if(!file_exists('themes/'.$dir.'/style.css')) continue;
+      
+      $css = file_get_contents('themes/'.$dir.'/style.css');
+      $comment = [];
+      
+      // https://www.w3.org/TR/CSS2/grammar.html#scanner
+      if(!preg_match('#\/\*[^*]*\*+([^/*][^*]*\*+)*\/#',$css,$comment)) continue;
 
-      include('themes/'.$dir.'/theme.php');
+      // remove /*, */
+      $comment = trim(preg_replace(['#^/\*#','#\*/$#'],'',trim($comment[0])));
+      
+      // get theme data
+      $data = [];
+      $rows = explode("\n",$comment);
+      foreach($rows as $row)
+      {
+        $tmp = explode(':',$row);
+        $key = strtolower(trim(array_shift($tmp)));
+        $value = trim(implode(':',$tmp));
+        $data[$key] = $value;
+      }
+      
+      // only using description for now
+      if(isset($data['description']) && $data['description']!=='') $themes[$dir] = $data['description'];
     }
-
+    
+    // sort by description
+    asort($themes);
+    
     return $themes;
   }
 
   public function get_languages()
   {
-    $dirs = scandir('strings');
-
     $languages = array();
 
-    foreach($dirs as $dir)
-    {
-      if($dir[0]=='.' && !is_dir($dir)) continue;
-      if(!file_exists('strings/'.$dir.'/language.php')) continue;
-
-      include('strings/'.$dir.'/language.php');
+    foreach ($this->db->get('translations_languages') as $language) {
+      $languages[] = array(
+        'name' => $language['name'],
+        'code' => $language['code']
+      );
     }
 
     return $languages;
-
   }
 
   // get language for user
@@ -117,128 +138,60 @@ class UIModel extends OBFModel
     if($this->user->userdata && !empty($this->user->userdata['language']) && !empty($all_languages[$this->user->userdata['language']]))
       return $all_languages[$this->user->userdata['language']];
 
-    else return $all_languages['default'];      
+    else return false;
   }
 
   // get strings for the user's language
   public function strings()
   {
-    $default = $this->strings_for_language('default');
 
-    if($this->user->userdata && !empty($this->user->userdata['language']) && $this->user->userdata['language']!='default')
-    {
-      $language = $this->strings_for_language($this->user->userdata['language']);
+    if ($this->user->userdata && !empty($this->user->userdata['language'])) {
+      $language = $this->user->userdata['language'];
 
-      // array_merge() doesn't work how we want for multi-dimensional arrays. so let's do this manually.  
-      // start with language and then fill in anything we don't have from default.
-      $return = $language;
+      if(!preg_match('/^[0-9a-z_-]+$/i',$language)) return array();
 
-      foreach($default as $namespace=>$strings)
-      {
-        // don't even have the namespace? create it.
-        if(!isset($return[$namespace])) $return[$namespace] = array();
+      $languages = array_keys($this->get_languages());
+      if(array_search($language,$languages)===false) return array();
 
-        // make sure we have all the values.
-        foreach($strings as $index=>$value)
-        {
-          if(!isset($return[$namespace][$index])) $return[$namespace][$index] = $value;
-        }
-      }    
+      $strings = array();
 
-      return $return;
-    }
+      $this->db->where('code', $language);
+      $lang_id = $this->db->get_one('translations_languages')['id'];
 
-    return $default;
-  }
+      $this->db->where('language_id', $lang_id);
+      $translations = $this->db->get('translations_values');
 
-  public function strings_for_language($language)
-  {
-
-    if(!preg_match('/^[0-9a-z_-]+$/i',$language)) return array();
-
-    $languages = array_keys($this->get_languages());
-    if(array_search($language,$languages)===false) return array();
-
-    $string_files = $this->find_files('strings/'.$language);
-
-    $strings = array();
-
-    foreach($string_files as $file)
-    {
-
-      if(!preg_match('/\.txt$/',$file)) continue;
-
-      $contents = explode("\n",$this->file_get_contents_utf8($file));
-
-      $namespace = false;
-
-      foreach($contents as $line)
-      {
-
-        // ignore empty lines
-        $line = trim($line);
-        if($line=='') continue;
-
-        $line_split = preg_split("/(?<!\\\):/", $line, 2);
-        
-        if(count($line_split)==1)
-        {
-          $namespace = $this->remove_utf8_bom(trim($line_split[0]));
-          if(!isset($strings[$namespace])) $strings[$namespace] = array();
-        }
-
-        elseif(count($line_split)>=2 && $namespace!==false)
-        {
-          $strings[$namespace][$this->remove_utf8_bom(trim($line_split[0]))] = trim($line_split[1]);
-        } 
+      foreach ($translations as $translation) {
+        $strings[$translation['source_str']] = $translation['result_str'];
       }
+
+      return $strings;
+
+    } else {
+      return array();
     }
-
-    // die();
-
-    return $strings;
-
   }
 
   // recursive function to find files with specific extention given a directory.
   // if override_path is set, same-filename-files in this directory will be used instead of given directory. (theme overrides).
-  private function find_files($dir,$ext=false,$override_path=false,&$array=array())
+  private function find_files($dir,$ext=false,&$array=[])
   {
-    if(!is_dir($dir)) return array();
-    
-    if($override_path)
-    {
-      $dir_explode = explode('/',$dir);
-      $override_replace = $dir_explode[0];
-    }
+    if(!is_dir($dir)) return $array;
 
     $files = scandir($dir);
 
     foreach($files as $file)
     {
       $dirfile = $dir.'/'.$file;
-    
-      if(is_dir($dirfile) && $file[0]!='.') $this->find_files($dirfile,$ext,$override_path,$array);
-      elseif(is_file($dirfile) && (!$ext || preg_match('/\.'.$ext.'$/',$dirfile))) 
-      {
-        // use theme override?
-        if($override_path)
-        {
-          $override_file = $override_path.'/'.preg_replace('/^'.$override_replace.'\//','',$dirfile);
-          if(is_file($override_file)) 
-          {
-            $array[]=$override_file;
-            continue;
-          }
-        }
 
-        // otherwise use core file.
-        $array[]=$dirfile;
-      }
+      // scan if directory
+      if(is_dir($dirfile) && $file[0]!='.') $this->find_files($dirfile,$ext,$array);
+      
+      // or add file if file
+      elseif(is_file($dirfile)) $array[]=$dirfile;
     }
 
     return $array;
   }
-
-
+  
 }

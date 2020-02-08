@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -44,38 +44,81 @@ class MediaCategoriesModel extends OBFModel
 
     $result = $this->db->get('media_categories');
 
+    // set default category
+    $current_default = $this->get_default();
+    foreach($result as &$category)
+    {
+      if($category['id']==$current_default) $category['is_default']=1;
+      else $category['is_default']=0;
+    }
+
     return $result;
 
   }
 
   public function save($data,$id=false)
   {
-    if(empty($id)) 
+    $set_default = $data['is_default']==1;
+    unset($data['is_default']);
+
+    if(empty($id))
     {
-      return $this->db->insert('media_categories',$data);
+      $id = $this->db->insert('media_categories',$data);
     }
 
-    else 
+    else
     {
       if(!$this->db->id_exists('media_categories',$id)) return false;
       $this->db->where('id',$id);
-      return $this->db->update('media_categories',$data);
+      $this->db->update('media_categories',$data);
     }
+
+    $current_default = $this->get_default();
+
+    // set default value if necessary
+    if($set_default)
+    {
+      // remove any existing default
+      $this->db->where('name','media_category_default');
+      $this->db->delete('settings');
+
+      // set this as default
+      $this->db->insert('settings',['name'=>'media_category_default','value'=>$id]);
+    }
+
+    // remove default value if necessary
+    elseif($current_default==$id)
+    {
+      $this->db->where('name','media_category_default');
+      $this->db->delete('settings');
+    }
+
+    return $id;
+  }
+
+  public function get_default()
+  {
+    $this->db->where('name','media_category_default');
+    $setting = $this->db->get_one('settings');
+    if($setting) return $setting['value'];
+    else return false;
   }
 
   public function validate($data,$id=false)
   {
-    if(!$data['name']) return array(false,['Category Edit','Name Required Message']);
+    //T A category name is required.
+    if(!$data['name']) return array(false,['Category Edit','A category name is required.']);
     return array(true,'Valid.');
   }
-  
+
   public function can_delete($id)
   {
 
     $this->db->where('media_category_id',$id);
     $genres = $this->db->get('media_genres');
 
-    if(count($genres)>0) return array(false,['Category Edit','Must Remove Message']);
+    //T You must remove the genres within this category before deleting the category.
+    if(count($genres)>0) return array(false,['Category Edit','You must remove the genres within this category before deleting the category.']);
     else return array(true,'Can delete.');
 
   }
@@ -84,18 +127,21 @@ class MediaCategoriesModel extends OBFModel
   {
     $this->db->where('id',$id);
     $delete = $this->db->delete('media_categories');
-    
+
     return $delete;
   }
-  
+
   public function get_by_id($id)
   {
     $this->db->where('media_categories.id',$id);
     $this->db->what('media_categories.id','id');
     $this->db->what('media_categories.name','name');
 
-    $category = $this->db->get_one('media_categories'); 
-    
+    $category = $this->db->get_one('media_categories');
+
+    if($category['id']==$this->get_default()) $category['is_default'] = 1;
+    else $category['is_default'] = 0;
+
     return $category;
   }
 }

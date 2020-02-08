@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -216,12 +216,14 @@ class OBFDB
   /* HIGHER-LEVEL HELPER FUNCTIONS - Simple Active-Record Style System.  Room for improvement, but covers the basics. */
   /* not designed to replace every function, only most. */
 
-  public function what($column,$as=null)
+  public function what($column,$as=null,$escape=true)
   {
 
     if(!is_array($this->hl_what)) $this->hl_what = array();
 
-    $what = $this->format_table_column($column);
+    if($escape) $what = $this->format_table_column($column);
+    else $what = $column;
+    
     if(!empty($as)) $what.= ' AS '.$this->format_backticks($as);
 
     $this->hl_what[] = $what;
@@ -504,9 +506,16 @@ class OBFDB
   // high-level update function
   public function update($table,$data)
   {
-
-    if(!is_array($data) || count($data)==0) return true; // nothing to update, but this isn't an error.
-    if((!is_array($this->hl_where) || count($this->hl_where)<1) && empty($this->hl_where_string)) return false; // avoid inadvertantly updating all rows.
+  
+    // nothing to update, but this isn't an error.
+    if(!is_array($data) || count($data)==0) 
+    { 
+      $this->reset_hlvars();
+      return true;
+    }
+    
+    // avoid inadvertantly updating all rows.
+    if((!is_array($this->hl_where) || count($this->hl_where)<1) && empty($this->hl_where_string)) return false;
 
     foreach($data as $item=>$value) {
       if($value===NULL) $setsql[]=$this->format_table_column($item).'=NULL';

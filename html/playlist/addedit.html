@@ -1,4 +1,4 @@
-<div data-tns="Playlist Edit">
+<div>
 
   <h1 id="playlist_edit_heading"></h1>
 
@@ -7,7 +7,7 @@
   <obwidget type="message" id="playlist_addedit_message"></obwidget>
 
   <fieldset>
-    <legend data-t>Form Heading</legend>
+    <legend data-t>Playlist Data</legend>
 
     <input type="hidden" id="playlist_id" value="">
     <input type="hidden" id="playlist_owner_id" value="">
@@ -24,26 +24,40 @@
 
     <div class="fieldrow">
       <label data-t>Status</label>
-      <select id="playlist_status_input"><option value="private" data-t>Private Option</option><option value="public" data-t>Public Option</option></select>
+      <select id="playlist_status_input"><option value="private" data-t>Private (available to you only)</option><option value="public" data-t>Public (available to everyone)</option></select>
     </div>
 
     <div class="fieldrow">
       <label data-t>Type</label>
       <select id="playlist_type_input" onchange="OB.Playlist.addeditTypeChange();">
-        <option value="standard" data-t>Standard Option</option>
-        <option value="advanced" data-t>Advanced Option</option>
-        <option value="live_assist" data-t>LiveAssist Option</option>
+        <option value="standard" data-t>Standard</option>
+        <option value="advanced" data-t>Advanced</option>
+        <option value="live_assist" data-t>LiveAssist</option>
       </select>
     </div>
 
   </fieldset>
 
+  <fieldset data-permissions="playlists_advanced_permissions">
+    <legend data-t>Permissions</legend>
+
+    <div class="fieldrow">
+      <label data-t>User Permissions</label>
+      <ob-user-input id="playlist_users_permissions_input"></ob-user-input>
+    </div>
+
+    <div class="fieldrow">
+      <label data-t>Group Permissions</label>
+      <ob-group-input id="playlist_groups_permissions_input"></ob-group-input>
+    </div>
+  </fieldset>
+
   <div class="playlist_edit_container hidden" id="playlist_edit_advanced_container">
 
     <fieldset>
-    <legend data-t>Items Heading</legend>
+    <legend data-t>Playlist Items</legend>
 
-    <p data-t>Items Instructions Advanced</p>
+    <p data-t>Drag media to the area below.  Double-click items to set properties.  Click to select item, then delete/backspace to remove, up/down keys to move.</p>
 
     <div class="fieldrow">
       <button onclick="OB.Playlist.advancedZoomIn();" data-t>Zoom In</button>
@@ -61,9 +75,9 @@
 
 
     <div class="playlist_data_save fieldrow">
-      <button class="edit" onclick="OB.Playlist.advancedRemoveAll();" data-t data-tns="Common">Clear</button>
-      <button class="add" onclick="OB.Playlist.save();" data-t data-tns="Common">Save</button>
-    </div>  
+      <button class="edit" onclick="OB.Playlist.advancedRemoveAll();" data-t>Clear</button>
+      <button class="add" onclick="OB.Playlist.save();" data-t>Save</button>
+    </div>
 
     </fieldset>
 
@@ -72,10 +86,10 @@
   <div class="playlist_edit_container hidden" id="playlist_edit_standard_container">
 
     <fieldset>
-    <legend data-t>Items Heading</legend>
+    <legend data-t>Playlist Items</legend>
 
-    <p data-t>Items Instructions Standard</p>
-    
+    <p data-t>Drag media and playlists to the area below.  Double-click items to set properties.  Click to select, then delete/backspace to remove, up/down keys to move.  You can also click-drag to reorder.</p>
+
     <div id="playlist_items" class="droppable_target_media droppable_target_playlist droppable_target_media_dynamic">
         <div id="playlist_items_drag_help" data-t>Drag Items Here</div>
     </div>
@@ -83,31 +97,31 @@
     <p>
       <span data-t>Total Duration</span>:
       <span id="playlist_total_duration">0:00</span>
-      <span class="hidden" id="playlist_edit_estimated_help" data-t>Total Duration Estimated</span>
+      <span class="hidden" id="playlist_edit_estimated_help">(<span data-t>estimated due to variable length content</span>)</span>
     </p>
-    
+
     <div class="playlist_data_save">
-      <button onclick="OB.Playlist.addeditInsertDynamic(true,OB.Sidebar.media_search_last_query);" data-t>Add Dynamic Selection Button</button>
-      <button onclick="OB.Playlist.addeditInsertStationId();" data-t>Add Station ID Button</button>
-      <button class="hidden" id="playlist_insert_breakpoint_button" onclick="OB.Playlist.addeditInsertBreakpoint();" data-t>Add Breakpoint Button</button>
-      <button onclick="OB.Playlist.addeditRemoveAll();" class="edit" data-t data-tns="Common">Clear</button>
-      <button onclick="OB.Playlist.save();" class="add" data-t data-tns="Common">Save</button>
+      <button onclick="OB.Playlist.addeditInsertDynamic(true,OB.Sidebar.media_search_last_query);" data-t>Add Dynamic Selection</button>
+      <button onclick="OB.Playlist.addeditInsertStationId();" data-t>Add Station ID</button>
+      <button class="hidden" id="playlist_insert_breakpoint_button" onclick="OB.Playlist.addeditInsertBreakpoint();" data-t>Add Breakpoint</button>
+      <button onclick="OB.Playlist.addeditRemoveAll();" class="edit" data-t>Clear</button>
+      <button onclick="OB.Playlist.save();" class="add" data-t>Save</button>
     </div>
 
     </fieldset>
 
     <fieldset id="playlist_liveassist_buttons">
-    <legend data-t>LiveAssist Buttons Heading</legend>
+    <legend data-t>LiveAssist Buttons</legend>
 
-      <p data-t>LiveAssist Buttons Instructions</p>
+      <p data-t>Drag playlists to this area to program the LiveAssist button area.  Each playlist will be a column of buttons, with one button per playlist item.</p>
 
       <div id="playlist_liveassist_items" class="droppable_target_playlist">
           <div id="playlist_liveassist_drag_help" data-t>Drag Items Here</div>
       </div>
 
       <div class="playlist_data_save">
-        <button onclick="OB.Playlist.liveassistRemoveAll();" class="edit" data-t data-tns="Common">Clear</button>
-        <button onclick="OB.Playlist.save();" class="add" data-t data-tns="Common">Save</button>
+        <button onclick="OB.Playlist.liveassistRemoveAll();" class="edit" data-t>Clear</button>
+        <button onclick="OB.Playlist.save();" class="add" data-t>Save</button>
       </div>
 
     </fieldset>

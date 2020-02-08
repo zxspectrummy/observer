@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013-2014 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -24,7 +24,8 @@ OB.Playlist.addeditInsertBreakpoint = function()
 {
   OB.Playlist.addedit_item_last_id += 1;
 
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><i>'+htmlspecialchars(OB.t('Playlist Edit','Breakpoint'))+'</i></div>');
+  //T Breakpoint
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><i>'+htmlspecialchars(OB.t('Breakpoint'))+'</i></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','breakpoint');
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-duration','0');
@@ -62,7 +63,7 @@ OB.Playlist.liveassistButtonItems = function()
 {
   var items = new Array();
 
-  $('#playlist_liveassist_items').children().not('#playlist_liveassist_drag_help').each(function(index,element) { 
+  $('#playlist_liveassist_items').children().not('#playlist_liveassist_drag_help').each(function(index,element) {
     items.push($(element).attr('data-id'));
   });
 
@@ -71,7 +72,8 @@ OB.Playlist.liveassistButtonItems = function()
 
 OB.Playlist.liveassistRemoveAll = function()
 {
-  if($('#playlist_edit_standard_container .playlist_addedit_liveassist_item').length && confirm( OB.t('Playlist Edit','Clear LiveAssist Items Confirm') ) )
+  //T Clear all LiveAssist buttons?
+  if($('#playlist_edit_standard_container .playlist_addedit_liveassist_item').length && confirm( OB.t('Clear all LiveAssist buttons?') ) )
   {
     $('#playlist_edit_standard_container .playlist_addedit_liveassist_item').remove();
     $('#playlist_liveassist_drag_help').show();

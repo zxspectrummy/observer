@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -19,16 +19,27 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Playlist extends OBFController 
+class Playlist extends OBFController
 {
 
   public function __construct()
   {
     parent::__construct();
-    
+
     $this->user->require_authenticated();
 
     $this->PlaylistModel = $this->load->model('Playlists');
+  }
+
+  private function user_can_edit($playlist)
+  {
+    $permissions = $this->PlaylistModel('get_permissions',$playlist['id']);
+
+    if($this->user->check_permission('manage_playlists')) return true;
+    if($playlist['owner_id']==$this->user->param('id') && $this->user->check_permission('create_own_playlists')) return true;
+    if(array_search($this->user->param('id'), $permissions['users'])!==FALSE) return true;
+    if(count(array_intersect($this->user->get_group_ids(), $permissions['groups']))>0) return true;
+    return false;
   }
 
   // get single playlist
@@ -39,19 +50,26 @@ class Playlist extends OBFController
 
     $playlist = $this->PlaylistModel('get_by_id',$id);
 
-    if($playlist) 
+    if($playlist)
     {
-
       $playlist['items'] = $this->PlaylistModel('get_items',$id);
       if($playlist['type']=='live_assist') $playlist['liveassist_button_items'] = $this->PlaylistModel('get_liveassist_items',$id);
 
       // if playlist is private and not ours, require 'manage_playlists'.
       if($playlist['status']=='private' && $playlist['owner_id']!=$this->user->param('id')) $this->user->require_permission('manage_playlists');
 
-      return array(true,'Playlist found.',$playlist);
+      // get our advanced permissions
+      $permissions = $this->PlaylistModel('get_permissions',$id);
+      if($this->user->check_permission('playlists_advanced_permissions'))
+      {
+        $playlist['permissions_users'] = $permissions['users'];
+        $playlist['permissions_groups'] = $permissions['groups'];
+      }
 
+      $playlist['can_edit'] = $this->user_can_edit($playlist, $permissions);
+
+      return array(true,'Playlist found.',$playlist);
     }
-    
 
     return array(false,'Playlist not found.');
 
@@ -87,6 +105,12 @@ class Playlist extends OBFController
 
     $search_result = $this->PlaylistModel('search',$query,$limit,$offset,$sort_by,$sort_dir,$my);
 
+    foreach($search_result['playlists'] as &$playlist)
+    {
+      $playlist['can_edit'] = $this->user_can_edit($playlist);
+    }
+
+    //T Playlists
     return array(true,'Playlists',$search_result);
 
   }
@@ -94,9 +118,6 @@ class Playlist extends OBFController
   // addedit playlist
   public function edit()
   {
-
-    $this->user->require_permission('manage_playlists or create_own_playlists');
-
     $media_model = $this->load->model('Media');
 
     $id = trim($this->data('id'));
@@ -107,13 +128,19 @@ class Playlist extends OBFController
     $items = $this->data('items');
     $liveassist_button_items = $this->data('liveassist_button_items');
 
-    // if we have an id, see if id exists.  check permission if editing someone else's playlist.
+    // editing playlist
     if(!empty($id))
     {
       $original_playlist = $this->PlaylistModel('get_by_id',$id);
-      if(!$original_playlist) { return array(false,array('Playlist Edit','Unable To Edit')); }
-      if($original_playlist['owner_id']!=$this->user->param('id')) $this->user->require_permission('manage_playlists');
+      //T Unable to edit this playlist.
+      if(!$original_playlist) { return array(false,array('Playlist Edit','Unable to edit this playlist.')); }
+
+      // if user can't edit, this will trigger a permission failure in via require_permission.
+      if(!$this->user_can_edit($original_playlist)) $this->user->require_permission('manage_playlists');
     }
+
+    // new playlist
+    else $this->user->require_permission('manage_playlists or create_own_playlists');
 
     // validate data.
     $validate_playlist = $this->PlaylistModel('validate_playlist', array('name'=>$name, 'status'=>$status, 'type'=>$type) );
@@ -134,6 +161,7 @@ class Playlist extends OBFController
     }
 
     // add/edit playlist entry.
+    $data = [];
     $data['name']=$name;
     $data['description']=$description;
     $data['status']=$status;
@@ -158,7 +186,7 @@ class Playlist extends OBFController
       $this->db->where('item_id',$id);
       $this->db->where('item_type','playlist');
       $schedules = $this->db->get('schedules');
-  
+
       $this->db->where('item_id',$id);
       $this->db->where('item_type','playlist');
       $schedules = array_merge($schedules,$this->db->get('schedules_recurring'));
@@ -188,12 +216,12 @@ class Playlist extends OBFController
 
       // TODO use a model... (liveassist model or playlist model?)
       // delete liveassist related cache for this playlist.
-    
+
       $this->db->query('SELECT * FROM playlists_liveassist_buttons WHERE playlist_id = "'.$this->db->escape($id).'" OR button_playlist_id = "'.$this->db->escape($id).'"');
       $groups = $this->db->assoc_list();
 
       foreach($groups as $group)
-      { 
+      {
         $this->db->where('playlists_liveassist_button_id',$group['id']);
         $this->db->delete('schedules_liveassist_buttons_cache');
       }
@@ -201,7 +229,8 @@ class Playlist extends OBFController
     }
 
     // at this point, we should have an ID.
-    if(!$id) return array(false,array('Playlist Edit','Error While Saving'));
+    //T An error occurred while saving this playlist.
+    if(!$id) return array(false,array('Playlist Edit','An error occurred while saving this playlist.'));
 
     // update our playlist items. first delete all items, then re-add them.
     $this->PlaylistModel('delete_items',$id);
@@ -221,7 +250,7 @@ class Playlist extends OBFController
         $data['item_id']=$item['id'];
         $data['duration']=$item['duration'];
       }
-    
+
       elseif($item['type']=='dynamic')
       {
         $data['dynamic_num_items']=$item['num_items_all'] ? null : $item['num_items'];
@@ -234,7 +263,7 @@ class Playlist extends OBFController
       {
         // nothing special to set here.
       }
-    
+
       elseif($item['type']=='breakpoint')
       {
         // nothing special to set here.
@@ -247,22 +276,25 @@ class Playlist extends OBFController
     if($type=='live_assist' && is_array($liveassist_button_items))
       $this->PlaylistModel('update_liveassist_items',$id, $liveassist_button_items);
 
-    return array(true,'Playlist saved.',$id);
+    // handle advanced permissions if we're allowed
+    if($this->user->check_permission('playlists_advanced_permissions'))
+    {
+      $this->PlaylistModel('update_permissions_users', $id, $this->data('permissions_users'));
+      $this->PlaylistModel('update_permissions_groups', $id, $this->data('permissions_groups'));
+    }
 
+    return array(true,'Playlist saved.',$id);
   }
 
   // validate dynamic selection, provide duration estimate.
-  public function validate_dynamic_properties($search_query=null,$num_items=null,$image_duration=null) {
-
-    $this->user->require_permission('create_own_playlists or manage_playlists');
-
-    if($search_query===null) $search_query = $this->data('search_query');
+  public function validate_dynamic_properties() {
+    $search_query = $this->data('search_query');
 
     $search_query = (array) $search_query; // might be object... want to make consistent.
 
-    if($num_items===null) $num_items = trim($this->data('num_items'));
-    if($num_items_all===null) $num_items_all = trim($this->data('num_items_all'));
-    if($image_duration===null) $image_duration = trim($this->data('image_duration'));
+    $num_items = trim($this->data('num_items'));
+    $num_items_all = trim($this->data('num_items_all'));
+    $image_duration = trim($this->data('image_duration'));
 
     $validation = $this->PlaylistModel('validate_dynamic_properties',$search_query,$num_items,$num_items_all,$image_duration);
 
@@ -278,12 +310,9 @@ class Playlist extends OBFController
 
   public function delete()
   {
-
-    $this->user->require_permission('manage_playlists or create_own_playlists');
-
     $ids = $this->data('id');
-      
-    // if we just have a single ID, make it into an array so we can proceed on that assumption. 
+
+    // if we just have a single ID, make it into an array so we can proceed on that assumption.
     if(!is_array($ids)) $ids = array($ids);
 
     // make sure we have all our playlists. check permission.
@@ -294,14 +323,14 @@ class Playlist extends OBFController
 
       if(!$playlist) return array(false,'One or more playlists were not found.');
 
-      if($playlist['owner_id']!=$this->user->param('id')) $this->user->require_permission('manage_playlists');
+      // if user can't edit, this will trigger a permission failure in via require_permission.
+      if(!$this->user_can_edit($playlist)) $this->user->require_permission('manage_playlists');
 
       // check where used, see if we have permission to remove from those.
       $where_used = $this->PlaylistModel('where_used',$id);
       if($where_used['can_delete']==false) return array(false,'Cannot delete one or more playlists as you do not have adequate permissions.');
-
     }
-    
+
     // proceed with delete
     foreach($ids as $id)
     {
@@ -314,7 +343,6 @@ class Playlist extends OBFController
 
   public function used()
   {
-
     $ids = $this->data('id');
     if(!is_array($ids)) $ids = array($ids);
 
@@ -323,8 +351,7 @@ class Playlist extends OBFController
     foreach($ids as $id) $return[]=$this->PlaylistModel('where_used',$id);
 
     return array(true,'Playlist where used information.',$return);
-
   }
-  
+
 
 }

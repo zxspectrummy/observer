@@ -1,7 +1,7 @@
 <?php 
 
 /*     
-    Copyright 2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -71,19 +71,80 @@ else $run=true;
     font-weight: bold;
   }
 
-  .check_error
+  .check_error, .ob-update-error > div
   {
-    background-color: #faa;
+    background-color: #faa !important;
   }
 
-  .check_warning
+  .check_warning, .ob-update-pending > div
   {
-    background-color: #ffc;
+    background-color: #ffc !important;
   }
 
-  .check_ok
+  .check_ok, .ob-update-success > div
   {
-    background-color: #cfc;
+    background-color: #cfc !important;
+  }
+  
+  .ob-updates
+  {
+    display: flex;
+    flex-direction: column-reverse;
+    font-size: 13px;
+  }
+  
+  .ob-update 
+  {
+    display: flex;
+    align-items: stretch;
+  }
+  
+  .ob-update p,
+  .ob-update h2,
+  .ob-update ul
+  {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 13px;
+  }
+  
+  .ob-update li
+  {
+    font-size: 12px;
+  }
+  
+  .ob-update ul
+  {
+    padding-left: 10px;
+  }
+  
+  .ob-update li:not(:first-child)
+  {
+    margin-top: 10px;
+  }
+  
+  .ob-update > div
+  {
+    background-color: #f3f3f3;
+    margin: 1px;
+    padding: 10px;
+  }
+  
+  .ob-update-name
+  {
+    flex: 0 0 75px;
+    display: flex;
+  }
+  
+  .ob-update-description
+  {
+    flex: 1 1 auto;
+  }
+  
+  .ob-update-status
+  {
+    flex: 0 0 75px;
+    display: flex;
   }
   
   </style>
@@ -109,9 +170,7 @@ else $run=true;
 <?php if($u->checker_status) { ?>
   <h1>OpenBroadcaster Updates</h1>
 
-  <?php $list = $u->updates(); 
-    //$list = array_reverse($list); // don't reverse list, causes updates to run in wrong order. will need to rework to do this. (new updates on top is nicer.)
-  ?>
+  <?php $list = $u->updates(); // don't reverse, causes updates to run in wrong order. ?>
 
   <p>This will complete database and other updates required when upgrading OpenBroadcaster.</p>
 
@@ -120,36 +179,42 @@ else $run=true;
   <p style="text-align: center; font-size: 1.1em; padding: 10px 0;"><a href="index.php?run=1">Run Updates Now</a></p>
 
 
-  <?php foreach($list as $update) { ?>
+  <div class="ob-updates">
+  <?php 
+  
+  $has_error = false;
+  
+  foreach($list as $update) { 
+  
+  if(!$update->needed) $status='Installed';
+  elseif($run && !$has_error)
+  {
+    $result = $u->run($update);
+    if($result==true) $status='Success';
+    else { $status='Error'; $has_error = true; }
+  }
+  else $status='Pending';
+  
+  ?>
 
-    <h2><?=$update->version?></h2>
-
-    <?php if(!$update->needed) { ?>
-      <p style="font-weight: bold; color: #006;">This update is not needed or is already installed.</p>
-    <?php } elseif($run) { 
-      $result = $u->run($update);
-      if($result==true) { ?><p style="font-weight: bold; color: #060;">This update has completed successfully.</p><?php } 
-      else
-      {
-        ?><p style="color: #a00; font-weight: bold;">An error occurred while attempting to make this update.</p>
-        <?php if($update->error) echo '<p style="font-weight: bold;">'.htmlspecialchars($update->error).'</p>'; ?>
-        <p>This script will now terminate.</p><?php
-        break;
-      }
-    } ?>  
-
-    <?php 
-    $items = $update->items(); 
-    if(empty($items)) { ?><p>No description is available for this update.</p><?php } else { ?>
+  <div class="ob-update ob-update-<?=strtolower($status)?>">
+  
+    <div class="ob-update-name"><h2><?=$update->version?></h2></div>
+    
+    <div class="ob-update-description">
+    <?php $items = $update->items(); ?>
       <ul>
+      <?php if($status=='Error') { ?><li><?=htmlspecialchars($update->error)?></li><?php } ?>
       <?php foreach($items as $item) { ?>
         <li><?=htmlspecialchars($item)?></li>
       <?php } ?>
       </ul>
-    <?php } ?>
-    <br>
-
+    </div>
+    
+    <div class="ob-update-status"><?=$status?></div>
+  </div> 
   <?php } ?>
+</div>
 <?php } ?>
 
 </div>

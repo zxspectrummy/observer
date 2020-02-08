@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -19,7 +19,7 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require('components.php');
+require_once('components.php');
 
 class OBFAPI
 {
@@ -48,26 +48,24 @@ class OBFAPI
       $auth_key = $_POST['k'];
     }
 
-    // if not in post, try fetching from cookie.
-		// this is actually disabled - we now require auth id and key to come from POST data to prevent CSRF
-		/*
-    elseif(!empty($_COOKIE['ob_auth_id']) && !empty($_COOKIE['ob_auth_key']))
-    {
-      $auth_id = $_COOKIE['ob_auth_id'];
-      $auth_key = $_COOKIE['ob_auth_key'];
-    } 
-		*/
-
     // authorize our user (from post data, cookie data, whatever.)
     $this->user->auth($auth_id,$auth_key);
-
 
     // we might get a post, or multi-post. standardize to multi-post.
     if(isset($_POST['m']) && is_array($_POST['m'])) 
       $requests = $_POST['m'];
 
     elseif(isset($_POST['c']) && isset($_POST['a']) && isset($_POST['d'])) 
+    {
       $requests = array( array($_POST['c'],$_POST['a'],$_POST['d']) );
+      
+      // access control for public API access. note that public API cannot use multi-post at this time.
+      $controller_action = strtolower($_POST['c'].'.'.$_POST['a']);
+      if(defined('OB_PUBLIC_API') && is_array(OB_PUBLIC_API) && $auth_id==null && $auth_key==null && array_search($controller_action,array_map('strtolower',OB_PUBLIC_API))!==FALSE)
+      {
+        header("Access-Control-Allow-Origin: *");
+      }
+    }
 
     else 
     { 

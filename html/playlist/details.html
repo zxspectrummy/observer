@@ -1,8 +1,11 @@
-<div data-tns="Playlist Details">
+<div>
 
 <h1 id="playlist_heading" data-t>Playlist Details</h1>
 
-<p id="playlist_details_message" data-t>Loading playlist details</p>
+<p>
+  <button data-t id="playlist_details_edit" class="hidden edit">Edit</button>
+  <button data-t id="playlist_details_delete" class="hidden delete">Delete</button>
+</p>
 
 <div id="playlist_details" class="hidden">
 
@@ -11,7 +14,7 @@
 
   <table class="table" id="playlist_details_items_table">
   <tr>
-    <th data-t data-tns="Playlist Edit">Description</th>
+    <th data-t>Description</th>
     <th data-t>Duration</th>
   </tr>
   </table>
@@ -28,12 +31,12 @@
     </div>
 
     <div class="fieldrow">
-      <label data-t data-tns="Playlist Edit">Name</label>
+      <label data-t>Name</label>
       <span id="playlist_details_name"></span>
     </div>
 
     <div class="fieldrow">
-      <label data-t data-tns="Playlist Edit">Description</label>
+      <label data-t>Description</label>
       <span id="playlist_details_description"></span>
     </div>
 
@@ -53,7 +56,7 @@
     </div>
 
     <div class="fieldrow">
-      <label data-t data-tns="Playlist Edit">Status</label>
+      <label data-t>Status</label>
       <span id="playlist_details_visibility"></span>
     </div>
 
@@ -62,7 +65,7 @@
   </fieldset>
 
   <fieldset>
-  <legend data-t data-tns="Playlist Where Used">Where is this playlist used?</legend>
+  <legend data-t>Where is this playlist used?</legend>
 
   <div id="playlist_details_used">
   <ul>

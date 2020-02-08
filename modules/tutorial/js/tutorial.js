@@ -208,7 +208,7 @@ OBModules.Tutorial = new function()
 
 		this.nextCondition = function()
 		{
-			if($('#schedule_heading').length && !$('#schedule_welcome button').length) return true;
+			if($('#schedule_container').length && $('#schedule_container').hasClass('droppable_target_playlist')) return true;
 			return false;
 		}
 

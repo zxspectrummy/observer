@@ -1,9 +1,9 @@
 <obwidget type="message" id="item_properties_message"></obwidget>
 
-<div data-tns="Playlist Dynamic Item Properties">
+<div>
 
 <fieldset>
-<legend data-t>Heading</legend>
+<legend data-t>Dynamic Item Properties</legend>
 
 <div class="fieldrow">
   <label class="required" data-t>Selection Name</label>
@@ -11,25 +11,25 @@
 </div>
 
 <div class="fieldrow">
-  <label class="required" data-t>Number Of Items</label>
-  <input type="text" size="5" id="dynamic_num_items"> <input type="checkbox" id="dynamic_num_items_all"> <span data-t>All Items</span>
+  <label class="required" data-t>Number of Items</label>
+  <input type="text" size="5" id="dynamic_num_items"> <input type="checkbox" id="dynamic_num_items_all"> <span data-t>all items</span>
 </div>
 
 <div class="fieldrow">
   <label class="required" data-t>Image Duration</label>
-  <input type="text" size="5" id="dynamic_image_duration"> <span data-t>In Seconds</span>
+  <input type="text" size="5" id="dynamic_image_duration"> (<span data-t>in seconds</span>)
 </div>
 </fieldset>
 
 <fieldset>
 <div class="fieldrow">
-  <button class="add" id="item_properties_save" data-t data-tns="Common">Save</button>
-  <button onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+  <button class="add" id="item_properties_save" data-t>Save</button>
+  <button onclick="OB.UI.closeModalWindow();" data-t>Cancel</button>
 </div>
 </fieldset>
 
 <fieldset>
-<legend data-t>Description Heading</legend>
+<legend data-t>Description</legend>
 
 <p id="dynamic_item_instructions"></p>
 

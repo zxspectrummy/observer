@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,8 +26,12 @@ OB.Playlist.newPage = function()
     OB.Playlist.station_id_avg_duration=data.data;
 
     OB.UI.replaceMain('playlist/addedit.html');
-    $('#playlist_edit_heading').text( OB.t('Playlist New', 'Heading') );
-    $('#playlist_edit_instructions').text( OB.t('Playlist New', 'Instructions') );
+    OB.UI.permissionsUpdate();
+
+    //T New Playlist
+    $('#playlist_edit_heading').text( OB.t('New Playlist') );
+    //T Fill out the following playlist information, then drag media and playlist items into the playlist area below.
+    $('#playlist_edit_instructions').text( OB.t('Fill out the following playlist information, then drag media and playlist items into the playlist area below.') );
 
     // need this to prevent adding other user's private media to this playlist.
     $('#playlist_owner_id').val(OB.Account.user_id);
@@ -41,36 +45,55 @@ OB.Playlist.newPage = function()
 }
 
 
-OB.Playlist.editPage = function()
+OB.Playlist.editPage = function(id)
 {
 
   OB.Playlist.advanced_items = [];
 
-  if($('.sidebar_search_playlist_selected').size() > 1) { OB.UI.alert( ['Playlist Edit','Select One Playlist Only'] ); return; }
+  // if not defined, get our ID from the sidebar
+  if(typeof(id)=='undefined')
+  {
+    //T Select one playlist only.
+    if($('.sidebar_search_playlist_selected').size() > 1) { OB.UI.alert( 'Select one playlist only.' ); return; }
+    id = $('.sidebar_search_playlist_selected').first().attr('data-id');
+  }
 
-  // playlist data from our search result (slight possibility it is out of date).
-  var playlist_local = $('.sidebar_search_playlist_selected');
+  // otherwise make sure it's a number or string
+  else if(typeof(id)!='number' && typeof(id)!='string')
+  {
+    return;
+  }
 
-  OB.API.post('device','station_id_avg_duration', {}, function(data) { OB.Playlist.station_id_avg_duration=data.data;
-  OB.API.post('playlist','get', { 'id': $(playlist_local).attr('data-id') }, function(data) {
+  var post = [];
+  post.push(['device','station_id_avg_duration', {}]);
+  post.push(['playlist','get', { 'id': id }]);
+
+  OB.API.multiPost(post, function(response)
+  {
+
+    OB.Playlist.station_id_avg_duration=response[0].data;
 
     // if we didn't get our playlist we are trying to edit, just direct to create new playlist instead.
-    if(data.status==false) { OB.Playlist.newPage(); return; }
+    if(response[1].status==false) { OB.Playlist.newPage(); return; }
 
     OB.UI.replaceMain('playlist/addedit.html');
-    $('#playlist_edit_heading').text( OB.t('Playlist Edit', 'Edit Playlist') );
-    $('#playlist_edit_instructions').text( OB.t('Playlist Edit', 'Instructions') );
+    OB.UI.permissionsUpdate();
+
+    //T Edit Playlist
+    $('#playlist_edit_heading').text( OB.t('Edit Playlist') );
+    //T Edit the following playlist as required.
+    $('#playlist_edit_instructions').text( OB.t('Edit the following playlist as required.') );
 
     OB.Playlist.addeditInit();
     OB.Playlist.advancedInit();
 
     // playlist data from the db (up to date, at this point anyway...)
-    playlist_data = data.data;
+    playlist_data = response[1].data;
 
     $('#playlist_name_input').val(playlist_data['name']);
     $('#playlist_description_input').val(playlist_data['description']);
-    $('#playlist_id').val($(playlist_local).attr('data-id'));
-    $('#playlist_owner_id').val($(playlist_local).attr('data-owner_id'));
+    $('#playlist_id').val(playlist_data['id']);
+    $('#playlist_owner_id').val(playlist_data['owner_id']);
 
     $('#playlist_status_input').val(playlist_data['status']);
     $('#playlist_type_input').val(playlist_data['type']);
@@ -83,7 +106,7 @@ OB.Playlist.editPage = function()
       {
         OB.Playlist.advancedAddItem(item,true);
       }
-      
+
       else
       {
         if(item['type']=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['dynamic_query'],item['dynamic_duration'],item['dynamic_name'],item['dynamic_num_items'],item['dynamic_image_duration']);
@@ -102,7 +125,10 @@ OB.Playlist.editPage = function()
       $.each(playlist_data['liveassist_button_items'], function(index,item) { OB.Playlist.addeditInsertLiveassistItem(item); });
     }
 
-  }); });
+    // advanced permissions values if we have them
+    if(playlist_data.permissions_groups) $('#playlist_groups_permissions_input').val(playlist_data.permissions_groups);
+    if(playlist_data.permissions_users) $('#playlist_users_permissions_input').val(playlist_data.permissions_users);
+  });
 
 }
 
@@ -145,7 +171,8 @@ OB.Playlist.addeditTypeChange = function()
 
 OB.Playlist.addeditTypeChangeConfirm = function()
 {
-  return confirm( OB.t('Playlist Edit','Change Playlist Type Confirm') );
+  //T Changing playlist type will clear the existing playlist.  Are you sure you want to do this?
+  return confirm( OB.t('Changing playlist type will clear the existing playlist.  Are you sure you want to do this?') );
 }
 
 
@@ -177,6 +204,7 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
 
     if(search_query.mode=='advanced')
     {
+      //T Advanced Search Type
       var search_type = 'Advanced Search Type';
       var search_string = '';
 
@@ -186,20 +214,24 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
       });
     }
 
-    else if(search_query.string=='') 
+    else if(search_query.string=='')
     {
+      //T All Media Search Type
       var search_type = 'All Media Search Type';
       var search_string = null;
     }
 
     else
     {
+      //T Standard Search Type
       var search_type = 'Standard Search Type';
       var search_string = htmlspecialchars(search_query.string);
     }
 
-    $('#dynamic_item_description').append('<div class="fieldrow"><label>Type</label><span>'+htmlspecialchars(OB.t('Playlist Dynamic Item Properties',search_type))+'</span></div>');
-    if(search_string!=null) $('#dynamic_item_description').append('<div class="fieldrow"><label>Query</label><span>'+search_string+'</span></div>');
+    //T Type
+    $('#dynamic_item_description').append('<div class="fieldrow"><label data-t>Type</label><span>'+htmlspecialchars(OB.t(search_type))+'</span></div>');
+    //T Query
+    if(search_string!=null) $('#dynamic_item_description').append('<div class="fieldrow"><label data-t>Query</label><span>'+search_string+'</span></div>');
 
   }
 
@@ -263,20 +295,21 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
       // make sure image properties are valid.
       if(!$('#image_properties_duration').val().match(/^[0-9]+$/) || $('#image_properties_duration')=='0')
       {
-        $('#item_properties_message').obWidget('error',['Playlist Image Properties','Valid Image Duration Required']);
+        //T A valid image duration is required.
+        $('#item_properties_message').obWidget('error', 'A valid image duration is required.');
       }
 
       // okay to save, standard playlist.
       else if($('#playlist_type_input').val()=='standard')
       {
-        $('#playlist_addedit_item_'+id).attr('data-duration', $('#image_properties_duration').val());    
+        $('#playlist_addedit_item_'+id).attr('data-duration', $('#image_properties_duration').val());
         OB.Playlist.addeditImageDurationUpdate(id);
         OB.UI.closeModalWindow();
       }
 
       // okay to save, advanced playlist.
       else
-      {      
+      {
         OB.Playlist.advanced_items[id].duration = $('#image_properties_duration').val();
         OB.Playlist.advancedItemsDisplay();
         OB.UI.closeModalWindow();
@@ -297,6 +330,19 @@ OB.Playlist.save = function()
   var status = $('#playlist_status_input').val();
   var type = $('#playlist_type_input').val();
 
+  var permissions_users = null;
+  var permissions_groups = null;
+
+  // add permissions if fields visible
+  if( $('#playlist_users_permissions_input').is(':visible') )
+  {
+    permissions_users = $('#playlist_users_permissions_input:visible').val();
+  }
+  if( $('#playlist_groups_permissions_input').is(':visible') )
+  {
+    permissions_groups = $('#playlist_groups_permissions_input:visible').val();
+  }
+
   if(type=='advanced') var items = OB.Playlist.advancedGetItems();
   else var items = OB.Playlist.addeditGetItems();
 
@@ -305,7 +351,17 @@ OB.Playlist.save = function()
 
   $('#playlist_addedit_message').hide();
 
-  OB.API.post('playlist','edit', { 'id': id, 'name': playlist_name, 'description': description, 'status': status, 'type': type, 'items': items, 'liveassist_button_items': liveassist_button_items }, function(data) {
+  OB.API.post('playlist','edit', {
+    'id': id,
+    'name': playlist_name,
+    'description': description,
+    'status': status,
+    'type': type,
+    'items': items,
+    'liveassist_button_items': liveassist_button_items,
+    'permissions_users': permissions_users,
+    'permissions_groups' : permissions_groups
+  }, function(data) {
 
     $('#playlist_addedit_message').obWidget(data.status ? 'success' : 'error', data.msg);
 

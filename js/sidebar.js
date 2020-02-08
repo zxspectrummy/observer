@@ -1,21 +1,21 @@
-/*     
- Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
- This file is part of OpenBroadcaster Server.
+    This file is part of OpenBroadcaster Server.
 
- OpenBroadcaster Server is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+    OpenBroadcaster Server is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
- OpenBroadcaster Server is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU Affero General Public License for more details.
+    OpenBroadcaster Server is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
- You should have received a copy of the GNU Affero General Public License
- along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
- */
+    You should have received a copy of the GNU Affero General Public License
+    along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 OB.Sidebar = new Object();
 
@@ -29,7 +29,11 @@ OB.Sidebar.sidebarInit = function()
 
   if(parseInt(OB.Account.userdata.sidebar_display_left))
   {
-    $('#main_container').addClass('sidebar_display_left');
+    $('body').addClass('sidebar-left');
+  }
+  else
+  {
+    $('body').addClass('sidebar-right');
   }
 
   $('#sidebar_player').droppable({
@@ -69,6 +73,26 @@ OB.Sidebar.sidebarInit = function()
   OB.Sidebar.playlistEditDeleteVisibility();
   OB.Sidebar.mediaSearchFilter('approved');
   OB.Sidebar.playlistSearch();
+  
+  var media_simplebar = new SimpleBar(document.getElementById('sidebar_search_media_results_container'));
+  media_simplebar.getScrollElement().addEventListener('scroll', function() 
+  {
+    var distance_to_bottom = $('#sidebar_search_media_results_container .simplebar-content').height() - $(this).scrollTop() - $('#sidebar_search_media_results_container').height();
+    if(distance_to_bottom<50 && $('#sidebar_search_media_loadmore').is(':visible')) OB.Sidebar.mediaSearchMore();
+  }); 
+
+  var playlist_simplebar = new SimpleBar(document.getElementById('sidebar_search_playlist_results_container'));
+  playlist_simplebar.getScrollElement().addEventListener('scroll', function() 
+  {
+    var distance_to_bottom = $('#sidebar_search_playlist_results_container .simplebar-content').height() - $(this).scrollTop() - $('#sidebar_search_playlist_results_container').height();
+    if(distance_to_bottom<50 && $('#sidebar_search_playlist_loadmore').is(':visible')) OB.Sidebar.playlistSearchMore();
+  }); 
+}
+
+OB.Sidebar.playerToggle = function()
+{
+  $('#sidebar_player').toggleClass('closed');
+  OB.UI.sidebarSearchResultsHeight();
 }
 
 OB.Sidebar.playerPlay = function(mode,type,id)
@@ -76,6 +100,7 @@ OB.Sidebar.playerPlay = function(mode,type,id)
 
   if(mode=='playlist')
   {
+    //T Playlist preview coming soon.
     OB.UI.alert('Playlist preview coming soon.');
   }
 
@@ -87,31 +112,26 @@ OB.Sidebar.playerPlay = function(mode,type,id)
     image_width = $('#sidebar_player_draghere').innerWidth();
     image_height = $('#sidebar_player_draghere').innerHeight();
 
-    // a little extra info so we can select an appropriate format for video or audio.
-    $.browser.chrome = /chrome/.test(navigator.userAgent.toLowerCase());
-
     if(type=='video')
     {
-      // what format do we need?
-      if($.browser.msie || ($.browser.safari && !$.browser.chrome)) var video_format = 'mp4';
-      else var video_format = 'ogv';
-
-      $('#sidebar_player_draghere').html('<video preload="auto" autoplay="autoplay" src="/preview.php?id='+id+'&w='+image_width+'&h='+image_height+'&format='+video_format+'" controls="controls"></video>');
+      $('#sidebar_player_draghere').html('<video preload="auto" autoplay="autoplay" controls="controls">\
+        <source src="/preview.php?x='+new Date().getTime()+'&id='+id+'&w='+image_width+'&h='+image_height+'&format=mp4" type="video/mp4">\
+        <source src="/preview.php?x='+new Date().getTime()+'&id='+id+'&w='+image_width+'&h='+image_height+'&format=ogv" type="video/ogg">\
+      </video>');
     }
 
     else if(type=='audio')
     {
-      // what format do we need?
-      if($.browser.msie || ($.browser.safari && !$.browser.chrome)) var audio_format = 'mp3';
-      else var audio_format = 'ogg';
-
-      $('#sidebar_player_draghere').html('<audio preload="auto" autoplay="autoplay" src="/preview.php?id='+id+'&format='+audio_format+'" controls="controls"></audio>');
+      $('#sidebar_player_draghere').html('<audio preload="auto" autoplay="autoplay" controls="controls">\
+        <source src="/preview.php?x='+new Date().getTime()+'&id='+id+'&format=mp3" type="audio/mpeg">\
+        <source src="/preview.php?x='+new Date().getTime()+'&id='+id+'&format=ogg" type="audio/ogg">\
+      </audio>');
     }
 
     else if(type=='image')
     {
 
-      $('#sidebar_player_draghere').html('<img src="/preview.php?id='+id+'&w='+image_width+'&h='+image_height+'">');
+      $('#sidebar_player_draghere').html('<img src="/preview.php?x='+new Date().getTime()+'&id='+id+'&w='+image_width+'&h='+image_height+'">');
 
     }
 
@@ -124,13 +144,8 @@ OB.Sidebar.showMediaSearch = function()
   $('#sidebar_search_playlist_container').hide();
   $('#sidebar_search_media_container').showFlex();
 
-  /* $('#sidebar_search_tab_playlist').css('z-index',5); */
-
   $('.sidebar_search_tab').removeClass('selected');
   $('#sidebar_search_tab_media').addClass('selected');
-
-  // TODO this is temporary to fix context menu not loading properly sometimes. real cause should be fixed and this should be removed.
-  OB.Sidebar.mediaSearch(true);
 
   OB.Layout.tableFixedHeaders($('#sidebar_search_media_headings'),$('#sidebar_search_media_results'));
 }
@@ -144,14 +159,8 @@ OB.Sidebar.showPlaylistSearch = function()
   $('#sidebar_search_media_container').hide();
   $('#sidebar_search_playlist_container').showFlex();
 
-  /* $('#sidebar_search_tab_playlist').css('z-index',15); */
-
   $('.sidebar_search_tab').removeClass('selected');
   $('#sidebar_search_tab_playlist').addClass('selected');
-
-
-  // TODO this is temporary to fix context menu not loading properly sometimes. real cause should be fixed and this should be removed.
-  OB.Sidebar.playlistSearch(true);
 
   OB.Layout.tableFixedHeaders($('#sidebar_search_playlist_headings'),$('#sidebar_search_playlist_results'));
 }
@@ -161,7 +170,7 @@ OB.Sidebar.mediaDetailedToggle = function()
 
   if($('#sidebar_search').hasClass('sidebar_search_detailed'))
   {
-    $('#main_container').removeClass('sidebar_expanded');
+    $('body').removeClass('sidebar-expanded');
     $('#sidebar_search').removeClass('sidebar_search_detailed');
     $('#sidebar_search_media_container').addClass('sidebar_search_media_container_basic');
     $('#sidebar_search_media_container').removeClass('sidebar_search_media_container_detailed');
@@ -170,12 +179,12 @@ OB.Sidebar.mediaDetailedToggle = function()
     $('.sidebar_search_media_detailed_column').hide();
 
     // update detailed toggle link
-    $('#media_detailed_toggle_text').text(OB.t('Sidebar','more'));
+    $('#media_detailed_toggle_text').text(OB.t('more'));
 
   }
 
   else {
-    $('#main_container').addClass('sidebar_expanded');
+    $('body').addClass('sidebar-expanded');
     $('#sidebar_search').addClass('sidebar_search_detailed');
     $('#sidebar_search_media_container').removeClass('sidebar_search_media_container_basic');
     $('#sidebar_search_media_container').addClass('sidebar_search_media_container_detailed');
@@ -184,7 +193,7 @@ OB.Sidebar.mediaDetailedToggle = function()
     $('.sidebar_search_media_detailed_column').show();
 
     // update detailed toggle link
-    $('#media_detailed_toggle_text').text(OB.t('Sidebar','less'));
+    $('#media_detailed_toggle_text').text(OB.t('less'));
   }
 
   $('#sidebar_search_media_headings').width($('#sidebar_search_media_results').width());
@@ -215,18 +224,23 @@ OB.Sidebar.mediaSearchFilter = function(what)
   }
 
   // set the look of the buttons
-  if(OB.Sidebar.media_search_filters.mode=='approved') $('#sidebar_search_media_approved').html(OB.t('Sidebar','Approved Filter Link').toUpperCase());
-  else $('#sidebar_search_media_approved').html(OB.t('Sidebar','Approved Filter Link').toLowerCase());
+  //T ap
+  if(OB.Sidebar.media_search_filters.mode=='approved') $('#sidebar_search_media_approved').html(OB.t('ap').toUpperCase());
+  else $('#sidebar_search_media_approved').html(OB.t('ap').toLowerCase());
 
-  if(OB.Sidebar.media_search_filters.mode=='unapproved') $('#sidebar_search_media_unapproved').html(OB.t('Sidebar','Unapproved Filter Link').toUpperCase());
-  else $('#sidebar_search_media_unapproved').html(OB.t('Sidebar','Unapproved Filter Link').toLowerCase());
+  //T un
+  if(OB.Sidebar.media_search_filters.mode=='unapproved') $('#sidebar_search_media_unapproved').html(OB.t('un').toUpperCase());
+  else $('#sidebar_search_media_unapproved').html(OB.t('un').toLowerCase());
 
-  if(OB.Sidebar.media_search_filters.mode=='archived') $('#sidebar_search_media_archived').html(OB.t('Sidebar','Archived Filter Link').toUpperCase());
-  else $('#sidebar_search_media_archived').html(OB.t('Sidebar','Archived Filter Link').toLowerCase());
+  //T ar
+  if(OB.Sidebar.media_search_filters.mode=='archived') $('#sidebar_search_media_archived').html(OB.t('ar').toUpperCase());
+  else $('#sidebar_search_media_archived').html(OB.t('ar').toLowerCase());
 
-  if(OB.Sidebar.media_search_filters.my==true) $('#sidebar_search_media_my').html(OB.t('Sidebar','My Filter Link').toUpperCase());
-  else $('#sidebar_search_media_my').html(OB.t('Sidebar','My Filter Link').toLowerCase());
+  //T my
+  if(OB.Sidebar.media_search_filters.my==true) $('#sidebar_search_media_my').html(OB.t('my').toUpperCase());
+  else $('#sidebar_search_media_my').html(OB.t('my').toLowerCase());
 
+  //T bk
   if(OB.Sidebar.media_search_filters.bookmarked==true) $('#sidebar_search_media_bookmarked').html('BK');
   else $('#sidebar_search_media_bookmarked').html('bk');
 
@@ -290,22 +304,6 @@ OB.Sidebar.mediaSelect = function(object,dragging,keypress)
 
 }
 
-// determine whether user can edit media (id).
-OB.Sidebar.mediaCanEdit = function(id)
-{
-
-  if(!OB.Settings.permissions) return false;
-
-  if(OB.Settings.permissions.indexOf('manage_media')!=-1) return true;
-
-  else if(OB.Settings.permissions.indexOf('create_own_media')==-1) return false;
-
-  else if($('#sidebar_search_media_result_'+id).attr('data-owner_id')==OB.Account.user_id) return true;
-
-  return false;
-
-}
-
 // adjust the visibility of the media edit / delete buttons.
 OB.Sidebar.mediaEditDeleteVisibility = function()
 {
@@ -320,21 +318,21 @@ OB.Sidebar.mediaEditDeleteVisibility = function()
   $('#sidebar_search_media_results tbody .sidebar_search_media_selected').each(function(index,element)
   {
 
-    if(!OB.Sidebar.mediaCanEdit($(element).attr('data-id'))) { visible = false; return false; }
+    if($(element).attr('data-can_edit')!="true") { visible = false; return false; }
 
   });
 
-  if(visible) 
-  { 
+  if(visible)
+  {
     $('#sidebar_media_edit_button').show();
     $('#sidebar_media_delete_button').show();
     if(OB.Sidebar.media_search_filters.mode=='archived') $('#sidebar_media_unarchive_button').show();
   }
-  else 
-  { 
-    $('#sidebar_media_edit_button').hide(); 
+  else
+  {
+    $('#sidebar_media_edit_button').hide();
     $('#sidebar_media_delete_button').hide();
-    $('#sidebar_media_unarchive_button').hide(); 
+    $('#sidebar_media_unarchive_button').hide();
   }
 
 }
@@ -348,43 +346,25 @@ OB.Sidebar.mediaSearchNumResults = function()
   if(num_results == 0)
   {
     $('#sidebar_search_media_results tbody').html('<td class="sidebar_search_noresults"></td>');
-    $('#sidebar_search_media_results tbody .sidebar_search_noresults').text(OB.t('Sidebar','No Media Found'));
+    //T No Media Found
+    $('#sidebar_search_media_results tbody .sidebar_search_noresults').text(OB.t('No Media Found'));
   }
 
-  if(num_results==1) num_results_text = OB.t('Sidebar','Media Item Found');
-  else num_results_text = OB.t('Sidebar','Media Items Found',num_results);
+  //T 1 result
+  if(num_results==1) var num_results_text = OB.t('1 result');
+  //T %1 results
+  else var num_results_text = OB.t('%1 results', format_number(num_results));
 
   $('#sidebar_search_media_footer .results .num_results').html(num_results_text);
   $('#sidebar_search_media_footer .results .dynamic_selection').html('&nbsp;');
-
 }
 
 OB.Sidebar.media_search_offset = 0;
 
-OB.Sidebar.mediaSearchPageNext = function()
+OB.Sidebar.mediaSearchMore = function()
 {
-
-  var num_results = $('#sidebar_search_media_results').attr('data-num_results');
-
-  if(num_results <= OB.Sidebar.media_search_offset + OB.ClientStorage.get('results_per_page'))
-  {
-    return;
-  }
-
   OB.Sidebar.media_search_offset += OB.ClientStorage.get('results_per_page');
   OB.Sidebar.mediaSearch(true);
-
-}
-
-OB.Sidebar.mediaSearchPagePrevious = function()
-{
-
-  if(OB.Sidebar.media_search_offset == 0) return;
-
-  OB.Sidebar.media_search_offset -= OB.ClientStorage.get('results_per_page');
-  if(OB.Sidebar.media_search_offset<0) OB.Sidebar.media_search_offset = 0;
-  OB.Sidebar.mediaSearch(true);
-
 }
 
 OB.Sidebar.media_search_sort_by = 'updated';
@@ -422,7 +402,8 @@ OB.Sidebar.mediaSearchMode = function(mode)
     {
       $('#sidebar_search_media_input').unbind('click');
       $('#sidebar_search_media_input').focus();
-      $('#sidebar_search_media_input').attr('placeholder',OB.t('Sidebar','Enter Search Query'));
+      //T enter search query
+      $('#sidebar_search_media_input').attr('placeholder','(' + OB.t('enter search query') + ')');
 
       if(OB.Sidebar.media_search_last_query.mode=='advanced' && OB.Sidebar.media_search_last_simple) $('#sidebar_search_media_input').val(OB.Sidebar.media_search_last_simple.string);
       OB.Sidebar.advanced_search_filters = null;
@@ -438,13 +419,14 @@ OB.Sidebar.mediaSearchMode = function(mode)
 
 }
 
-OB.Sidebar.mediaSearch = function(pagination)
+OB.Sidebar.mediaSearch = function(more)
 {
 
   // if not the result of pagination (new search), reset offset to 0
-  if(!pagination)
+  if(!more)
   {
     OB.Sidebar.media_search_offset = 0;
+    $('.context-menu-media-item:first-child').parent().remove();
   }
 
   // generate our search query
@@ -461,36 +443,23 @@ OB.Sidebar.mediaSearch = function(pagination)
     search_query.mode = 'advanced';
     search_query.filters = OB.Sidebar.advanced_search_filters;
     $('#sidebar_search_media_input').val('');
-    $('#sidebar_search_media_input').attr('placeholder',OB.t('Sidebar','Advanced Search Query'));
+    //T advanced mode
+    $('#sidebar_search_media_input').attr('placeholder','(' + OB.t('advanced mode') + ')');
     $('#sidebar_search_media_input').click(function(e) { OB.Sidebar.mediaSearchMode('advanced'); });
   }
 
+  $('#sidebar_search_media_loading').show();
+  $('#sidebar_search_media_loadmore').hide();
+
   OB.API.post('media','media_search',{ save_history: true, sort_by: OB.Sidebar.media_search_sort_by, sort_dir: OB.Sidebar.media_search_sort_dir, q: search_query, s: OB.Sidebar.media_search_filters.mode, l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.media_search_offset, my: OB.Sidebar.media_search_filters.my },function (data)
   {
-
-    // clear out context menus, they are about to be reloaded. (context menus only used for media. but this should be fixed so context menus can be used elsewhere).
-    $('.context-menu').remove();
-
     var media_class = media; // media singleton is needed, but media local variable below overrides.
 
     var media = data.data.media;
     var num_results = data.data.num_results;
 
-    // update pagination
-    if(OB.Sidebar.media_search_offset > 0) var pagination_previous = true;
-    else var pagination_previous = false;
-
-    if(num_results > OB.Sidebar.media_search_offset + OB.ClientStorage.get('results_per_page')) { var pagination_next = true; }
-    else var pagination_next = false;
-
-    if(pagination_previous) $('#sidebar_search_media_pagination_previous a').removeClass('disabled');
-    else $('#sidebar_search_media_pagination_previous a').addClass('disabled');
-
-    if(pagination_next) $('#sidebar_search_media_pagination_next a').removeClass('disabled');
-    else $('#sidebar_search_media_pagination_next a').addClass('disabled');
-
     // handle results
-    $('#sidebar_search_media_results tbody').html('');
+    if(!more) $('#sidebar_search_media_results tbody').html('');
 
     if(data.status != false) for(var i in media)
     {
@@ -503,11 +472,22 @@ OB.Sidebar.mediaSearch = function(pagination)
       else if(media[i]['is_approved']==0) var data_data = 'media_unapproved';
       else data_mode = 'media';
 
-      var media_type_symbol = OB.t('Sidebar', media[i]['type'][0].toUpperCase()+media[i]['type'].substring(1).toLowerCase()+' Search Symbol');
+      var media_type_symbol = '';
+      switch (media[i]['type']) {
+        case 'audio':
+          media_type_symbol = '<i class="fas fa-music"></i>';
+        break;
+        case 'video':
+          media_type_symbol = '<i class="fas fa-video"></i>';
+        break;
+        case 'image':
+          media_type_symbol = '<i class="fas fa-image"></i>';
+        break;
+      }
 
       $('#sidebar_search_media_results tbody').append('\
         <tr class="sidebar_search_media_result" id="sidebar_search_media_result_'+media[i]['id']+'" data-mode="'+data_mode+'">\
-          <td class="sidebar_search_media_type" data-column="type">'+htmlspecialchars(media_type_symbol)+'</td>\
+          <td class="sidebar_search_media_type" data-column="type">'+media_type_symbol+'</td>\
           <td class="sidebar_search_media_artist" data-column="artist">'+htmlspecialchars(media[i]['artist'])+'</td>\
           <td class="sidebar_search_media_detailed_column hidden" data-column="album">'+htmlspecialchars(media[i]['album'])+'</td>\
           <td class="sidebar_search_media_title" data-column="title">'+htmlspecialchars(media[i]['title'])+'</td>\
@@ -564,41 +544,51 @@ OB.Sidebar.mediaSearch = function(pagination)
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-comments', media[i]['comments']);
 
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-is_copyright_owner', media[i]['is_copyright_owner']);
+      $('#sidebar_search_media_result_'+media[i]['id']).attr('data-is_public', media[i]['is_public']);
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-public_status', media[i]['status']);
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-dynamic_select', media[i]['dynamic_select']);
 
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-owner_id', media[i]['owner_id']);
+      $('#sidebar_search_media_result_'+media[i]['id']).attr('data-can_edit', media[i]['can_edit']);
 
       if(media[i]['is_archived']==1) $('#sidebar_search_media_result_'+media[i]['id']).attr('data-status', 'archived');
       else if(media[i]['is_approved']==0) $('#sidebar_search_media_result_'+media[i]['id']).attr('data-status', 'unapproved');
       else $('#sidebar_search_media_result_'+media[i]['id']).attr('data-status', 'approved');
 
+      // set custom metadata
+      $.each(OB.Settings.media_metadata, function(index, metadata)
+      {
+        $('#sidebar_search_media_result_'+media[i]['id']).attr('data-metadata_'+metadata.name, media[i]['metadata_'+metadata.name]);
+      });
+
       // remove our hidden class from detailed columns if we're in an expanded (detailed) view.
       if($('#sidebar_search').hasClass('sidebar_search_detailed')) $('.sidebar_search_media_detailed_column').show();
 
       // set up context menu
-
       var menuOptions = new Object();
 
-      menuOptions[OB.t('Common','Details')] = { click: function(element) { OB.Sidebar.contextMenuDetailsPage($(element).attr('data-id')); } };
-      if(OB.Sidebar.mediaCanEdit(media[i]['id'])) menuOptions[OB.t('Common','Edit')] = { click: function(element) { OB.Sidebar.contextMenuEditPage(); } };
-      if(OB.Settings.permissions.indexOf('download_media')!=-1) menuOptions[OB.t('Common','Download')] = { click: function(element){ OB.Sidebar.contextMenuDownload($(element).attr('data-id')); } };
+      //T Details
+      menuOptions[OB.t('Details')] = { klass: 'context-menu-media-item', click: function(element) { OB.Sidebar.contextMenuDetailsPage($(element).attr('data-id')); } };
+      if(media[i]['can_edit']=="true") menuOptions[OB.t('Edit')] = { klass: 'context-menu-media-item', click: function(element) { OB.Sidebar.contextMenuEditPage(); } };
+      //T Download
+      if(OB.Settings.permissions.indexOf('download_media')!=-1) menuOptions[OB.t('Download')] = { klass: 'context-menu-media-item', click: function(element){ OB.Sidebar.contextMenuDownload($(element).attr('data-id')); } };
+      //T Versions
+      if(media[i]['can_edit']=="true" && OB.Settings.permissions.indexOf('manage_media_versions')!=-1) menuOptions[OB.t('Versions')] = { klass: 'context-menu-media-item', click: function(element) { OB.Sidebar.contextMenuVersionPage($(element).attr('data-id'), $(element).attr('data-title')); } };
 
       if(Object.keys(menuOptions).length>0)
       {
-
-        $('#sidebar_search_media_result_'+media[i]['id']).contextMenu('context-menu-'+media[i]['id'],
-
+        $('#sidebar_search_media_result_'+media[i]['id']).contextMenu('context-menu-media-'+media[i]['id'],
             menuOptions,
-
             {
               disable_native_context_menu: false,
               showMenu: function(element) { $(element).click(); },
               hideMenu: function() { },
               leftClick: false // trigger on left click instead of right click
             });
-
       }
+
+      // double click loads detail
+      $('#sidebar_search_media_result_'+media[i]['id']).dblclick(function() { OB.Sidebar.contextMenuDetailsPage($(this).attr('data-id')); });
 
     }
 
@@ -612,7 +602,7 @@ OB.Sidebar.mediaSearch = function(pagination)
     else OB.Sidebar.media_search_last_advanced = search_query;
 
     if(data.status!=false && media.length>0) {
-      $('.sidebar_search_media_result').draggable({helper: 'clone', opacity: 0.8, cursor: 'crosshair',
+      $('.sidebar_search_media_result').not('.ui-draggable').draggable({helper: 'clone',
         start: function(event, ui) {
 
           var keypress = null;
@@ -627,10 +617,11 @@ OB.Sidebar.mediaSearch = function(pagination)
 
           var num_selected = $('.sidebar_search_media_selected').size();
 
-          if(num_selected==1) var helper_text = $(ui.helper).attr('data-artist') + ' - ' + $(ui.helper).attr('data-title');
-          else var helper_text = num_selected+' items';
-
-          $(ui.helper).html('<div class="sidebar_dragging_items">'+htmlspecialchars(helper_text)+'</div>');
+          if(num_selected==1) var helper_html = htmlspecialchars($(ui.helper).attr('data-artist')) + '<br>' + htmlspecialchars($(ui.helper).attr('data-title'));
+          else var helper_html = htmlspecialchars(num_selected+' items');
+          
+          $(ui.helper).html('');
+          OB.UI.dragHelperOn(helper_html);
 
           var data_status = $(ui.helper).attr('data-status');
 
@@ -646,6 +637,8 @@ OB.Sidebar.mediaSearch = function(pagination)
         },
 
         stop: function(event, ui) {
+
+          OB.UI.dragHelperOff();
 
           var data_status = $(ui.helper).attr('data-status');
 
@@ -667,6 +660,9 @@ OB.Sidebar.mediaSearch = function(pagination)
 
     OB.Sidebar.mediaEditDeleteVisibility();
 
+    // show/hide loadmore as necessary, hide loading
+    $('#sidebar_search_media_loadmore').toggle( $('.sidebar_search_media_result').length < num_results );
+    $('#sidebar_search_media_loading').hide();
   });
 
 }
@@ -684,6 +680,11 @@ OB.Sidebar.contextMenuDownload = function(id)
 OB.Sidebar.contextMenuDetailsPage = function(id)
 {
   OB.Media.detailsPage(id);
+}
+
+OB.Sidebar.contextMenuVersionPage = function(id, title)
+{
+  OB.Media.versionPage(id, title);
 }
 
 OB.Sidebar.contextMenuPlaylistEditPage = function()
@@ -706,8 +707,9 @@ OB.Sidebar.playlistSearchFilter = function(what)
   // toggle on off
   if(what=='my') OB.Sidebar.playlist_search_filters.my = !OB.Sidebar.playlist_search_filters.my;
 
-  if(OB.Sidebar.playlist_search_filters.my==true) $('#sidebar_search_playlist_my').text(OB.t('Sidebar','My Filter Link').toUpperCase());
-  else $('#sidebar_search_playlist_my').text(OB.t('Sidebar','My Filter Link').toLowerCase());
+  //T my
+  if(OB.Sidebar.playlist_search_filters.my==true) $('#sidebar_search_playlist_my').text(OB.t('my').toUpperCase());
+  else $('#sidebar_search_playlist_my').text(OB.t('my').toLowerCase());
 
   // reload search
   OB.Sidebar.playlistSearch();
@@ -769,78 +771,31 @@ OB.Sidebar.playlistSelect = function(object,dragging,keypress)
 
 }
 
-// determine whether user can edit media (id).
-OB.Sidebar.playlistCanEdit = function(id)
-{
-
-  if(OB.Settings.permissions.indexOf('manage_playlists')!=-1) return true;
-
-  else if(OB.Settings.permissions.indexOf('create_own_playlists')==-1) return false;
-
-  else if($('#sidebar_search_playlist_result_'+id).attr('data-owner_id')==OB.Account.user_id) return true;
-
-  return false;
-
-}
-
 // adjust the visibility of the playlist edit / delete buttons.
 OB.Sidebar.playlistEditDeleteVisibility = function()
 {
-
   // default to true.
   var visible = true;
 
   // if there is nothing selected, then we can't edit or delete.
   if($('#sidebar_search_playlist_results tbody .sidebar_search_playlist_selected').length==0) visible = false;
 
-  // if we can manage playlists, then we can always edit/delete.
-  else if(OB.Settings.permissions.indexOf('manage_playlists')!=-1) visible = true;
-
-  // if we can't edit our own playlists either, then we definitely can't edit/delete.
-  else if(OB.Settings.permissions.indexOf('create_own_playlists')==-1) visible = false;
-
-  // otherwise, we have to go through each seleted item to see if we can edit/delete.
-  else
+  // check to make sure we can edit all selected items
+  $('#sidebar_search_playlist_results tbody .sidebar_search_playlist_selected').each(function(index,element)
   {
-
-    $('#sidebar_search_playlist_results tbody .sidebar_search_playlist_selected').each(function(index,element)
-    {
-      if(!OB.Sidebar.playlistCanEdit($(element).attr('data-id'))) { visible = false; return false; }
-    });
-
-  }
+    if($(element).attr('data-can_edit')!="true") { visible = false; }
+  });
 
   if(visible) { $('#sidebar_playlist_edit_button').show(); $('#sidebar_playlist_delete_button').show(); }
   else { $('#sidebar_playlist_edit_button').hide(); $('#sidebar_playlist_delete_button').hide(); }
-
 }
 
 OB.Sidebar.playlist_search_offset = 0;
 
-OB.Sidebar.playlistSearchPageNext = function()
+OB.Sidebar.playlistSearchMore = function()
 {
-
-  var num_results = $('#sidebar_search_playlist_results').attr('data-num_results');
-
-  if(num_results <= OB.Sidebar.playlist_search_offset + OB.ClientStorage.get('results_per_page'))
-  {
-    return;
-  }
-
   OB.Sidebar.playlist_search_offset += OB.ClientStorage.get('results_per_page');
   OB.Sidebar.playlistSearch(true);
-
-}
-
-OB.Sidebar.playlistSearchPagePrevious = function()
-{
-
-  if(OB.Sidebar.playlist_search_offset == 0) return;
-
-  OB.Sidebar.playlist_search_offset -= OB.ClientStorage.get('results_per_page');
-  if(OB.Sidebar.playlist_search_offset<0) OB.Sidebar.playlist_search_offset = 0;
-  OB.Sidebar.playlistSearch(true);
-
 }
 
 OB.Sidebar.playlist_search_sort_by = 'updated';
@@ -862,52 +817,43 @@ OB.Sidebar.playlistSearchSort = function(sortby)
 
 }
 
-OB.Sidebar.playlistSearch = function(pagination)
+OB.Sidebar.playlistSearch = function(more)
 {
 
   // if not the result of pagination (new search), reset offset to 0
-  if(!pagination)
+  if(!more)
   {
     OB.Sidebar.playlist_search_offset = 0;
+    $('.context-menu-playlist-item:first-child').parent().remove();
   }
 
   $('#sidebar_search_playlist_headings').show();
+
+  $('#sidebar_search_playlist_loading').show();
+  $('#sidebar_search_playlist_loadmore').hide();
 
   OB.API.post('playlist','playlist_search',{ sort_by: OB.Sidebar.playlist_search_sort_by, sort_dir: OB.Sidebar.playlist_search_sort_dir, q: $('#sidebar_search_playlist_input').val(), l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.playlist_search_offset, my: OB.Sidebar.playlist_search_filters.my },function (data) {
 
     var playlist = data.data.playlists;
     var num_results = data.data.num_results;
 
-    // update pagination
-    if(OB.Sidebar.playlist_search_offset > 0) var pagination_previous = true;
-    else var pagination_previous = false;
-
-    if(num_results > OB.Sidebar.playlist_search_offset + OB.ClientStorage.get('results_per_page')) { var pagination_next = true; }
-    else var pagination_next = false;
-
-    if(pagination_previous) $('#sidebar_search_playlist_pagination_previous a').removeClass('disabled');
-    else $('#sidebar_search_playlist_pagination_previous a').addClass('disabled');
-
-    if(pagination_next) $('#sidebar_search_playlist_pagination_next a').removeClass('disabled');
-    else $('#sidebar_search_playlist_pagination_next a').addClass('disabled');
-
     // handle results
     $('#sidebar_search_playlist_results').attr('data-num_results',num_results);
 
-    $('#sidebar_search_playlist_results tbody').html('');
+    if(!more) $('#sidebar_search_playlist_results tbody').html('');
 
     if(num_results == 0)
     {
       $('#sidebar_search_playlist_results tbody').html('<tr><td colspan="3" class="sidebar_search_noresults"></td></tr>');
-      $('#sidebar_search_playlist_results tbody .sidebar_search_noresults').text(OB.t('Sidebar','No Playlists Found'));
+      //T No Playlists Found
+      $('#sidebar_search_playlist_results tbody .sidebar_search_noresults').text(OB.t('No Playlists Found'));
     }
 
-    if(num_results==1) num_results_text = OB.t('Sidebar','Playlist Found');
-    else num_results_text = OB.t('Sidebar','Playlists Found',num_results);
-
+    //T 1 result
+    //T %1 results
+    if(num_results==1) num_results_text = OB.t('1 result');
+    else num_results_text = OB.t('%1 results', format_number(num_results));
     $('#sidebar_search_playlist_footer .results .num_results').html(num_results_text);
-
-
 
     for(var i in playlist)
     {
@@ -941,34 +887,36 @@ OB.Sidebar.playlistSearch = function(pagination)
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-description', playlist[i]['description']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-status', playlist[i]['status']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-owner_id', playlist[i]['owner_id']);
+      $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-can_edit', playlist[i]['can_edit']);
 
       // set up context menu
-
       var menuOptions = new Object();
 
-      menuOptions[OB.t('Common','Details')] = { click: function(element) { OB.Sidebar.contextMenuPlaylistDetailsPage($(element).attr('data-id')); } };
-      if(OB.Sidebar.playlistCanEdit(playlist[i]['id'])) menuOptions[OB.t('Common','Edit')] = { click: function(element) { OB.Sidebar.contextMenuPlaylistEditPage(); } };
+      //T Details
+      menuOptions[OB.t('Details')] = { klass: 'context-menu-playlist-item', click: function(element) { OB.Sidebar.contextMenuPlaylistDetailsPage($(element).attr('data-id')); } };
+      //T Edit
+      if(playlist[i]['can_edit']) menuOptions[OB.t('Edit')] = { klass: 'context-menu-playlist-item', click: function(element) { OB.Sidebar.contextMenuPlaylistEditPage(); } };
 
       if(Object.keys(menuOptions).length>0)
       {
-
-        $('#sidebar_search_playlist_result_'+playlist[i]['id']).contextMenu('context-menu-'+playlist[i]['id'],
-
-            menuOptions,
-
-            {
-              disable_native_context_menu: false,
-              showMenu: function(element) { $(element).click(); },
-              hideMenu: function() { },
-              leftClick: false // trigger on left click instead of right click
-            });
-
+        $('#sidebar_search_playlist_result_'+playlist[i]['id']).contextMenu('context-menu-playlist-'+playlist[i]['id'],
+          menuOptions,
+          {
+            disable_native_context_menu: false,
+            showMenu: function(element) { $(element).click(); },
+            hideMenu: function() { },
+            leftClick: false // trigger on left click instead of right click
+          }
+        );
       }
+
+      // double click loads details page
+      $('#sidebar_search_playlist_result_'+playlist[i]['id']).dblclick(function() { OB.Sidebar.contextMenuPlaylistDetailsPage($(this).attr('data-id')); });
 
     }
 
     if(playlist.length>0) {
-      $('.sidebar_search_playlist_result').draggable({helper: 'clone', opacity: 0.8, cursor: 'crosshair',
+      $('.sidebar_search_playlist_result').not('.ui-draggable').draggable({helper: 'clone',
         start: function(event, ui) {
 
           var keypress = null;
@@ -983,10 +931,11 @@ OB.Sidebar.playlistSearch = function(pagination)
 
           var num_selected = $('.sidebar_search_playlist_selected').size();
 
-          if(num_selected==1) var helper_text = $(ui.helper).attr('data-name');
-          else var helper_text = num_selected+' items';
+          if(num_selected==1) var helper_html = htmlspecialchars($(ui.helper).attr('data-name'));
+          else var helper_html = htmlspecialchars(num_selected+' items');
 
-          $(ui.helper).html('<div class="sidebar_dragging_items">'+htmlspecialchars(helper_text)+'</div>');
+          $(ui.helper).html('');
+          OB.UI.dragHelperOn(helper_html);
 
           $('.droppable_target_playlist').addClass('droppable_target_highlighted');
 
@@ -994,6 +943,7 @@ OB.Sidebar.playlistSearch = function(pagination)
 
         stop: function(event, ui) {
           $('.droppable_target_playlist').removeClass('droppable_target_highlighted');
+          OB.UI.dragHelperOff();
         }
       });
 
@@ -1002,6 +952,9 @@ OB.Sidebar.playlistSearch = function(pagination)
 
     OB.Sidebar.playlistEditDeleteVisibility();
 
+    // show/hide loadmore as necessary, hide loading
+    $('#sidebar_search_playlist_loadmore').toggle( $('.sidebar_search_playlist_result').length < num_results );
+    $('#sidebar_search_playlist_loading').hide();
   });
 
 }
@@ -1058,6 +1011,7 @@ OB.Sidebar.mySearchesSave = function()
       OB.Sidebar.mySearchesItemContextMenu($('.my_searches_item[data-id='+id+']'),'saved');
       OB.Sidebar.mySearchesNosearchtext();
     }
+    //T An error occurred while trying to save this search item.
     else OB.UI.alert('An error occurred while trying to save this search item.');
   });
 }
@@ -1075,6 +1029,7 @@ OB.Sidebar.mySearchesDelete = function()
       $('.my_searches_item[data-id='+id+']').remove();
       OB.Sidebar.mySearchesNosearchtext();
     }
+    //T An error occurred while trying to delete this search item.
     else OB.UI.alert('An error occurred while trying to delete this search item.');
   });
 }
@@ -1137,7 +1092,8 @@ OB.Sidebar.mySearchesWindowAddItem = function(data,type)
 
   OB.Sidebar.mySearchesItemContextMenu($('#my_searches_item_'+data.id), type);
 
-  if(data.default=='1') $('#my_searches_item_'+data.id).append('<div class="media_search_item_default_text">All simple searches will include these filters by default.</div>');
+  //T All simple searches will include these filters by default.
+  if(data.default=='1') $('#my_searches_item_'+data.id).append('<div class="media_search_item_default_text">' + OB.t('All simple searches will include these filters by default.') + '</div>');
 
   if(type=='saved' && data.description!='')
   {
@@ -1170,8 +1126,10 @@ OB.Sidebar.mySearchesMakeDefault = function()
     if(response.status==true)
     {
       $('.media_search_item_default_text').remove();
-      $('.my_searches_item[data-id='+id+']').prepend('<div class="media_search_item_default_text">All simple searches will include these filters by default.</div>');
+      //T All simple searches will include these filters by default.
+      $('.my_searches_item[data-id='+id+']').prepend('<div class="media_search_item_default_text">' + OB.t('All simple searches will include these filters by default.') + '</div>');
     }
+    //T An error occurred while trying to make this search the default.
     else OB.UI.alert('An error occurred while trying to make this search the default.');
   });
 }
@@ -1184,6 +1142,7 @@ OB.Sidebar.mySearchesUnsetDefault = function()
     {
       $('.media_search_item_default_text').remove();
     }
+    //T An error occurred while trying to unset the default search.
     else OB.UI.alert('An error occurred while trying to unset the default search.');
   });
 }
@@ -1196,7 +1155,7 @@ OB.Sidebar.mySearchesEditWindow = function()
   var filters = $('#my_searches_item_'+id).data('filters');
   var description = $('#my_searches_item_'+id).data('description');
 
-  OB.UI.openModalWindow('sidebar/advanced_search.html');
+  OB.Sidebar.advancedSearchWindowInit();
 
   // switch to 'edit my search item' mode.
   $('#layout_modal_window .advanced_search_item').hide();
@@ -1221,7 +1180,8 @@ OB.Sidebar.mySearchesEdit = function()
 
   if(postfields.filters.length<1)
   {
-    $('#advanced_search_message').obWidget('error','Add at least one search filter is required.');
+    //T Adding at least one search filter is required.
+    $('#advanced_search_message').obWidget('error','Adding at least one search filter is required.');
     return;
   }
 
@@ -1237,33 +1197,67 @@ OB.Sidebar.mySearchesEdit = function()
   });
 }
 
+OB.Sidebar.advancedSearchWindowInit = function()
+{
+  
+  // refresh settings and then load window
+  OB.Settings.getSettings(function() {
 
+    OB.UI.openModalWindow('sidebar/advanced_search.html');
+
+    $.each(OB.Settings.categories,function(index,category)
+    {
+      $('#advanced_search_category_options').append('<option value="'+category.id+'">'+htmlspecialchars(category.name)+'</option>');
+    });
+
+    $.each(OB.Settings.countries,function(index,country)
+    {
+      $('#advanced_search_country_options').append('<option value="'+country.id+'">'+htmlspecialchars(country.name)+'</option>');
+    });
+
+    $.each(OB.Settings.genres,function(index,genre)
+    {
+      $('#advanced_search_genre_options').append('<option value="'+genre.id+'">'+htmlspecialchars(genre.name)+'</option>');
+    });
+
+    $.each(OB.Settings.languages,function(index,language)
+    {
+      $('#advanced_search_language_options').append('<option value="'+language.id+'">'+htmlspecialchars(language.name)+'</option>');
+    });
+
+    $.each(OB.Settings.media_metadata,function(index,metadata)
+    {
+      $metadata = $('<option></option>').text(metadata.description).attr('value','metadata_'+metadata.name);
+
+      if(metadata.type=='text' || metadata.type=='textarea') $metadata.attr('data-compare','text').attr('data-value','text');
+      else if(metadata.type=='bool') $metadata.attr('data-compare','select').attr('data-value','bool');
+      else if(metadata.type=='tags') 
+      {
+        $metadata.attr('data-compare','tags').attr('data-value','metadata_'+metadata.name);
+        var $select = $('<select></select>').attr('data-type','value').attr('data-name','metadata_'+metadata.name).addClass('hidden');
+        $.each(metadata.settings.all, function(index,option) { $select.append($('<option></option>').text(option)); });
+        $('#advanced_search_bool_options').after($select);
+      }
+      else if(metadata.type=='select')
+      {
+        $metadata.attr('data-compare','select').attr('data-value','metadata_'+metadata.name);
+        var $select = $('<select></select>').attr('data-type','value').attr('data-name','metadata_'+metadata.name).addClass('hidden');
+        $.each(metadata.settings.options, function(index,option) { $select.append($('<option></option>').text(option)); });
+        $('#advanced_search_bool_options').after($select);
+      }
+
+      $('#advanced_search_filter').append($metadata);
+    });
+
+    $('#advanced_search_value').focus();
+  
+  });
+
+}
 
 OB.Sidebar.advancedSearchWindow = function()
 {
-  OB.UI.openModalWindow('sidebar/advanced_search.html');
-
-  $.each(OB.Settings.categories,function(index,category)
-  {
-    $('#advanced_search_category_options').append('<option value="'+category.id+'">'+htmlspecialchars(category.name)+'</option>');
-  });
-
-  $.each(OB.Settings.countries,function(index,country)
-  {
-    $('#advanced_search_country_options').append('<option value="'+country.id+'">'+htmlspecialchars(country.name)+'</option>');
-  });
-
-  $.each(OB.Settings.genres,function(index,genre)
-  {
-    $('#advanced_search_genre_options').append('<option value="'+genre.id+'">'+htmlspecialchars(genre.name)+'</option>');
-  });
-
-  $.each(OB.Settings.languages,function(index,language)
-  {
-    $('#advanced_search_language_options').append('<option value="'+language.id+'">'+htmlspecialchars(language.name)+'</option>');
-  });
-
-  $('#advanced_search_value').focus();
+  OB.Sidebar.advancedSearchWindowInit();
 
   if(OB.Sidebar.media_search_last_advanced)
   {
@@ -1297,31 +1291,15 @@ OB.Sidebar.advancedSearchWindow = function()
 
 OB.Sidebar.advancedSearchFilterChange = function()
 {
+  $('.advanced_search [data-type=compare]').hide();
+  $('.advanced_search [data-type=value]').hide();
 
-  $('#advanced_search_value').hide();
+  var $filter = $('#advanced_search_filter').find(':selected');
+  var compare = $filter.attr('data-compare'); // which compare field to use
+  var value = $filter.attr('data-value'); // which value field to use
 
-  $('#advanced_search_year_options').hide();
-  $('#advanced_search_duration_options').hide();
-  $('#advanced_search_type_options').hide();
-  $('#advanced_search_category_options').hide();
-  $('#advanced_search_country_options').hide();
-  $('#advanced_search_language_options').hide();
-  $('#advanced_search_genre_options').hide();
-  $('#advanced_search_text_options').hide();
-  $('#advanced_search_bool_options').hide();
-
-  var val = $('#advanced_search_filter').val();
-
-  if(val=='year') { $('#advanced_search_year_options').show(); $('#advanced_search_value').show(); $('#advanced_search_value').attr('size',10); }
-  else if(val=='duration') { $('#advanced_search_duration_options').show(); $('#advanced_search_value').show(); $('#advanced_search_value').attr('size',10); }
-  else if(val=='type') { $('#advanced_search_bool_options').show(); $('#advanced_search_type_options').show(); }
-  else if(val=='category') { $('#advanced_search_bool_options').show(); $('#advanced_search_category_options').show(); }
-  else if(val=='country') { $('#advanced_search_bool_options').show(); $('#advanced_search_country_options').show(); }
-  else if(val=='language') { $('#advanced_search_bool_options').show(); $('#advanced_search_language_options').show(); }
-  else if(val=='genre') { $('#advanced_search_bool_options').show(); $('#advanced_search_genre_options').show(); }
-  else if(val=='is_copyright_owner') { $('#advanced_search_bool_options').show(); $('#advanced_search_is_copyright_owner_options').show(); }
-  else { $('#advanced_search_text_options').show(); $('#advanced_search_value').show(); $('#advanced_search_value').attr('size',25); }
-
+  $('.advanced_search [data-type=compare][data-name='+compare+']').show();
+  $('.advanced_search [data-type=value][data-name='+value+']').show();
 }
 
 OB.Sidebar.advanced_search_filter_id = 0;
@@ -1329,94 +1307,55 @@ OB.Sidebar.advanced_search_filter_id = 0;
 OB.Sidebar.advancedSearchAdd = function(filter_data)
 {
 
-  if (filter_data) {
-
+  if(filter_data)
+  {
     OB.Sidebar.advanced_search_filter_id++;
     var filter_description = filter_data.description;
     var op = filter_data.op;
     var val = filter_data.val;
     var filter = filter_data.filter;
 
-  } else {
-
+  }
+  else
+  {
+    var $filter = $('#advanced_search_filter option:selected');
     var filter = $('#advanced_search_filter').val();
-    var filter_name = $('#advanced_search_filter option:selected').first().text();
+    var filter_name = $filter.text();
 
-    var text_input_val = $.trim($('#advanced_search_value').val());
+    var compare_field = $filter.attr('data-compare');
+    var value_field = $filter.attr('data-value');
+
+    var $op = $('.advanced_search [data-type=compare][data-name='+compare_field+'] option:selected');
+    var op = $op.val();
+    var op_name = $op.text();
+
+    var $val = $('.advanced_search [data-type=value][data-name='+value_field+']');
+    var val = $val.val();
+    if($val.prop('nodeName')=='SELECT') var val_name = $val.find('option:selected').text();
 
     // some basic validation
-    if ((filter == 'artist' || filter == 'album' || filter == 'title') && text_input_val == '') {
+    if ((filter == 'artist' || filter == 'album' || filter == 'title') && val == '') {
 
       $('#advanced_search_message').obWidget('error',filter_name + ' text required.');
 
       return false;
     }
 
-    if ((filter == 'year' || filter == 'duration') && text_input_val.match(/^[0-9]+$/) === null) {
-
-
-      $('#advanced_search_message').obWidget('error','A valid ' + filter_name.toLowerCase() + ' is required.');
-
+    if ((filter == 'year' || filter == 'duration') && val.match(/^[0-9]+$/) === null) {
+      $('#advanced_search_message').obWidget('error',['A valid %1 is required', filter_name.toLowerCase()]);
       return false;
     }
-
-    if (filter == 'year' && text_input_val > 2100) {
-
-      $('#advanced_search_message').obWidget('error','A valid year is required.');
-      return false;
-    }
-
 
     $('#advanced_search_no_criteria').hide();
     OB.Sidebar.advanced_search_filter_id++;
 
     var filter_description = filter_name;
 
-    if (filter == 'artist' || filter == 'album' || filter == 'title' || filter == 'comments') {
-
-      var op = $('#advanced_search_text_options').val();
-      var op_name = $('#advanced_search_text_options option:selected').first().text();
-
-      var val = text_input_val;
-
-      filter_description += ' ' + op_name + ' "' + val + '"';
-
-    }
-
-    else if (filter == 'year') {
-
-      var op = $('#advanced_search_year_options').val();
-      var op_name = $('#advanced_search_year_options option:selected').first().text();
-
-      var val = text_input_val;
-
-      filter_description += ' ' + op_name + ' ' + val;
-
-    }
-
-    else if (filter == 'duration') {
-
-      var op = $('#advanced_search_duration_options').val();
-      var op_name = $('#advanced_search_duration_options option:selected').first().text();
-
-      var val = text_input_val;
-
-      filter_description += ' ' + op_name + ' ' + val + ' seconds';
-
-    }
-
-    else {
-
-      var op = $('#advanced_search_bool_options').val();
-      var op_name = $('#advanced_search_bool_options option:selected').first().text();
-
-      var val = $('#advanced_search_' + filter + '_options').val();
-      var val_name = $('#advanced_search_' + filter + '_options option:selected').first().text();
-
-      filter_description += ' ' + op_name + ' "' + val_name + '"';
-
-    }
-
+    if(compare_field=='select') filter_description += ' ' + op_name + ' ' + val_name;
+    else if(compare_field=='number') filter_description += ' ' + op_name + ' ' + val;
+    //T seconds
+    else if(compare_field=='duration') filter_description += ' ' + op_name + ' ' + val + ' ' + OB.t('seconds');
+    else filter_description += ' ' + op_name + ' "' + val + '"';
   }
 
   $('#advanced_search_criteria_list').prepend(
@@ -1431,7 +1370,6 @@ OB.Sidebar.advancedSearchAdd = function(filter_data)
   $(filter_div).attr('data-filter',filter);
   $(filter_div).attr('data-op',op);
   $(filter_div).attr('data-val',val);
-
 }
 
 OB.Sidebar.advancedSearchRemove = function(id)
@@ -1452,7 +1390,8 @@ OB.Sidebar.advancedSearch = function()
 
   if(filters.length<1)
   {
-    $('#advanced_search_message').obWidget('error','Add at least one search filter is required.');
+    //T Adding at least one search filter is required.
+    $('#advanced_search_message').obWidget('error','Adding at least one search filter is required.');
     return;
   }
 
@@ -1477,4 +1416,3 @@ OB.Sidebar.advancedSearchGetFilters = function()
 
   return filters;
 }
-

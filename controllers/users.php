@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -30,9 +30,21 @@ class Users extends OBFController
     $this->UsersModel = $this->load->model('users');
   }
 
-  public function user_list()
+  public function user_registration_set()
   {
-    $this->user->require_permission('manage_users or manage_schedule_permissions:*');
+    $this->user->require_permission('manage_users');
+    
+    $this->UsersModel->user_registration_set( $this->data('user_registration') );
+    return array(true,'User registration set.');
+  }
+  
+  public function user_registration_get()
+  {
+    return array(true,'User registration.',$this->UsersModel->user_registration_get());
+  }
+
+  public function user_list()
+  { 
     $users = $this->UsersModel('user_list');
     return array(true,'User list.',$users);
   }
@@ -44,10 +56,16 @@ class Users extends OBFController
     $sort_col = $this->data('sort_col');
     $sort_desc = $this->data('sort_desc');
 
-    if(array_search($sort_col,array('display_name','email','created','last_access'))===false) $sort_col='display_name';
+    // store sort settings for future display.
+    if($sort_col) $this->UsersModel('user_manage_list_set_sort',$sort_col,$sort_desc);
+    
+    // get sort settings (even if we already have them since the above will validate)
+    $sort = $this->UsersModel('user_manage_list_get_sort');
+    $sort_col = $sort[0];
+    $sort_desc = $sort[1];
 
     $users = $this->UsersModel('user_manage_list',$sort_col,($sort_desc ? 'desc' : 'asc'));
-    return array(true,'User list.',$users);
+    return array(true,'User list.',[$users,$sort_col,$sort_desc]);
   }
 
   public function user_manage_addedit()
@@ -92,8 +110,8 @@ class Users extends OBFController
 
   public function group_list()
   {
-    $this->user->require_permission('manage_users or manage_permissions');
-    $groups = $this->UsersModel('group_list');
+    $hide_permissions = !$this->user->check_permission('manage_users or manage_permissions');
+    $groups = $this->UsersModel('group_list', $hide_permissions);
     return array(true,'Group list.',$groups);
   }
 

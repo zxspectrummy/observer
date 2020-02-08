@@ -1,7 +1,7 @@
 <?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -59,13 +59,13 @@ class SchedulesPermissionsModel extends OBFModel
     }
 
     // fill in recurring data
-    $this->db->query('SELECT schedules_permissions_recurring.*,users.display_name AS user, schedules_permissions_recurring_expanded.start as single_start FROM schedules_permissions_recurring_expanded 
+    $this->db->query('SELECT schedules_permissions_recurring.*,users.display_name AS user, schedules_permissions_recurring_expanded.start as single_start FROM schedules_permissions_recurring_expanded
                         LEFT JOIN schedules_permissions_recurring ON schedules_permissions_recurring_expanded.recurring_id = schedules_permissions_recurring.id
                         LEFT JOIN users ON users.id = schedules_permissions_recurring.user_id
                         WHERE schedules_permissions_recurring.device_id = "'.$this->db->escape($device).'" AND
                         schedules_permissions_recurring_expanded.end > "'.$this->db->escape($start).'" AND
                         schedules_permissions_recurring_expanded.start < "'.$this->db->escape($end).'"'
-                        .($not_entry && $not_entry['recurring'] ? ' AND schedules_permissions_recurring.id!= '.$not_entry['id'] : '') 
+                        .($not_entry && $not_entry['recurring'] ? ' AND schedules_permissions_recurring.id!= '.$not_entry['id'] : '')
                         .(!empty($user_id) ? ' AND schedules_permissions_recurring.user_id = "'.$this->db->escape($user_id).'"' : '')
                     );
 
@@ -127,35 +127,43 @@ class SchedulesPermissionsModel extends OBFModel
     // make sure data is valid.
     if($data['description']=='' || empty($data['device_id']) || empty($data['user_id']) || empty($data['mode']) || empty($data['start']) ||
         ( empty($data['x_data']) && ( $data['mode']=='xdays' || $data['mode']=='xweeks' || $data['mode']=='xmonths' )) || ($data['mode']!='once' && empty($data['stop'])))
-        return array(false,'Required Field Missing');
+        //T One or more required fields were not filled.
+        return array(false,'One or more required fields were not filled.');
 
     // check if user is valid.
-    if(!$this->db->id_exists('users',$data['user_id'])) return array(false,'User Does Not Exist');
+    //T The user you have selected does not exist.
+    if(!$this->db->id_exists('users',$data['user_id'])) return array(false,'The user you have selected does not exist.');
 
     // check if device is valid.
     $this->db->where('id',$data['device_id']);
     $device_data = $this->db->get_one('devices');
 
-    if(!$device_data) return array(false,'Device Does Not Exist');
+    //T The player you have selected does not exist.
+    if(!$device_data) return array(false,'The player you have selected does not exist.');
 
     // set our timezone based on device settings.  this makes sure 'strtotime' advancing by days, weeks, months will account for DST propertly.
     date_default_timezone_set($device_data['timezone']);
 
     // check valid scheduling mode
     if(array_search($data['mode'],array('once','daily','weekly','monthly','xdays','xweeks','xmonths'))===false)
-      return array(false,'Scheduling Mode Not Valid');
+      //T The selected scheduling mode is not valid.
+      return array(false,'The selected scheduling mode is not valid.');
 
     // check if start date is valid.
-    if(!preg_match('/^[0-9]+$/',$data['start'])) return array(false,'Start Date/Time Not Valid');
+    //T The start date/time is not valid.
+    if(!preg_match('/^[0-9]+$/',$data['start'])) return array(false,'The start date/time is not valid.');
 
     // check if the stop date is valid.
-    if($data['mode']!='once' && !preg_match('/^[0-9]+$/',$data['stop'])) return array(false,'Stop Date/Time Not Valid');
+    //T The stop (last) date is not valid and must come after the start date/time.
+    if($data['mode']!='once' && !preg_match('/^[0-9]+$/',$data['stop'])) return array(false,'The stop (last) date is not valid and must come after the start date/time.');
 
-    if($data['mode']!='once' && $data['start']>=$data['stop']) return array(false,'Stop Date/Time Not Valid');
+    //T The stop (last) date is not valid and must come after the start date/time.
+    if($data['mode']!='once' && $data['start']>=$data['stop']) return array(false,'The stop (last) date is not valid and must come after the start date/time.');
 
     // check if x data is valid.
     if(!empty($data['x_data']) && (!preg_match('/^[0-9]+$/',$data['x_data']) || $data['x_data']>65535))
-      return array(false,'Recurring Frequency Not Valid');
+      //T The recurring frequency is not valid.
+      return array(false,'The recurring frequency is not valid.');
 
 
     return array(true,'Valid');
@@ -168,7 +176,7 @@ class SchedulesPermissionsModel extends OBFModel
     $duration = $data['duration'];
 
     // does this collide with another permission?
-    if(!empty($id)) $not_entry = array('id'=>$id,'recurring'=>$edit_recurring); 
+    if(!empty($id)) $not_entry = array('id'=>$id,'recurring'=>$edit_recurring);
     else $not_entry = false;
 
     $collision_check = array();
@@ -178,13 +186,18 @@ class SchedulesPermissionsModel extends OBFModel
     else
     {
 
-      if($duration > 2419200) return array(false,'Recurring Permission Too Long');
+      //T Recurring permissions cannot be longer than 28 days.
+      if($duration > 2419200) return array(false,'Recurring permissions cannot be longer than 28 days.');
 
       // this is a recurring item.  make sure we don't collide with ourselves.
-      if($data['mode']=='daily' && $duration > 86400) return array(false,'Daily Permission Too Long');
-      if($data['mode']=='weekly' && $duration > 604800) return array(false,'Weekly Permission Too Long');
-      if($data['mode']=='xdays' && $duration > 86400*$data['x_data']) return array(false,'XDay Permission Too Long');
-      if($data['mode']=='xweeks' && $duration > 604800*$data['x_data']) return array(false,'XWeek Permission Too Long');
+      //T A permission scheduled daily cannot be longer than a day.
+      if($data['mode']=='daily' && $duration > 86400) return array(false,'A permission scheduled daily cannot be longer than a day.');
+      //T A permission scheduled weekly cannot be longer than a week.
+      if($data['mode']=='weekly' && $duration > 604800) return array(false,'A permission scheduled weekly cannot be longer than a week.');
+      //T A scheduled permission cannot be longer than its frequency.
+      if($data['mode']=='xdays' && $duration > 86400*$data['x_data']) return array(false,'A scheduled permission cannot be longer than its frequency.');
+      //T A scheduled permission cannot be longer than its frequency.
+      if($data['mode']=='xweeks' && $duration > 604800*$data['x_data']) return array(false,'A scheduled permission cannot be longer than its frequency.');
 
       // this is a recurring item.  determine the times to use for collision checks.
       if($data['mode']=='daily' || $data['mode']=='weekly' || $data['mode']=='monthly') $interval = '+1';
@@ -201,18 +214,19 @@ class SchedulesPermissionsModel extends OBFModel
 
         $collision_check[]=$tmp_time;
         $tmp_time = strtotime($interval,$tmp_time);
-    
+
       }
 
     }
 
-    foreach($collision_check as $check) 
+    foreach($collision_check as $check)
     {
 
       $collision_data = $this('get_permissions',$check,$check + $duration, $data['device_id'], $not_entry);
 
-      // if(!is_array($collision_data) || count($collision_data)>0) return array(false,'This permission conflicts with another on the schedule ('.date('M j, Y',$collision_data[0]['start']).').'.print_r($collision_data,true).' '.$check.' '.($check+$duration)); 
-      if(!is_array($collision_data) || count($collision_data)>0) return array(false,'Permission Conflict');  
+      // if(!is_array($collision_data) || count($collision_data)>0) return array(false,'This permission conflicts with another on the schedule ('.date('M j, Y',$collision_data[0]['start']).').'.print_r($collision_data,true).' '.$check.' '.($check+$duration));
+      //T This permission conflicts with another on the schedule.
+      if(!is_array($collision_data) || count($collision_data)>0) return array(false,'This permission conflicts with another on the schedule.');
 
     }
 
@@ -285,12 +299,12 @@ class SchedulesPermissionsModel extends OBFModel
         $this->db->insert('schedules_permissions_recurring_expanded',$expanded_data);
 
         $tmp_time = strtotime($interval,$tmp_time);
-    
+
       }
 
     }
 
-    else 
+    else
     {
       $dbdata['end']=$dbdata['start']+$dbdata['duration']; // we also add 'end' data, which is used to speed up permission searching
       $this->db->insert('schedules_permissions',$dbdata);

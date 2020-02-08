@@ -1,5 +1,5 @@
-/*     
-    Copyright 2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -17,33 +17,55 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-OB.Playlist.deletePage = function()
+OB.Playlist.deletePage = function(ids)
 {
 
-  if($('.sidebar_search_playlist_selected').size() < 1) { return; }
+  // no playlist IDs specified, get IDs from sidebar selection
+  if(typeof(ids)=='undefined')
+  {
+    ids = [];
+    $('.sidebar_search_playlist_selected').each(function(index,element) { ids.push($(element).attr('data-id')); });
+  }
 
-  OB.UI.replaceMain('playlist/delete.html')
+  // ids is a single number, make array for consistency
+  else if(typeof(ids)=='number' || typeof(ids)=='string')
+  {
+    ids = [parseInt(ids)];
+  }
 
-  // get 'where playlist is used' information, load page.
-  var playlist_ids = Array();
-  $('.sidebar_search_playlist_selected').each(function(index,element) { playlist_ids.push($(element).attr('data-id')); });
+  // if we get this far, we require ids to be an object/array
+  else if(typeof(ids)!='object')
+  {
+    return;
+  }
 
-  OB.API.post('playlist', 'used', { 'id': playlist_ids }, function(data) {
+  if(ids.length < 1) { return; }
 
-    var used_info = data.data;
+  var post = [];
+  ids.forEach(function(id) { post.push(['playlist','get',{'id':id}]); });
+  post.push(['playlist','used', {'id': ids}]);
+
+  OB.API.multiPost(post, function(response) {
+
+    OB.UI.replaceMain('playlist/delete.html');
+
+    var used_info = response[response.length-1].data;
     var append_html = '';
+
+    var playlists = {};
+    response.forEach(function(item) { if(!item.data.name) return true; playlists[item.data.id] = item.data; });
 
     $.each(used_info,function(used_index,used) {
 
-      $playlist = $('#sidebar_search_playlist_result_'+used.id);
+      var playlist = playlists[used.id];
 
       if(used.can_delete)
       {
-        $('#playlist_delete_list').append('<li data-id="'+$playlist.attr('data-id')+'">'+htmlspecialchars($playlist.attr('data-name'))+'</li>');
+        $('#playlist_delete_list').append('<li data-id="'+playlist.id+'">'+htmlspecialchars(playlist.name)+'</li>');
       }
       else
       {
-        $('#playlist_cannot_delete > ul').append('<li data-id="'+$playlist.attr('data-id')+'">'+htmlspecialchars($playlist.attr('data-name'))+'</li>');
+        $('#playlist_cannot_delete > ul').append('<li data-id="'+playlist.id+'">'+htmlspecialchars(playlist.name)+'</li>');
         $('#playlist_cannot_delete').show();
       }
 
@@ -54,7 +76,8 @@ OB.Playlist.deletePage = function()
 
         $.each(used.used,function(where_used_index,where_used) {
 
-          append_html += '<li>'+htmlspecialchars(OB.t('Playlist Delete','Item will be removed from'))+' '+htmlspecialchars(OB.t('Playlist Where Used',where_used.where))+' <i>'+htmlspecialchars(where_used.name)+'</i></li>';
+          //T Item will be removed from
+          append_html += '<li>'+htmlspecialchars(OB.t('Item will be removed from'))+' '+htmlspecialchars(where_used.where)+' <i>'+htmlspecialchars(where_used.name)+'</i></li>';
 
         });
 
@@ -85,14 +108,15 @@ OB.Playlist.delete = function()
 
   OB.API.post('playlist','delete',{ 'id': delete_ids },function(data) {
 
-    if(data.status==true) 
+    if(data.status==true)
     {
       OB.Sidebar.playlistSearch();
 
       $('.playlist_delete_button').remove();
       $('#playlist_delete_list').remove();
 
-      $('#playlist_top_message').text(OB.t('Playlist Delete','Playlists have been deleted.'));
+      //T Playlists have been deleted.
+      $('#playlist_top_message').text(OB.t('Playlists have been deleted.'));
     }
 
     else OB.UI.alert(data.msg);

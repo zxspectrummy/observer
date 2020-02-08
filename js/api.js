@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -23,12 +23,12 @@ OB.API.ajax_list = Array(); // list of ajax XMLHTTPREQUEST objects
 
 OB.API.ajaxStatus = function()
 {
-  
+
   var is_loading = false;
 
   for(i in OB.API.ajax_list)
   {
-    if(OB.API.ajax_list[i].readyState==4) OB.API.ajax_list.splice(i,1);
+    if(OB.API.ajax_list[i].readyState==4 || (OB.API.ajax_list[i].readyState==0 && OB.API.ajax_list[i].statusText=='abort')) OB.API.ajax_list.splice(i,1);
     else is_loading = true;
   }
 
@@ -46,9 +46,9 @@ OB.API.multiPost = function(post,callback_function,mode)
   var actions = [];
   var sdatas = [];
 
-  $.each(post,function(index,data) 
-  { 
-    post[index][2] = $.toJSON(post[index][2]); 
+  $.each(post,function(index,data)
+  {
+    post[index][2] = $.toJSON(post[index][2]);
     controllers.push(post[index][0]);
     actions.push(post[index][1]);
     sdatas.push(post[index][2]);
@@ -59,9 +59,9 @@ OB.API.multiPost = function(post,callback_function,mode)
     'async': async,
     'type': 'POST',
     'url': '/api.php',
-    'dataType': 'json', 
+    'dataType': 'json',
     'data': { "m": post, "i": readCookie('ob_auth_id'), "k": readCookie('ob_auth_key') },
-    'success': function(data) { 
+    'success': function(data) {
       OB.API.postSuccess(controllers,actions,callback_function,sdatas,data);
     }
   }) );
@@ -75,20 +75,27 @@ OB.API.post = function(controller,action,sdata,callback_function,mode)
   if(mode=='sync') var async = false;
   else async = true;
 
-  OB.API.ajax_list.push( $.ajax( {
-
+  var xhr = $.ajax( {
     'async': async,
     'type': 'POST',
     'url': '/api.php',
-    'dataType': 'json', 
+    'dataType': 'json',
     'data': { "c": controller, "a": action, "d": $.toJSON(sdata), "i": readCookie('ob_auth_id'), "k": readCookie('ob_auth_key') },
-    'success': function(data) { 
+    'success': function(data) {
       OB.API.postSuccess(controller,action,callback_function,sdata,data);
     }
-  }) );
+  })
 
+  OB.API.ajax_list.push(xhr);
   OB.API.ajaxStatus();
+  return OB.API.ajax_list.length-1;
+}
 
+OB.API.abort = function(id)
+{
+  if(!OB.API.ajax_list[id]) return;
+  OB.API.ajax_list[id].abort();
+  OB.API.ajaxStatus();
 }
 
 OB.API.postSuccess = function(controller,action,callback_function,sdata,data)
@@ -116,10 +123,12 @@ OB.API.postSuccess = function(controller,action,callback_function,sdata,data)
   $.each(datas,function(index,tmp) { if(typeof(tmp.error)!='undefined') { has_error = tmp.error; return false; } });
   if(has_error)
   {
-    if(has_error.no==4 && has_error.uid!=0) OB.UI.alert('Access denied while attempting to complete your request.\n\nPlease refresh your web browser, log out, log back in, and try again.\n\nIf the problem persists, please contact the system administrator.');
-    else if(has_error.no==4 && has_error.uid==0) OB.Account.loginWindow(); 
+    //T Access denied while attempting to complete your request. Please refresh your web browser, log out, log back in, and try again. If the problem persists, please contact the system administrator.
+    if(has_error.no==4 && has_error.uid!=0) OB.UI.alert('Access denied while attempting to complete your request. Please refresh your web browser, log out, log back in, and try again. If the problem persists, please contact the system administrator.');
+    else if(has_error.no==4 && has_error.uid==0) OB.Account.loginWindow();
 
-    else OB.UI.alert('An unknown error occurred while attempting to complete your request.\n\nPlease refresh your web browser and try again.\n\nIf the problem persists, please contact the system administrator.');
+    //T An unknown error occurred while attempting to complete your request. Please refresh your web browser and try again. If the problem persists, please contact the system administrator.
+    else OB.UI.alert('An unknown error occurred while attempting to complete your request. Please refresh your web browser and try again. If the problem persists, please contact the system administrator.');
 
     return false;
   }
@@ -132,7 +141,7 @@ OB.API.postSuccess = function(controller,action,callback_function,sdata,data)
     }
   });
 
-  callback_function(data); 
+  callback_function(data);
 
   $.each(controllers,function(index,controller)
   {
@@ -163,4 +172,3 @@ OB.API.callbackAppend = function(controller, action, callback)
 
   OB.API.callback_append_array[controller][action].push(callback);
 }
-

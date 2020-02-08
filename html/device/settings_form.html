@@ -1,85 +1,98 @@
 <div>
+  <obwidget id="device_edit_message" type="message"></obwidget>
 
-  <div class="device_settings_form" data-tns="Device Manager">
+  <fieldset>
+    <legend data-t>Player Settings</legend>
 
-<fieldset>
-<legend data-t>Form Heading</legend>
-
-<div class="fieldrow">
-  <label class="required" data-t>Settings Name</label>
-  <input type="text" class="device_settings_name">
-</div>
-
-<div class="fieldrow">
-  <label data-t>Settings Description</label>
-  <input type="text" class="device_settings_description">
-</div>
-
-<div class="fieldrow">
-  <label data-t>Settings Parent Device</label>
-  <select class="device_settings_parent_id" onchange="OB.Device.settingsFormParentChange(this);">
-    <option value="0" data-t>None</option>
-  </select>
-</div>
-
-<div class="device_settings_parent_id_options hidden">
-
-  <div class="fieldrow">
-    <label class="empty"></label>
-    <div>
-      <div ><input class="device_settings_use_parent_schedule" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Schedule Check</span></div>
-      <div  class="device_settings_use_parent_dynamic_container"><input class="device_settings_use_parent_dynamic" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Dynamic Check</span></div>
-      <div ><input class="device_settings_use_parent_ids" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>ID Check</span></div>
-      <div ><input class="device_settings_use_parent_playlist" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Playlist Check</span></div>
-      <div ><input class="device_settings_use_parent_emergency" type="checkbox" onchange="OB.Device.settingsFormParentOptionChange(this);" > <span data-t>Emergency Check</span></div>
+    <div class="fieldrow">
+      <label class="required" data-t>Name</label>
+      <input type="text" id="device_settings_name">
     </div>
-  </div>
 
-</div>
+    <div class="fieldrow">
+      <label data-t>Description</label>
+      <input type="text" id="device_settings_description">
+    </div>
 
-<div class="fieldrow">
-  <label data-t>IP Address</label>
-  <input type="text" class="device_settings_ip">
-</div>
+    <div class="fieldrow">
+      <label data-t>Parent Device</label>
+      <select id="device_settings_parent_id" onchange="OB.Device.dynamicFormOptions();">
+        <option value="" data-t>None</option>
+      </select>
+    </div>
 
-<div class="fieldrow">
-  <label class="required" data-t>Password</label>
-  <input type="password" placeholder="Enter New Password" class="device_settings_password" size="25" data-t>
-</div>
+    <div class="fieldrow" id="device_settings_parent_options" hidden>
+      <label class="empty"></label>
+      <div>
+        <div>
+          <input id="device_settings_parent_schedule" type="checkbox" onchange="OB.Device.dynamicFormOptions();">
+          <span data-t>Use parent schedule</span>
+        </div>
+        <div hidden>
+          <input id="device_settings_parent_dynamic"  type="checkbox" onchange="OB.Device.dynamicFormOptions();">
+          <span data-t>Use parent dynamic selections</span>
+        </div>
+        <div>
+          <input id="device_settings_parent_stations" type="checkbox" onchange="OB.Device.dynamicFormOptions();">
+          <span data-t>Use parent station IDs</span>
+        </div>
+        <div>
+          <input id="device_settings_parent_playlist" type="checkbox" onchange="OB.Device.dynamicFormOptions();">
+          <span data-t>Use parent default playlist</span>
+        </div>
+        <div>
+          <input id="device_settings_parent_priority" type="checkbox" onchange="OB.Device.dynamicFormOptions();">
+          <span data-t>Use parent priority broadcasts</span>
+        </div>
+      </div>
+    </div>
 
-<div class="fieldrow device_settings_media_types_row">
-  <label class="required" data-t>Media Types</label>
-  <div>
-    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_audio"> <span data-t>Audio</span>*</div>
-    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_images"> <span data-t>Images</span>*</div>
-    <div class="device_settings_supports_dynamic"><input type="checkbox" class="device_settings_supports_video"> <span data-t>Video</span>*</div>
-    <div class="device_settings_supports_linein_container"><input type="checkbox" class="device_settings_supports_linein"> <span data-t>Line-In</span></div>
-    <div class="device_settings_supports_dynamic">* <span data-t>Dynamic Selections Only</span></div>
-  </div>
-</div>
+    <div class="fieldrow">
+      <label data-t>IP Address</label>
+      <input type="text" id="device_settings_ip">
+    </div>
 
-<div class="fieldrow">
-  <label class="required" data-t>Timezone</label>
-  <select class="device_settings_timezone" name="timezone"></select>
-</div>
+    <div class="fieldrow">
+      <label class="required" data-t>Password</label>
+      <input type="password" placeholder="Enter New Password" id="device_settings_password" size="25" data-t>
+    </div>
 
-<div class="fieldrow device_settings_default_playlist_row">
-  <label data-t>Default Playlist</label>
-  <span class="device_settings_default_playlist" ><span data-t>Playlist Drag Zone</span></span>
-</div>
+    <div class="fieldrow">
+      <label class="required" data-t>Media Types</label>
+      <div>
+        <div class="no_parent_dynamic"><input id="device_settings_support_audio" type="checkbox"><span data-t>Audio</span>*</div>
+        <div class="no_parent_dynamic"><input id="device_settings_support_image" type="checkbox"><span data-t>Images</span>*</div>
+        <div class="no_parent_dynamic"><input id="device_settings_support_video" type="checkbox"><span data-t>Video</span>*</div>
+        <div><input id="device_settings_support_linein" type="checkbox"><span data-t>Line-In</span></div>
+        <div id="device_settings_support_dynamic">* <span data-t>affects dynamic selections only</span></div>
+      </div>
+    </div>
 
-<div class="fieldrow device_settings_station_ids_row">
-  <label data-t>Station IDs</label>
-  <div class="device_settings_station_ids" ><span data-t>Media Drag Zone</span></div>
-</div>
+    <div class="fieldrow">
+      <label class="required" data-t>Timezone</label>
+      <select id="device_settings_timezone"></select>
+    </div>
 
-<div class="fieldrow device_settings_station_ids_duration_row">
-  <label data-t>Station ID Image Duration</label>
-  <input type="text" class="device_settings_station_id_image_duration" value="15" size="4"><span data-t>seconds</span>
-</div>
+    <div class="no_parent_playlist fieldrow">
+      <label data-t>Default Playlist</label>
+      <ob-playlist-input data-single id="device_settings_playlist"></ob-playlist-input>
+    </div>
 
-</legend>
+    <div class="no_parent_stations fieldrow">
+      <label data-t>Station IDs</label>
+      <ob-media-input id="device_settings_station_ids"></ob-media-input>
+    </div>
 
-</div>
+    <div class="no_parent_stations fieldrow">
+      <label data-t>Station ID Image Duration</label>
+      <input type="text" id="device_settings_image_duration" value="15" size="4"><span>seconds</span>
+    </div>
 
+    <div class="fieldrow">
+      <button class="add" onclick="OB.Device.saveDevice();" data-t>Save</button>
+      <button onclick="OB.UI.closeModalWindow();" data-t>Close</button>
+      <button class="delete device_existing" onclick="OB.Device.deleteDevice();" hidden data-t>Delete</button>
+      <input type="hidden" id="device_settings_id">
+    </div>
+  </fieldset>
 </div>

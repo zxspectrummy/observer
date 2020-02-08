@@ -8,7 +8,7 @@ Dependencies are Debian/Ubuntu package names.
 - apg
 - festival
 - imagemagick
-- libav-tools
+- libav-tools **
 - libavcodec-extra
 - libavfilter-extra
 - mysql-server
@@ -21,5 +21,7 @@ Dependencies are Debian/Ubuntu package names.
 - php7.0-imagick
 - vorbis-tools
 
+** If libav-tools package is not available, install ffmpeg package instead, and symlink the following:
 
-
+ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
+ln -s /usr/bin/ffprobe /usr/local/bin/avprobe

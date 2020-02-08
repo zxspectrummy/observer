@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -19,7 +19,7 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Schedule extends OBFController 
+class Schedule extends OBFController
 {
 
   public function __construct()
@@ -56,6 +56,7 @@ class Schedule extends OBFController
 
     $show = $this->SchedulesModel('get_show_by_id',$id,false);
 
+    //T Schedule
     if(!$show) return array(false, ['Schedule','Show Not Found']);
 
     return array(true,'Scheduled show.',$show);
@@ -72,8 +73,10 @@ class Schedule extends OBFController
 
     $show = $this->SchedulesModel('get_show_by_id',$id,true);
 
-    if(!$show) return array(false, ['Schedule','Show Not Found']);
-  
+    //T Schedule
+    //T Show not found.
+    if(!$show) return array(false, ['Schedule','Show not found.']);
+
     return array(true,'Scheduled show (recurring).',$show);
 
   }
@@ -88,7 +91,9 @@ class Schedule extends OBFController
 
     $this->user->require_permission('manage_schedule_permissions:'.$permission['device_id']);
 
-    if(!$permission) return array(false, ['Schedule','Permission Not Found']);
+    //T Schedule
+    //T Permission not found.
+    if(!$permission) return array(false, ['Schedule','Permission not found.']);
     else return array(true,'Schedule permission.',$permission);
 
   }
@@ -103,6 +108,8 @@ class Schedule extends OBFController
 
     $this->user->require_permission('manage_schedule_permissions:'.$permission['device_id']);
 
+    //T Schedule
+    //T Permission not found.
     if(!$permission) return array(false, ['Schedule','Permission Not Found']);
     else return array(true,'Schedule permission (recurring).',$permission);
 
@@ -119,20 +126,47 @@ class Schedule extends OBFController
     $end = $this->data('end');
     $device = $this->data('device');
 
-    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Device ID Invalid']);
+    //T Schedule
+    //T Player ID is invalid.
+    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Player ID is invalid.']);
     if(!preg_match('/^[0-9]+$/',$start) || !preg_match('/^[0-9]+$/',$end)) return array(false, ['Schedule','Start Or End Date Invalid']);
-    if($start>=$end) return array(false, ['Schedule','Start Or End Date Invalid']);
+    //T Schedule
+    //T The start or end date is invalid.
+    if($start>=$end) return array(false, ['Schedule','The start of end date is invalid.']);
 
     // check if device is valid.
     $this->db->where('id',$device);
     $device_data = $this->db->get_one('devices');
 
-    if(!$device_data) return array(false, ['Schedule','Device ID Invalid']);
+    //T Schedule
+    //T Player ID is invalid.
+    if(!$device_data) return array(false, ['Schedule','Player ID is invalid.']);
 
     $data = $this->SchedulesModel('get_shows',$start,$end,$device);
 
     return array(true,'Schedule data',$data);
+  }
 
+  public function shows_set_last_device()
+  {
+    $device_id = $this->data('device');
+
+    $this->db->where('id',$device_id);
+    $device_data = $this->db->get_one('devices');
+
+    if($device_data)
+    {
+      $this->user->set_setting('last_schedule_device',$device_id);
+      return array(true,'Set last schedule device.');
+    }
+    else return array(false,'Device not found.');
+  }
+
+  public function shows_get_last_device()
+  {
+    $device_id = $this->user->get_setting('last_schedule_device');
+    if($device_id) return array(true,'Last schedule device.',$device_id);
+    else return array(false,'Last schedule device not found.');
   }
 
   // get schedule permissions data between two given date/times.
@@ -148,26 +182,60 @@ class Schedule extends OBFController
     $device = $this->data('device');
     $user_id = $this->data('user_id');
 
-    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Device ID Invalid']);
+    //T Schedule
+    //T Player ID is invalid.
+    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Player ID is invalid.']);
 
     // require "manage schedule permissions" permission unless we are getting the permissions for our own user.
     if($user_id!=$this->user->param('id')) $this->user->require_permission('manage_schedule_permissions:'.$device);
 
-    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Device ID Invalid']);
-    if(!preg_match('/^[0-9]+$/',$start) || !preg_match('/^[0-9]+$/',$end)) return array(false, ['Schedule','Start Or End Date Invalid']);
-    if(!empty($user_id) && !preg_match('/^[0-9]+$/',$user_id)) return array(false, ['Schedule','User ID Invalid']);
-    if($start>=$end) return array(false, ['Schedule','Start Or End Date Invalid']);
+    //T Schedule
+    //T Player ID is invalid.
+    if(!preg_match('/^[0-9]+$/',$device)) return array(false, ['Schedule','Player ID is invalid.']);
+    //T Schedule
+    //T The start or end date is invalid.
+    if(!preg_match('/^[0-9]+$/',$start) || !preg_match('/^[0-9]+$/',$end)) return array(false, ['Schedule','Start or end date is invalid.']);
+    //T Schedule
+    //T User ID is invalid.
+    if(!empty($user_id) && !preg_match('/^[0-9]+$/',$user_id)) return array(false, ['Schedule','User ID is invalid.']);
+    //T Schedule
+    //T Start or end date is invalid.
+    if($start>=$end) return array(false, ['Schedule','Start or end date is invalid.']);
 
     // check if device is valid.
     $this->db->where('id',$device);
     $device_data = $this->db->get_one('devices');
 
-    if(!$device_data) return array(false, ['Schedule','Device ID Invalid']);
+    //T Schedule
+    // Device ID is invalid.
+    if(!$device_data) return array(false, ['Schedule','Device ID is invalid.']);
 
     $data = $this->SchedulesPermissionsModel('get_permissions',$start,$end,$device,false,$user_id);
 
     return array(true,'Schedule permissions data',$data);
 
+  }
+
+  public function permissions_set_last_device()
+  {
+    $device_id = $this->data('device');
+
+    $this->db->where('id',$device_id);
+    $device_data = $this->db->get_one('devices');
+
+    if($device_data)
+    {
+      $this->user->set_setting('last_schedule_permissions_device',$device_id);
+      return array(true,'Set last schedule permissions device.');
+    }
+    else return array(false,'Device not found.');
+  }
+
+  public function permissions_get_last_device()
+  {
+    $device_id = $this->user->get_setting('last_schedule_permissions_device');
+    if($device_id) return array(true,'Last schedule permissions device.',$device_id);
+    else return array(false,'Last schedule permissions device not found.');
   }
 
   public function delete_permission()
@@ -179,7 +247,8 @@ class Schedule extends OBFController
     // make sure permission exists, check user permissions against device ID.
     if($recurring) $permission = $this->SchedulesPermissionsModel('get_permission_by_id',$id,true);
     else $permission = $this->SchedulesPermissionsModel('get_permission_by_id',$id,false);
-    if(!$permission) return array(false, ['Schedule','Permission Not Found']);
+    //T Permission not found.
+    if(!$permission) return array(false, ['Schedule','Permission not found.']);
     $this->user->require_permission('manage_schedule_permissions:'.$permission['device_id']);
 
     $this->SchedulesPermissionsModel('delete_permission',$id,$recurring);
@@ -202,7 +271,7 @@ class Schedule extends OBFController
 
     $this->SchedulesModel('delete_show',$id,$recurring);
 
-    return array(true,'Show deleted.');   
+    return array(true,'Show deleted.');
 
   }
 
@@ -219,7 +288,7 @@ class Schedule extends OBFController
     $data['x_data']=trim($this->data('x_data'));
 
     $data['start']=trim($this->data('start'));
-  
+
     $data['duration_days']=trim($this->data('duration_days'));
     $data['duration_hours']=trim($this->data('duration_hours'));
     $data['duration_minutes']=trim($this->data('duration_minutes'));
@@ -231,10 +300,11 @@ class Schedule extends OBFController
     $data['item_id']=trim($this->data('item_id'));
 
     // if we are editing, make sure ID is valid.
-    if(!empty($id)) 
+    if(!empty($id))
     {
       $original_show_data = $this->SchedulesModel('get_show_by_id',$id,$edit_recurring);
-      if(!$original_show_data) return array(false,['Schedule Edit','Show Not Found']);
+      //T Show not found.
+      if(!$original_show_data) return array(false,['Schedule Edit','Show not found.']);
 
       // if we're editing someone elses show, we need to be a schedule admin.
       if($original_show_data['user_id']!=$this->user->param('id')) $this->user->require_permission('manage_schedule_permissions');
@@ -251,7 +321,8 @@ class Schedule extends OBFController
     $duration += 60 * 60 * $data['duration_hours'];
     $duration += 60 * 60 * 24 * $data['duration_days'];
 
-    if(empty($duration)) return array(false, ['Schedule Edit','Duration Not Valid']);
+    //T The duration is not valid.
+    if(empty($duration)) return array(false, ['Schedule Edit','The duration is not valid.']);
 
     $data['duration']=$duration;
 
@@ -279,7 +350,7 @@ class Schedule extends OBFController
     $data['description']=trim($this->data('description'));
 
     $data['start']=trim($this->data('start'));
-  
+
     $data['duration_days']=trim($this->data('duration_days'));
     $data['duration_hours']=trim($this->data('duration_hours'));
     $data['duration_minutes']=trim($this->data('duration_minutes'));
@@ -288,10 +359,11 @@ class Schedule extends OBFController
     $data['stop']=trim($this->data('stop'));
 
     // if we are editing, make sure ID is valid.
-    if(!empty($id)) 
+    if(!empty($id))
     {
       $original_permission = $this->SchedulesPermissionsModel('get_permission_by_id',$id,$edit_recurring);
-      if(!$original_permission) return array(false, ['Schedule Edit','Permission Not Found']);
+      //T Permission not found.
+      if(!$original_permission) return array(false, ['Schedule Edit','Permission not found.']);
     }
 
     $validate = $this->SchedulesPermissionsModel('validate_permission',$data,$id);
@@ -307,7 +379,8 @@ class Schedule extends OBFController
     $duration += 60 * 60 * $data['duration_hours'];
     $duration += 60 * 60 * 24 * $data['duration_days'];
 
-    if(empty($duration)) return array(false,['Schedule Edit','Duration Not Valid']);
+    //T The duration is not valid.
+    if(empty($duration)) return array(false,['Schedule Edit','The duration is not valid.']);
 
     $data['duration']=$duration;
 

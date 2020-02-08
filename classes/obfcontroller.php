@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,7 +26,8 @@ class OBFController
   public $db;
   public $user;
   public $data;
-
+  
+  protected $helpers;
   protected $callback_handler;
 
   // make database (db) and base framwork (ob) available. 
@@ -36,6 +37,7 @@ class OBFController
     $this->db = OBFDB::get_instance();
     $this->user = OBFUser::get_instance();
     $this->callback_handler = OBFCallbacks::get_instance();
+    $this->helpers = OBFHelpers::get_instance();
   }
 
   // shortcut to use $this->ModelName('method',arg1,arg2,...).

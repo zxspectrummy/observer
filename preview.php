@@ -1,7 +1,7 @@
 <?php
 
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -58,7 +58,7 @@ $user->auth($auth_id,$auth_key);
 class MediaPreview extends OBFController
 {
 
-  public function output($id,$download) 
+  public function output($id,$download,$version=false) 
   {
 
     global $user;
@@ -69,25 +69,56 @@ class MediaPreview extends OBFController
     $media = $this->db->get_one('media');
 
     if(!$media) die();
+    
+    if($version!==false)
+    {
+      $this->db->where('media_id',$id);
+      $this->db->where('created',$version);
+      $version = $this->db->get_one('media_versions');
+      if(!$version) die();
+    }
 
     $type = strtolower($media['type']);
     $format = strtolower($media['format']);
 
-    $media_location = OB_MEDIA;
-
     if(!preg_match('/^[a-z0-9_-]+\.[a-z0-9]+$/i',$media['filename'])) die();
     if(!preg_match('/^[A-Z0-9]{2}$/',$media['file_location'])) die();
 
-    if($media['is_archived']==1) $user->require_permission('manage_media');
+    // check permissions
+    $is_media_owner = $media['owner_id']==$user->param('id');    
+    
+    // preview/download both require manage_media if private media and not owner
+    if($media['status']=='private' && !$is_media_owner) $user->require_permission('manage_media');
+    
+    // download requires download_media if this is not the media owner
+    if($download && !$is_media_owner && !$version) $user->require_permission('download_media');
+    
+    // any version download requires manage_media_versions
+    if($version) $user->require_permission('manage_media_versions');
+    
+    // version download if not owner requires manage_media
+    if($version && !$is_media_owner) $user->require_permission('manage_media');
+    
+    // set media location for preview/download
+    if(!$version)
+    {
+      if($media['is_archived']==1) $media_location = OB_MEDIA_ARCHIVE;
+      elseif($media['is_approved']==0) $media_location = OB_MEDIA_UPLOADS;
+      else $media_location = OB_MEDIA;
 
-    if($media['status']=='private' && $media['owner_id']!=$user->param('id')) $user->require_permission('manage_media');
-
-    if($media['is_archived']==1) $media_location = OB_MEDIA_ARCHIVE;
-    elseif($media['is_approved']==0) $media_location = OB_MEDIA_UPLOADS;
-    else $media_location = OB_MEDIA;
-
-    $media_location.='/'.$media['file_location'][0].'/'.$media['file_location'][1].'/';
-    $media_file = $media_location.$media['filename'];
+      $media_location.='/'.$media['file_location'][0].'/'.$media['file_location'][1].'/';
+      $media_file = $media_location.$media['filename'];
+      
+      $download_filename = $media['filename'];
+    }
+    else
+    {
+      $media_file = (defined('OB_MEDIA_VERSIONS') ? OB_MEDIA_VERSIONS : OB_MEDIA.'/versions') . 
+                            '/' . $media['file_location'][0] . '/' . $media['file_location'][1] . '/' . 
+                            $version['media_id'] . '-' . $version['created'] . '.' . $version['format'];
+                            
+      $download_filename = $version['media_id'] . '-' . $version['created'] . '.' . $version['format'];
+    }
 
     // get our cached data directory ready if we don't already have it.
     if(!file_exists(OB_CACHE.'/media')) mkdir(OB_CACHE.'/media');
@@ -102,13 +133,8 @@ class MediaPreview extends OBFController
       if($download)
       {
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename='.$media['filename']);
-
-        if($format=='flac') header('Content-Type: audio/x-flac');
-        elseif($format=='mp3') header('Content-Type: audio/mpeg');
-        elseif($format=='ogg') header('Content-Type: audio/ogg');
-        else die();
-
+        header('Content-Disposition: attachment; filename='.$download_filename);
+        header('Content-Type: application/octet-stream');
         header('Content-Length: '.filesize($media_file));
 
         $fp = fopen($media_file,'rb');
@@ -148,15 +174,8 @@ class MediaPreview extends OBFController
       if($download)
       {
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename='.$media['filename']);
-
-        if($format=='avi') header('Content-Type: video/avi');
-        elseif($format=='mpg') header('Content-Type: video/mpeg');
-        elseif($format=='ogg') header('Content-Type: video/ogg');
-        elseif($format=='wmv') header('Content-Type: video/x-ms-wmv');
-        elseif($format=='mov') header('Content-Type: video/quicktime');
-        else die();
-
+        header('Content-Disposition: attachment; filename='.$download_filename);
+        header('Content-Type: application/octet-stream');
         header('Content-Length: '.filesize($media_file));
 
         $fp = fopen($media_file,'rb');
@@ -214,7 +233,7 @@ class MediaPreview extends OBFController
       if($download)
       {
         header('Content-Description: File Transfer');
-        header('Content-Disposition: attachment; filename='.$media['filename']);
+        header('Content-Disposition: attachment; filename='.$download_filename);
 
         if($format=='png') header('Content-Type: image/png');
         elseif($format=='jpg') header('Content-Type: image/jpeg');
@@ -312,10 +331,23 @@ class MediaPreview extends OBFController
 
 }
 
-// have we requested to download? if so, check permission.  if permission does not match up, switch automatically to preview.
-if(isset($_GET['dl']) && $_GET['dl']==1 && $user->check_permission('download_all_media')) $download_mode = true;
-else $download_mode = false;
+// default is to preview active media file
+$download_mode = false;
+$version = false;
+
+// if version set, we are also downloading
+if(isset($_GET['v']))
+{
+  $download_mode = true;
+  $version = (int) $_GET['v'];
+}
+
+// or just downloading active media file
+elseif(isset($_GET['dl']) && $_GET['dl']==1)
+{
+  $download_mode = true;
+}
 
 $preview = new MediaPreview();
-$preview->output($_GET['id'],$download_mode);
+$preview->output($_GET['id'],$download_mode,$version);
 

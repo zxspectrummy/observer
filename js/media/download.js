@@ -1,5 +1,5 @@
 /*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -18,8 +18,8 @@
 */
 
 
-OB.Media.download = function(id)
+OB.Media.download = function(id, version)
 {
-  window.open('/preview.php?id='+id+'&dl=1','Download');
+  window.open('/preview.php?id='+id+'&dl=1'+(version ? '&v='+version : ''),'Download');
 }
 

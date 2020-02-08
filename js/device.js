@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012-2013 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,454 +26,281 @@ OB.Device.init = function()
 
 OB.Device.initMenu = function()
 {
-  OB.UI.addSubMenuItem('admin',['Admin Menu','Device Manager'],'device_settings',OB.Device.settings,20,'manage_devices');
-  OB.UI.addSubMenuItem('admin',['Admin Menu','Device Monitoring'],'device_monitoring',OB.Device.monitor,30,'view_device_monitor');
+  //T Player Manager
+  OB.UI.addSubMenuItem('admin', 'Player Manager', 'device_settings', OB.Device.settings, 20, 'manage_devices');
+  //T Player Monitoring
+  OB.UI.addSubMenuItem('admin', 'Player Monitoring', 'device_monitoring', OB.Device.monitor, 30, 'view_device_monitor');
 }
 
-OB.Device.settingsDetails = function(id) 
-{
-  var expand_text = OB.t('Common', 'Expand');
-  var collapse_text = OB.t('Common', 'Collapse');
-
-  if($('#device_'+id+'_details').is(':visible')==true)
-  {
-    $('#device_'+id+'_details').hide();
-    $('#device_'+id+'_expand_link').html(expand_text);
-  }
-
-  else
-  {
-    $('#device_'+id+'_details').show();
-    $('#device_'+id+'_expand_link').html(collapse_text);
-  }
-
-  $('#device_list .device_details').not('#device_'+id+'_details').hide(); // only allow one device 'expanded' at a time.
-  $('#device_list .device_expand_link').not('#device_'+id+'_expand_link').html(expand_text);
-
-}
-
-OB.Device.settingsRemoveDefaultPlaylist = function(device_id)
-{
-  $('.device_settings_form[data-device_id='+device_id+'] .device_settings_default_playlist').html(OB.t('Device Manager','Playlist Drag Zone'));
-}
-
-OB.Device.settingsAddDefaultPlaylist = function(device_id, playlist_id, playlist_name)
-{
-  var html = '<div data-id="'+playlist_id+'"><a href="javascript: OB.Device.settingsRemoveDefaultPlaylist(\''+device_id+'\');">x</a> '+htmlspecialchars(playlist_name)+'</div>';
-  $('.device_settings_form[data-device_id='+device_id+'] .device_settings_default_playlist').html(html);
-}
-
-OB.Device.settingsAddStationId = function(device_id, media_id, media_text)
-{
-
-    // get rid of our help text if this is the first item.
-    if($('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids > div').length<1) $('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').html('');
-
-    // only add if it doesn't already exist
-    if($('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').children('[data-id="'+media_id+'"]').length<1)
-    {
-      var html = '<div data-id="'+media_id+'"><a href="javascript: OB.Device.settingsRemoveStationId(\''+device_id+'\','+media_id+');">x</a> '+htmlspecialchars(media_text)+'</div>';
-      $('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').append(html);  
-    }
-}
-
-OB.Device.settingsRemoveStationId = function(device_id, media_id)
-{
-  $('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').children('[data-id="'+media_id+'"]').remove();
-
-  // restore our help text if there are no more station IDs.
-  if($('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').children().length<1) $('.device_settings_form[data-device_id='+device_id+'] .device_settings_station_ids').html(OB.t('Device Manager','Media Drag Zone'));
-
-}
-
-OB.Device.settingsNewDevice = function()
-{
-  
-  // TODO this is ugly... lock up and wait for device list ot actually load since we use the device list to determine our available parent devices.
-  // will be fixed up with some device settings UI enhanacements soon.
-  var cache_wait_start = new Date().getTime();
-
-  while(OB.Device.settings_device_cache === false)
-  {
-    if(new Date().getTime() > cache_wait_start + 3000) // don't wait longer than 3 seconds.
-    {
-      OB.UI.alert(OB.t('Device Manager','Device List Must Load'));
-      return;
-    }
-  }
-
-  var htmladd = OB.Device.settingsForm();
-  
-  htmladd += '<fieldset>' +
-  '<div class="fieldrow"><button class="add" onclick="OB.Device.deviceSave();" data-t data-tns="Common">Save</button>' +
-  '<button onclick="OB.Device.settingsNewDeviceCancel();" data-t data-tns="Common">Cancel</button></div></fieldset>';
-
-  $('#devices_new_form').html(htmladd);
-
-  $('#devices_new_form').wrap('<div data-tns="Device Manager"></div>');
-
-  OB.UI.translateHTML( $('#devices_new_form') );
-//  OB.UI.replaceMain();
-//  OB.UI.translateHTML( $('#layout_main') );
-
-  // some form processing
-  OB.Device.settingsFormProcess();
-
-  $('#devices_new_form').show();
-
-  $('#devices_new_device_button').hide();
-
-}
-
-OB.Device.settingsNewDeviceCancel = function(keep_message)
-{
-  if(!keep_message) $('#device_main_message').hide();
-
-  $('#devices_new_form').hide();
-  $('#devices_new_device_button').show();
-}
-
-OB.Device.settingsFormParentChange = function(element)
-{
-
-  $form = $(element).parents('.device_settings_form');
-
-  if($form.find('.device_settings_parent_id').val()==0) 
-  {
-    $form.find('.device_settings_parent_id_options').hide();
-    $form.find('.device_settings_use_parent_schedule').attr('checked',false);
-    $form.find('.device_settings_use_parent_dynamic').attr('checked',false);
-    $form.find('.device_settings_use_parent_ids').attr('checked',false);
-    $form.find('.device_settings_use_parent_playlist').attr('checked',false);
-    $form.find('.device_settings_use_parent_emergency').attr('checked',false);
-    OB.Device.settingsFormParentOptionChange(element);
-  }
-  else $form.find('.device_settings_parent_id_options').show();
-}
-
-OB.Device.settingsFormParentOptionChange = function(element)
-{
-  var $form = $(element).parents('.device_settings_form');
-  var ids_checked = $form.find('.device_settings_use_parent_ids').is(':checked');
-  var playlist_checked = $form.find('.device_settings_use_parent_playlist').is(':checked');
-  var schedule_checked = $form.find('.device_settings_use_parent_schedule').is(':checked');
-
-  if(!schedule_checked)
-  {
-    $form.find('.device_settings_use_parent_dynamic_container').hide();
-    $form.find('.device_settings_use_parent_dynamic').attr('checked',false);
-  }
-  else $form.find('.device_settings_use_parent_dynamic_container').show();
-
-  var dynamic_checked = $form.find('.device_settings_use_parent_dynamic').is(':checked');
-
-  // show/hide station ID settings
-  $form.find('.device_settings_station_ids_row').toggle(!ids_checked);
-  $form.find('.device_settings_station_ids_duration_row').toggle(!ids_checked);      
-
-  // show/hide default playlist setting.
-  $form.find('.device_settings_default_playlist_row').toggle(!playlist_checked);
-
-  // show/hide media types setting.
-  $form.find('.device_settings_supports_dynamic').toggle(!dynamic_checked);
-
-}
-
-OB.Device.settingsForm = function(data)
-{
-
-  if(data) var device_id = data.id;
-  else device_id = 'new';
-
-  var $html = $(OB.UI.getHTML('device/settings_form.html'));
-
-  // set device id on form.
-  $html.find('.device_settings_form').attr('data-device_id',device_id);
-
-  // add timezone options to form.
-  $html.find('.device_settings_timezone').html(OB.UI.getHTML('device/tzoptions.html'));
-
-  return $html.html();
-}
-
-OB.Device.settingsFormProcess = function(data)
-{
-
-  if(data) var device_id = data.id;
-  else device_id = 'new';
-
-  $form = $('.device_settings_form[data-device_id='+device_id+']');
-
-  // establish drop target for media (station IDs)  
-  $form.find('.device_settings_station_ids').addClass('droppable_target_media');
-  $form.find('.device_settings_station_ids').droppable({
-      drop: function(event, ui) 
-      {
-//        alert('ding dong');
-        if($(ui.draggable).attr('data-mode')=='media') 
-        {
-          OB.Device.settingsAddStationId(device_id,$(ui.draggable).attr('data-id'),$(ui.draggable).attr('data-artist')+' - '+$(ui.draggable).attr('data-title'));  
-        }
-      }
-
-  });
-
-  // establish drop target for playlist (default playlist)
-  $form.find('.device_settings_default_playlist').addClass('droppable_target_playlist');
-  $form.find('.device_settings_default_playlist').droppable({
-
-    drop: function(event, ui) { 
-
-      if($(ui.draggable).attr('data-mode')!='playlist') return;
-
-      if($('.sidebar_search_playlist_selected').length>1) { OB.UI.alert('Select a single playlist for default content.'); return; }
-
-      $('.sidebar_search_playlist_selected').each(function(index,element) {
-        OB.Device.settingsAddDefaultPlaylist(device_id,$(element).attr('data-id'),$(element).attr('data-name'));
-      });
-
-    }
-
-  });
-
-  // add parent list.
-  var devices = OB.Device.settings_device_cache;
-  var $select = $form.find('.device_settings_parent_id');
-
-  for(var i in devices)
-  {
-    if(!devices[i].parent_device_id && devices[i].id!=device_id) // child devices can't be parents.
-      $select.append('<option value="'+devices[i].id+'">'+htmlspecialchars(devices[i].name)+'</option>');
-  }
-
-  if(data)
-  {
-    $form.find('.device_settings_name').val(data.name);
-    $form.find('.device_settings_description').val(data.description);
-    $form.find('.device_settings_stream_url').val(data.stream_url);
-    $form.find('.device_settings_ip').val(data.ip_address);
-    $form.find('.device_settings_station_id_image_duration').val(data.station_id_image_duration);
-
-    $form.find('.device_settings_parent_id option[value='+data.parent_device_id+']').attr('selected','selected');
-    $form.find('.device_settings_timezone option[value="'+data.timezone+'"]').attr('selected','selected');
-
-    if(data.support_audio==1) $form.find('.device_settings_supports_audio').attr('checked','checked');
-    if(data.support_images==1) $form.find('.device_settings_supports_images').attr('checked','checked');
-    if(data.support_video==1) $form.find('.device_settings_supports_video').attr('checked','checked');
-    if(data.support_linein==1) $form.find('.device_settings_supports_linein').attr('checked','checked');
-
-    if(data.parent_device_id)
-    {
-      if(data.use_parent_dynamic==1) $form.find('.device_settings_use_parent_dynamic').attr('checked','checked');
-      if(data.use_parent_schedule==1) $form.find('.device_settings_use_parent_schedule').attr('checked','checked');
-      if(data.use_parent_ids==1) $form.find('.device_settings_use_parent_ids').attr('checked','checked');
-      if(data.use_parent_playlist==1) $form.find('.device_settings_use_parent_playlist').attr('checked','checked');
-      if(data.use_parent_emergency==1) $form.find('.device_settings_use_parent_emergency').attr('checked','checked');
-    }
-
-  }
-
-  OB.Device.settingsFormParentChange($form.find('.device_settings_parent_id'));
-  OB.Device.settingsFormParentOptionChange($form.find('.device_settings_parent_id'));
-
-}
-
-OB.Device.settings_device_cache = false;
-OB.Device.settingsDeviceList = function()
-{
-
-  $('#device_list').hide();
-  $('#device_list').html('<tr><th><span data-t>ID</span></th><th data-t>Name</th><th data-t>Description</th><th>&nbsp;</th><th data-t>Status</th><th>&nbsp;</th></tr>');
-
-
-  OB.API.post('device','device_list', { }, function(data) { 
-
-    OB.Device.settings_device_cache = data.data;
-
-    var devices = data.data;
-
-    for(var i in devices)
-    {
-      var last_connect = devices[i].last_connect ? format_timestamp(devices[i].last_connect) : '<i data-t>never</i>';
-      var last_connect_schedule = devices[i].last_connect_schedule ? format_timestamp(devices[i].last_connect_schedule) : '<i data-t>never</i>';
-      var last_connect_playlog = devices[i].last_connect_playlog ? format_timestamp(devices[i].last_connect_playlog) : '<i data-t>never</i>';
-      var last_connect_media = devices[i].last_connect_media ? format_timestamp(devices[i].last_connect_media) : '<i data-t>never</i>';
-      var last_connect_emergency =   devices[i].last_connect_emergency ? format_timestamp(devices[i].last_connect_emergency) : '<i data-t>never</i>';
-      var version = devices[i].version ? devices[i].version : '<i data-t>not available</i>';
-
-      var dhtml = '<tr id="device_'+devices[i].id+'_row">\
-          <td>'+htmlspecialchars(devices[i].id)+'</td>\
-          <td >'+htmlspecialchars(devices[i].name)+'</td>\
-          <td>'+htmlspecialchars(devices[i].description)+'</td>\
-          <td class="last_connect_error"><div>&nbsp</div><div class="last_connect_error_all">&nbsp;</div>\
-          <div class="last_connect_error_schedule">&nbsp;</div><div class="last_connect_error_emergency">&nbsp;</div>\
-          <div class="last_connect_error_media">&nbsp;</div><div class="last_connect_error_playlog">&nbsp;</div></td>\
-          <td class="last_connect_time">\
-          <div class="version"><span data-t>Version</span>: '+version+'</div>' +
-          '<div class="last_ip_address"><span data-t>Last IP</span>: '+devices[i].last_ip_address+'</div>' +
-          '<div class="last_connect_all"><span data-t>All</span>: '+last_connect+'</div>' +
-          '<div class="last_connect_schedule"><span data-t>Schedule</span>: '+last_connect_schedule+'</div>' +
-          '<div class="last_connect_emergency"><span data-t>Emergency</span>: '+last_connect_emergency+'</div>' +
-          '<div class="last_connect_media"><span data-t>Media</span>: '+last_connect_media+'</div>' +
-          '<div class="last_connect_playlog"><span data-t>Playlog</span>: '+last_connect_playlog+'</div>\
-          </td>\
-          <td><a class="device_expand_link" id="device_'+devices[i].id+'_expand_link" href="javascript: OB.Device.settingsDetails('+devices[i].id+');" data-t data-tns="Common">Expand</a></td></tr>\
-          <tr class="hidden expanding device_details" id="device_'+devices[i].id+'_details"><td colspan="5">\
-            <obwidget id="device_'+devices[i].id+'_message" type="message"></obwidget>';
-  
-      dhtml += OB.Device.settingsForm(devices[i]);
-
-      dhtml +='<fieldset><div class="fieldrow"><button class="add" onclick="OB.Device.deviceSave('+devices[i].id+');" data-t data-tns="Common">Save</button><button onclick="OB.Device.deviceDelete('+devices[i].id+');" class="delete" data-t data-tns="Common">Delete</button><button onclick="$(\'#device_'+devices[i].id+'_details\').hide();" data-t data-tns="Common">Cancel</button></div></fieldset>\
-          </td></tr>';
-
-      $('#device_list').append(dhtml);
-
-      OB.UI.widgetHTML( $('#device_list') );
-
-      // display alert icons where device has not connected recently 
-      var present_timestamp = Math.floor(new Date().getTime()/1000);
-      if( devices[i].last_connect && present_timestamp-devices[i].last_connect > 3600 ) $('#device_'+devices[i].id+'_row .last_connect_error_all').html('&lt;!&gt;');
-      if( devices[i].last_connect_schedule && present_timestamp-devices[i].last_connect_schedule > 3600 ) $('#device_'+devices[i].id+'_row .last_connect_error_schedule').html('&lt;!&gt;');
-      if( devices[i].last_connect_playlog && present_timestamp-devices[i].last_connect_playlog > 3600 ) $('#device_'+devices[i].id+'_row .last_connect_error_playlog').html('&lt;!&gt;');
-      if( devices[i].last_connect_media && present_timestamp-devices[i].last_connect_media > 3600 ) $('#device_'+devices[i].id+'_row .last_connect_error_media').html('&lt;!&gt;');
-      if( devices[i].last_connect_emergency && present_timestamp-devices[i].last_connect_emergency > 3600 ) $('#device_'+devices[i].id+'_row .last_connect_error_emergency').html('&lt;!&gt;');
-
-      // add our default playlist.
-      if(devices[i].default_playlist_id) OB.Device.settingsAddDefaultPlaylist(devices[i].id,devices[i].default_playlist_id,devices[i].default_playlist_name);
-
-      // add our station ids
-      var media_ids = devices[i].media_ids;
-      for(var j in media_ids)
-      {
-        OB.Device.settingsAddStationId(devices[i].id,media_ids[j].id,media_ids[j].artist+' - '+media_ids[j].title);
-      }
-
-      // some form processing
-      OB.Device.settingsFormProcess(devices[i]);
-
-    }
-
-    $('#device_list').show();
-    $('#device_list').wrap('<div data-tns="Device Manager"></div>');
-    OB.UI.translateHTML( $('#layout_main') );
-
-  });
-
-}
-
-OB.Device.settings = function()
-{
-  $('.sf-submenu').hide();
-
+/* ======================
+   PLAYER MANAGER SECTION
+====================== */
+
+OB.Device.settings = function () {
   OB.UI.replaceMain('device/settings.html');
-  OB.Device.settingsDeviceList();
-
-
+  OB.Device.playerOverview();
 }
 
-OB.Device.deviceDelete = function(device_id,confirm)
-{
+OB.Device.playerOverview = function (orderby = 'name', orderdesc = null) {
+  var post = {};
+  post.orderby = orderby;
+  if (orderdesc != null) post.orderdesc = 'desc';
 
-  if(!confirm)
-  {
+  OB.API.post('device', 'device_list', post, function (response) {
+    if (!response.status) {
+      $('#device_main_message').obWidget('error', response.msg);
+      return false;
+    }
 
-    OB.UI.confirm('Are you sure you want to delete this device? All data for this device (including schedules) will be removed.',
-      function() { OB.Device.deviceDelete(device_id,true); }, 'Yes, Delete', 'No, Cancel', 'delete');
+    $.each(response.data, function (i, device) {
+      var dev_version       = (device.version == '') ? '<em>N/A</em>': device.version;
+      var dev_lastip        = device.last_ip_address;
+      var dev_conn_all      = device.last_connect;
+      var dev_conn_schedule = device.last_connect_schedule;
+      var dev_conn_priority = device.last_connect_emergency;
+      var dev_conn_media    = device.last_connect_media;
+      var dev_conn_playlog  = device.last_connect_playlog;
 
-  }
+      $html = $('<tr/>');
+      $html.append($('<td/>').text(device.id));
+      $html.append($('<td/>').text(device.name));
+      $html.append($('<td/>').text(device.description));
 
-  else
-  {
+      $error = $('<div/>');
+      $html.append($('<td/>').append($error));
 
-    OB.API.post('device','delete', { 'id': device_id },function(data) {
+      $status = $('<div/>');
 
-      if(data.status==true)
-      {
-        $('#device_main_message').obWidget('success','Device deleted.');
-        OB.Device.settingsDeviceList();
-      }
+      //T Version
+      $status.append($('<div/>').html('<span>' + OB.t('Version') + ': </span>' + dev_version));
+      //T Last IP
+      if (dev_lastip) $status.append($('<div/>').html('<span>' + OB.t('Last IP') + ': </span>' + dev_lastip));
 
-      else
-      {
-        $('#device_'+device_id+'_message').obWidget('error',data.msg);
-      }
+      //T All
+      if (dev_conn_all) $status.append(OB.Device.generateConnectionHTML('All', dev_conn_all));
+      //T Schedule
+      if (dev_conn_schedule) $status.append(OB.Device.generateConnectionHTML('Schedule', dev_conn_schedule));
+      //T Priority
+      if (dev_conn_priority) $status.append(OB.Device.generateConnectionHTML('Priority', dev_conn_priority));
+      //T Media
+      if (dev_conn_media) $status.append(OB.Device.generateConnectionHTML('Media', dev_conn_media));
+      //T Playlog
+      if (dev_conn_playlog) $status.append(OB.Device.generateConnectionHTML('Playlog', dev_conn_playlog));
+      $html.append($('<td/>').append($status));
+      
+      //T Edit
+      $html.append($('<td/>').html('<button class="edit" onclick="OB.Device.editDevice(' + device.id + ');">Edit</button>'));
 
+      $('#device_list tbody').append($html);
     });
+  });
+}
 
+OB.Device.sortOverview = function (elem, field) {
+    $('#device_list tbody tr:nth-child(n+2)').empty();
+
+    if ($(elem).hasClass('device_order_asc')) {
+      $(elem).removeClass('device_order_asc').addClass('device_order_desc');
+      $(elem).find('i').removeClass('fa-angle-down').addClass('fa-angle-up');
+      OB.Device.playerOverview(field);
+    } else {
+      $(elem).removeClass('device_order_desc').addClass('device_order_asc');
+      $(elem).find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
+      OB.Device.playerOverview(field, 'desc');
+    }
+    return false;
+}
+
+OB.Device.generateConnectionHTML = function (label, last_conn) {
+  var now = new Date().getTime() / 1000;
+  var alert_icon = ((now - last_conn) > 3600) ? '<i class="device_list_alert fas fa-exclamation-triangle"></i>' : '';
+
+  return $('<div/>').html(alert_icon + '<span>' + label + ': </span>' + format_timestamp(last_conn));
+}
+
+OB.Device.newDevice = function () {
+  OB.UI.openModalWindow('device/settings_form.html');
+
+  $('#device_settings_id').val('new');
+  $('.device_existing').hide();
+
+  $('#device_settings_timezone').html(OB.UI.getHTML('device/tzoptions.html'));
+  OB.Device.loadParentPlayers('new');
+
+  OB.Device.dynamicFormOptions();
+}
+
+OB.Device.editDevice = function (dev_id) {
+  OB.UI.openModalWindow('device/settings_form.html');
+
+  $('#device_settings_id').val(dev_id);
+  $('.device_existing').show();
+
+  $('#device_settings_timezone').html(OB.UI.getHTML('device/tzoptions.html'));
+  OB.Device.loadParentPlayers(dev_id);
+
+  var post = {};
+  post.id = dev_id;
+  OB.API.post('device', 'get', post, function (response) {
+    if (!response.status) {
+      OB.UI.closeModalWindow();
+      $('#device_main_message').obWidget('error', response.msg);
+      return false;
+    }
+
+    $('#device_settings_name').val(response.data.name);
+    $('#device_settings_description').val(response.data.description);
+
+    $('#device_settings_parent_id').val(response.data.parent_device_id);
+    if (response.data.use_parent_schedule == "1")  $('#device_settings_parent_schedule').prop('checked', true);
+    if (response.data.use_parent_dynamic == "1")   $('#device_settings_parent_dynamic').prop('checked', true);
+    if (response.data.use_parent_ids == "1")       $('#device_settings_parent_stations').prop('checked', true);
+    if (response.data.use_parent_playlist == "1")  $('#device_settings_parent_playlist').prop('checked', true);
+    if (response.data.use_parent_emergency == "1") $('#device_settings_parent_priority').prop('checked', true);
+
+    $('#device_settings_ip').val(response.data.ip_address);
+
+    if (response.data.support_audio == "1")  $('#device_settings_support_audio').prop('checked', true);
+    if (response.data.support_images == "1") $('#device_settings_support_image').prop('checked', true);
+    if (response.data.support_video == "1")  $('#device_settings_support_video').prop('checked', true);
+    if (response.data.support_linein == "1") $('#device_settings_support_linein').prop('checked', true);
+
+    $('#device_settings_timezone').val(response.data.timezone);
+
+    $('#device_settings_playlist').val([response.data.default_playlist_id]);
+    $('#device_settings_station_ids').val(response.data.station_ids)
+    $('#device_settings_image_duration').val(response.data.station_id_image_duration);
+
+    OB.Device.dynamicFormOptions();
+  });
+}
+
+OB.Device.loadParentPlayers = function (dev_id) {
+  $('#device_list tbody tr:gt(0)').each(function (i, e) {
+    var $option = $('<option/>');
+    var id      = $(e).find('td:nth-child(1)').text();
+    var name    = $(e).find('td:nth-child(2)').text();
+
+    if (id == dev_id) return;
+
+    $option.val(id);
+    $option.text(name);
+    $('#device_settings_parent_id').append($option);
+  });
+}
+
+OB.Device.dynamicFormOptions = function () {
+  if ($('#device_settings_parent_id').val() != "") {
+    $('#device_settings_parent_options').show();
+  } else {
+    $('#device_settings_parent_options').hide();
+    $('#device_settings_parent_schedule').prop('checked', false);
+    $('#device_settings_parent_stations').prop('checked', false);
+    $('#device_settings_parent_playlist').prop('checked', false);
+    $('#device_settings_parent_priority').prop('checked', false);
+  }
+
+  if ($('#device_settings_parent_schedule').is(':checked')) {
+    $('#device_settings_parent_dynamic').parent().show();
+  } else {
+    $('#device_settings_parent_dynamic').parent().hide();
+    $('#device_settings_parent_dynamic').prop('checked', false);
+  }
+
+  if ($('#device_settings_parent_dynamic').is(':checked')) {
+    $('.no_parent_dynamic').hide();
+    $('#device_settings_support_audio').prop('checked', false);
+    $('#device_settings_support_image').prop('checked', false);
+    $('#device_settings_support_video').prop('checked', false);
+  } else {
+    $('.no_parent_dynamic').show();
+  }
+
+  if ($('#device_settings_parent_stations').is(':checked')) {
+    $('.no_parent_stations').hide();
+    $('#device_settings_station_ids').empty();
+    $('#device_settings_image_duration').val(15);
+  } else {
+    $('.no_parent_stations').show();
+  }
+
+  if ($('#device_settings_parent_playlist').is(':checked')) {
+    $('.no_parent_playlist').hide();
+    $('#device_settings_playlist').empty();
+  } else {
+    $('.no_parent_playlist').show();
   }
 }
 
-OB.Device.deviceSave = function(device_id) 
-{
+OB.Device.saveDevice = function () {
+  var post = {};
+  if ($('#device_settings_id').val() != 'new') post.id = $('#device_settings_id').val();
 
-  if(!device_id) {
-    device_id = 'new';
-  }
+  post.name = $('#device_settings_name').val();
+  post.description = $('#device_settings_description').val();
+  post.password = $('#device_settings_password').val();
+  post.ip_address = $('#device_settings_ip').val();
 
-  var $form = $('.device_settings_form[data-device_id='+device_id+']');
+  post.support_audio = $('#device_settings_support_audio').is(':checked');
+  post.support_video = $('#device_settings_support_video').is(':checked');
+  post.support_images = $('#device_settings_support_image').is(':checked');
+  post.support_linein = $('#device_settings_support_linein').is(':checked');
 
-  var device_name = $form.find('.device_settings_name').val();
-  var device_description = $form.find('.device_settings_description').val();
-  var device_stream = $form.find('.device_settings_stream_url').val();
-  var device_ip = $form.find('.device_settings_ip').val();
-  var device_password = $form.find('.device_settings_password').val();
-  var device_station_id_image_duration = $form.find('.device_settings_station_id_image_duration').val();
+  post.timezone = $('#device_settings_timezone').val();
+  post.station_ids = $('#device_settings_station_ids').val();
+  post.station_id_image_duration = $('#device_settings_image_duration').val();
+  if ($('#device_settings_playlist').val().length != 0) post.default_playlist = $('#device_settings_playlist').val()[0];
 
-  var device_timezone = $form.find('.device_settings_timezone').val();
+  if ($('#device_settings_parent_id').val() != "") post.parent_device_id = $('#device_settings_parent_id').val();
+  post.use_parent_dynamic = $('#device_settings_parent_dynamic').is(':checked');
+  post.use_parent_schedule = $('#device_settings_parent_schedule').is(':checked');
+  post.use_parent_ids = $('#device_settings_parent_stations').is(':checked');
+  post.use_parent_playlist = $('#device_settings_parent_playlist').is(':checked');
+  post.use_parent_emergency = $('#device_settings_parent_priority').is(':checked');
 
-  var device_supports_audio = $form.find('.device_settings_supports_audio').is(':checked');
-  var device_supports_images = $form.find('.device_settings_supports_images').is(':checked');
-  var device_supports_video = $form.find('.device_settings_supports_video').is(':checked');
-  var device_supports_linein = $form.find('.device_settings_supports_linein').is(':checked');
+  OB.API.post('device', 'edit', post, function (response) {
+    if (!response.status) {
+      $('#device_edit_message').obWidget('error', response.msg);
+    } else {
+      OB.UI.closeModalWindow();
+      OB.Device.settings();
 
-  var device_parent_id = $form.find('.device_settings_parent_id').val();
-  var device_use_parent_schedule = $form.find('.device_settings_use_parent_schedule').is(':checked');
-  var device_use_parent_dynamic = $form.find('.device_settings_use_parent_dynamic').is(':checked');
-  var device_use_parent_ids = $form.find('.device_settings_use_parent_ids').is(':checked');
-  var device_use_parent_playlist = $form.find('.device_settings_use_parent_playlist').is(':checked');
-  var device_use_parent_emergency = $form.find('.device_settings_use_parent_emergency').is(':checked');
-
-  // get station IDs.
-  var device_station_ids = new Array();
-  $form.find('.device_settings_station_ids').children().each(function(key,value) {
-    if($(value).attr('data-id')) device_station_ids.push($(value).attr('data-id'));
-  });
-
-  // get default playlist
-  var device_default_playlist = false;
-  $form.find('.device_settings_default_playlist').children().each(function(key,value) {
-    if($(value).attr('data-id')) device_default_playlist = $(value).attr('data-id');
-  });
-
-  if(device_id == 'new') device_id = false;
-
-  OB.API.post('device','edit', { 'id': device_id, 'timezone': device_timezone, 'station_ids': device_station_ids, 
-          'default_playlist': device_default_playlist, 'name': device_name, 'description': device_description, 
-          'stream_url': device_stream, 'ip_address': device_ip, 'password': device_password, 
-          'support_audio': device_supports_audio, 'support_video': device_supports_video, 
-          'support_images': device_supports_images, 'support_linein': device_supports_linein, 'station_id_image_duration': device_station_id_image_duration,
-          'parent_device_id': device_parent_id, 'use_parent_schedule': device_use_parent_schedule,
-          'use_parent_dynamic': device_use_parent_dynamic, 'use_parent_ids': device_use_parent_ids,
-          'use_parent_playlist': device_use_parent_playlist, 'use_parent_emergency': device_use_parent_emergency }, function(data) {
-
-    if(!device_id) device_id = 'main'; // we want to manipulate the main message for new devices.
-
-    $('#device_'+device_id+'_message').obWidget((data.status==true ? 'success' : 'error'), data.msg);
-
-    if(device_id == 'main' && data.status == true)
-    {
-      OB.Device.settingsNewDeviceCancel(true); // hides form, keeps message
-      OB.Device.settingsDeviceList(); // reload the device list
+      $('#device_main_message').obWidget('success', response.msg);
     }
-
-    if(device_id!='main') {
-      $('#device_main_message').hide(); // hide this so we aren't confusing.
-    }
-
-  });
-
+  })
 }
-  
+
+OB.Device.deleteDevice = function () {
+  var dev_id = $('#device_settings_id').val();
+
+  //T Are you sure you want to remove this device?
+  OB.UI.confirm({
+    text: "Are you sure you want to remove this device?",
+    okay_class: "delete",
+    callback: function () {
+      OB.Device.deleteDeviceConfirm(dev_id);
+    }
+  })
+}
+
+OB.Device.deleteDeviceConfirm = function (dev_id) {
+  var post = {};
+  post.id = dev_id;
+
+  OB.API.post('device', 'delete', post, function (response) {
+    OB.UI.closeModalWindow();
+    OB.Device.settings();
+
+    if (!response.status) {
+      $('#device_main_message').obWidget('error', response.msg);
+    }
+  });
+}
+
+/* =========================
+   PLAYER MONITORING SECTION
+========================= */
+
 OB.Device.monitor = function()
 {
   $('.sf-submenu').hide();
@@ -507,17 +334,17 @@ OB.Device.monitorFilterFieldChange = function()
 {
 
   var val = $('#monitor_filter_field').val();
-  
+
   if(val=='media_id')
   {
-    $('#monitor_filter_operator option:[value="like"]').hide();
-    $('#monitor_filter_operator option:[value="not_like"]').hide();
+    $('#monitor_filter_operator option[value="like"]').hide();
+    $('#monitor_filter_operator option[value="not_like"]').hide();
   }
 
   else
   {
-    $('#monitor_filter_operator option:[value="like"]').show();
-    $('#monitor_filter_operator option:[value="not_like"]').show();
+    $('#monitor_filter_operator option[value="like"]').show();
+    $('#monitor_filter_operator option[value="not_like"]').show();
   }
 
 }
@@ -560,14 +387,16 @@ OB.Device.monitorSearch = function()
 {
 
   $('#monitor_results_container').hide();
+  $('#monitor_download_csv').hide();
 
   var date_start = $('#monitor_date_start').val();
   var date_end = $('#monitor_date_end').val();
-  
-  // validate our start / end date, convert to UTC timestamp.
+
+  // validate our start / end date
   var date_regexp = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   if(!date_regexp.test(date_end) || !date_regexp.test(date_start))
   {
+    //T The start or end date is invalid.
     $('#monitor_message').obWidget('error','The start or end date is invalid.');
     return;
   }
@@ -580,6 +409,7 @@ OB.Device.monitorSearch = function()
 
   if(date_start_object > date_end_object)
   {
+    //T The start date must be before the end date.
     $('#monitor_message').obWidget('error','The start date must be before the end date.');
     return;
   }
@@ -592,8 +422,8 @@ OB.Device.monitorSearch = function()
 
   fields.device_id = $('#monitor_device_select').val();
 
-  fields.start_timestamp = Math.round(date_start_object.getTime()/1000);
-  fields.end_timestamp = Math.round(date_end_object.getTime()/1000);
+  fields.date_start = date_start;
+  fields.date_end = date_end;
 
   // get our filters...
   filters = new Array();
@@ -611,9 +441,11 @@ OB.Device.monitorSearch = function()
 
   fields.filters = filters;
 
-  OB.API.post('device','monitor_search',fields,function(data) { 
+  $('#monitor_message').hide();
 
-    if(data.status==false) 
+  OB.API.post('device','monitor_search',fields,function(data) {
+
+    if(data.status==false)
     {
 
       $('#monitor_message').obWidget('error',data.msg);
@@ -627,7 +459,7 @@ OB.Device.monitorSearch = function()
     if(total_rows==0)
     {
       $('#monitor_no_results').show();
-      $('#monitor_results_table').hide();      
+      $('#monitor_results_table').hide();
     }
 
     else
@@ -639,18 +471,33 @@ OB.Device.monitorSearch = function()
       // add results to table
       $.each(results,function(index,row) {
 
-        var html = '<tr><td>'+row.media_id+'</td><td>'+htmlspecialchars(row.artist)+'</td><td>'+htmlspecialchars(row.title)+'</td><td>'+format_timestamp(row.timestamp)+'</td><td>'+htmlspecialchars(row.context)+'</td><td>'+htmlspecialchars(row.notes)+'</td></tr>';
+        var $tr = $('<tr/>');
+        $tr.append( $('<td/>').text(row.media_id) );
+        $tr.append( $('<td/>').text(row.artist) );
+        $tr.append( $('<td/>').text(row.title) );
+        $tr.append( $('<td/>').text(row.datetime) );
+        $tr.append( $('<td/>').text(row.context) );
+        $tr.append( $('<td/>').text(row.notes) );
 
-        $('#monitor_results_table tbody').append(html);
+        $('#monitor_results_table tbody').append($tr);
 
       });
 
     }
 
     $('#monitor_results_container').show();
+    if(total_rows>0)
+    {
+      $('#monitor_download_csv').show();
+        var data = new Blob([data.data.csv], { type: 'application/octect-stream' });
+        var url = URL.createObjectURL(data);
+        var filename = 'player_monitor.csv';
+        $('#monitor_download_csv').attr({
+          href: url,
+          download: filename
+        });
+    }
 
   });
 
 }
-
-

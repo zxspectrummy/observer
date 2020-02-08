@@ -1,4 +1,0 @@
-﻿Help Menu
-
-  Help: 救命
-  Documentation: 文件

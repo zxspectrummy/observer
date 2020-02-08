@@ -1,3 +1,22 @@
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
+
+    This file is part of OpenBroadcaster Server.
+
+    OpenBroadcaster Server is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    OpenBroadcaster Server is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 OB.UI.Widgets = new Object();
 
 OB.UI.widgetHTML = function($elements)
@@ -32,14 +51,14 @@ OB.UI.widgetHTML = function($elements)
 
 }
 
-OB.UI.Widgets.message = function($element,args)
+OB.UI.Widgets.message = function($element,type,...message)
 {
   // validate args.
-  if(!args.length) return false;
-  if(args[0]!='hide' && args.length<2) return false;
-  if($.inArray(args[0],['hide','info','warning','error','success'])<0) return;
+  if(!type) return false;
+  if(type!='hide' && !message.length) return false;
+  if($.inArray(type,['hide','info','warning','error','success'])<0) return;
 
-  if(args[0]=='hide') $element.hide();
+  if(type=='hide') $element.hide();
 
   else
   {
@@ -48,18 +67,9 @@ OB.UI.Widgets.message = function($element,args)
     $element.removeClass('warning');
     $element.removeClass('error');
 
-    $element.addClass(args[0]);
+    $element.addClass(type);
 
-    // translate message or leave as-is
-    if(typeof(args[1] == 'object') && args[1].length==2)
-      var message = OB.t(args[1][0],args[1][1]);
-    else if(typeof(args[1] == 'object') && args[1].length==3)
-      var message = OB.t(args[1][0],args[1][1],args[1][2]);
-    else
-      var message = args[1];
-
-    $element.text(message);
-    
+    $element.text(OB.t(...message));
     $element.show();
 
     OB.UI.scrollIntoView($element);
@@ -68,8 +78,8 @@ OB.UI.Widgets.message = function($element,args)
   return true;
 }
 
-$.fn.obWidget = function()
+$.fn.obWidget = function(...args)
 {
   if(!this.hasClass('obwidget') || !this.attr('data-type') || !OB.UI.Widgets[this.attr('data-type')]) return false;
-  return OB.UI.Widgets[this.attr('data-type')](this,arguments);
+  return OB.UI.Widgets[this.attr('data-type')](this,...args);
 }

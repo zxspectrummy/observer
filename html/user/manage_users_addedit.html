@@ -1,9 +1,9 @@
 <obwidget id="user_addedit_message" type="message"></obwidget>
 
-<div data-tns="User Edit">
+<div>
 
   <fieldset>
-    <legend data-t>Heading</legend>
+    <legend data-t>User</legend>
 
     <div class="fieldrow">
       <label class="required" data-t>Name</label>
@@ -40,8 +40,8 @@
     <div class="fieldrow">
       <label class="required" data-t>Status</label>
       <select id="user_enabled_input">
-        <option value="1" data-t data-tns="Common">Enabled</option>
-        <option value="0" data-t data-tns="Common">Disabled</option>
+        <option value="1" data-t>Enabled</option>
+        <option value="0" data-t>Disabled</option>
       </select>
     </div>
 
@@ -52,13 +52,13 @@
 
 </fieldset>
 
-  <p class="edit_only" >* <span data-t>Password Warning</span></p>
+  <p class="edit_only" >* <span data-t>Enter password only if you wish to change the password.</span></p>
 <fieldset>
 
     <div class="fieldrow">
-      <button class="add" id="item_properties_save" onclick="OB.User.manageUsersSave();" data-t data-tns="Common">Save</button>
-      <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.manageUsersDelete();" data-t data-tns="Common">Delete</button>
-      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t data-tns="Common">Cancel</button>
+      <button class="add" id="item_properties_save" onclick="OB.User.manageUsersSave();" data-t>Save</button>
+      <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.manageUsersDelete();" data-t>Delete</button>
+      <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t>Cancel</button>
     </div>
 
 </fieldset>

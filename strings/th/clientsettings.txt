@@ -1,9 +1,0 @@
-﻿Admin Menu
-
-  Client Settings: การตั้งค่าไคลเอนต์
-
-Client Settings
-
-  Heading: การตั้งค่าไคลเอนต์
-  Welcome Message: ข้อความยินดีต้อนรับ
-  Save Confirmation: ข้อความต้อนรับที่บันทึกไว้

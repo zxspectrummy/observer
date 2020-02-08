@@ -1,9 +1,0 @@
-﻿Admin Menu
-
-  Client Settings: Client-Einstellungen
-
-Client Settings
-
-  Heading: Client-Einstellungen
-  Welcome Message: Willkommensnachricht
-  Save Confirmation: Willkommens-Nachricht gespeichert.

@@ -1,5 +1,5 @@
-/*     
-    Copyright 2012 OpenBroadcaster, Inc.
+/*
+    Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -26,10 +26,11 @@ OB.Modules.init = function()
 
 OB.Modules.initMenu = function()
 {
-  OB.UI.addSubMenuItem('admin',['Admin Menu','Modules'],'manage_modules',OB.Modules.modulesPage,50,'manage_modules');
+  //T Modules
+  OB.UI.addSubMenuItem('admin', 'Modules', 'manage_modules', OB.Modules.modulesPage, 50, 'manage_modules');
 }
 
-OB.Modules.modulesPage = function()  
+OB.Modules.modulesPage = function()
 {
 //  $('#layout_main').html(OB.UI.getHTML('admin/modules.html'));
   OB.UI.replaceMain('admin/modules.html');
@@ -39,8 +40,9 @@ OB.Modules.modulesPage = function()
 OB.Modules.modulesGet = function()
 {
 
-  $('#modules_installed_info').text('Loading modules...');
-  $('#modules_available_info').text('Loading modules...');
+  //T Loading modules...
+  $('#modules_installed_info').text(OB.t('Loading modules...'));
+  $('#modules_available_info').text(OB.t('Loading modules...'));
 
   $('#modules_installed_list tbody').html('');
   $('#modules_available_list tbody').html('');
@@ -50,10 +52,14 @@ OB.Modules.modulesGet = function()
     var installed_modules = response.data.installed;
     var available_modules = response.data.available;
 
-    var no_modules_text = OB.t('Modules Edit','No Modules Message');
-    var following_modules_text = OB.t('Modules Edit', 'Following Modules Message');
-    var no_available_text = OB.t('Modules Edit', 'None Available Message');
-    var available_modules_text = OB.t('Modules Edit', 'Following Available Message');
+    //T There are no modules installed.
+    var no_modules_text = OB.t('There are no modules installed.');
+    //T The following modules are installed:
+    var following_modules_text = OB.t('The following modules are installed:');
+    //T There are no modules available to install.
+    var no_available_text = OB.t('There are no modules available to install.');
+    //T The following modules are available to install:
+    var available_modules_text = OB.t('The following modules are available to install:');
 
     if(installed_modules.length==0) {
       $('#modules_installed_info').text(no_modules_text);
@@ -79,7 +85,7 @@ OB.Modules.modulesGet = function()
           '<tr><td>'+htmlspecialchars(module.name)+'</td>'+
           '<td>'+htmlspecialchars(module.description)+'</td>'+
           '<td><button onclick="OB.Modules.moduleUninstall(false, \''+module.dir+'\');" >' +
-          OB.t('Modules Edit','Uninstall Button') +
+          OB.t('uninstall') +
           '</td>'+
           '</tr>');
     });
@@ -91,7 +97,7 @@ OB.Modules.modulesGet = function()
       '<td>'+htmlspecialchars(module.name)+'</td>'+
       '<td>'+htmlspecialchars(module.description)+'</td>'+
       '<td><button onclick="OB.Modules.moduleInstall(false, \''+module.dir+'\');" >' +
-      OB.t('Modules Edit','Install Button') +
+      OB.t('install') +
       '</td></tr>');
     });
 
@@ -107,17 +113,23 @@ OB.Modules.moduleInstall = function(confirm, module_name) {
     OB.API.post('modules','install', {'name': module_name}, function(response) {
       if (response.status) {
         OB.Modules.modulesGet();
-      } else OB.UI.alert(response.msg);
+        $('#modules_message').obWidget('success', response.msg)
+      } else {
+        $('#modules_message').obWidget('error', response.msg);
+      }
     });
   } else {
 
+    //T Are you sure you wish to install the module "%1"?
+    //T Yes, Install the Module
+    //T No, Cancel
     OB.UI.confirm(
-        ['Modules Edit', 'Install Module Confirm', module_name],
+        ['Are you sure you wish to install the module "%1"?', module_name],
         function () {
           OB.Modules.moduleInstall(true, module_name);
         },
-        ['Modules Edit', 'Install Yes Button'],
-        ['Common', 'No Cancel'],
+        'Yes, Install the Module',
+        'No, Cancel',
         'delete'
     )
   }
@@ -128,22 +140,28 @@ OB.Modules.moduleUninstall = function(confirm, module_name) {
   if (confirm) {
 
     OB.API.post('modules', 'uninstall', {'name': module_name}, function (response) {
-      if (!response.status) OB.UI.alert(response.msg);
-      else OB.Modules.modulesGet();
+      if (!response.status) {
+        $('#modules_message').obWidget('error', response.msg);
+      } else {
+        OB.Modules.modulesGet();
+        $('#modules_message').obWidget('success', response.msg);
+      }
     });
 
   } else {
 
+    //T Are you sure you wish to uninstall the module "%1"?
+    //T Yes, Uninstall the Module
+    //T No, Cancel
     OB.UI.confirm(
-        ['Modules Edit', 'Delete Module Confirm', module_name],
+        ['Are you sure you wish to uninstall the module "%1"?', module_name],
         function () {
           OB.Modules.moduleUninstall(true, module_name);
         },
-        ['Modules Edit', 'Delete Yes Button'],
-        ['Common', 'No Cancel'],
+        'Yes, Uninstall the Module',
+        'No, Cancel',
         'delete'
     );
 
   }
 }
-
