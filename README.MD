@@ -8,7 +8,17 @@ title: Server
 
 ## About the Server
 
-__OpenBroadcaster Server__ uses AJAX, Gstreamer, HTML5 and Javascript to deliver a web application in support of broadcast automation, media asset management and crowd-source community programming.
+__OpenBroadcaster Server__ uses PHP, HTML5 and Javascript to deliver a web application in support of broadcast automation, media asset management and crowd-source community programming. Server manages remote Python OBPlayer playout boxes built on the Gstreamer multimedia framework. 
+
+### Resources
+
+Manuals and Guides
+
+http://support.openbroadcaster.com/server/
+
+Wiki
+
+https://wiki.openbroadcaster.com
 
 ### Typical applications
 {:toc}
@@ -17,12 +27,12 @@ __OpenBroadcaster Server__ uses AJAX, Gstreamer, HTML5 and Javascript to deliver
 {:.no_toc}
 
  * Theme based music segments for restaurants and public spaces 
- * GPS Geo coded triggering for multicultural tourist 
+ * GPS Geo coded triggering for multicultural tourist services
  * User Determined Radio Music Discovery Service
  * Dynamic Podcast assembler
  * Logging and archiving
  * Community radio administration networking
- * Special interest multicultural  broadcasters 
+ * Special interest multicultural broadcasters 
  * Syndicated in store advertising and PA distribution 
  * Music on Hold for telephone systems
  * Crowd Sourced Community Radio Jukebox
@@ -40,7 +50,7 @@ __OpenBroadcaster Server__ uses AJAX, Gstreamer, HTML5 and Javascript to deliver
  * Point-of-purchase promotions
 
 OpenBroadcaster Server
-http://www.openbroadcaster.com/
+https://openbroadcaster.com/
 
 Copyright 2012-2020 OpenBroadcaster, Inc.
 
