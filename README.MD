@@ -10,7 +10,7 @@ title: Server
 
 __OpenBroadcaster Server__ uses PHP, HTML5 and Javascript to deliver a web application in support of broadcast automation, media asset management and crowd-source community programming. Server manages remote Python OBPlayer playout boxes built on the Gstreamer multimedia framework. 
 
-## 
+## First run troubleshooting
 
 http://support.openbroadcaster.com/Troubleshooting#post-installation-server-troubleshooting
 
