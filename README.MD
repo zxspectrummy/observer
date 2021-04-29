@@ -12,13 +12,13 @@ __OpenBroadcaster Server__ uses PHP, HTML5 and Javascript to deliver a web appli
 
 ## First run troubleshooting
 
-http://support.openbroadcaster.com/Troubleshooting#post-installation-server-troubleshooting
+https://support.openbroadcaster.com/troubleshooting#post-installation-server-troubleshooting
 
 ### Resources
 
 Manuals and Guides
 
-http://support.openbroadcaster.com/server/
+https://support.openbroadcaster.com/server/
 
 Wiki
 
@@ -28,7 +28,7 @@ OpenBroadcaster Server
 
 https://openbroadcaster.com/
 
-Copyright 2012-2020 OpenBroadcaster, Inc.
+Copyright 2012-2021 OpenBroadcaster, Inc.
 
 Licensed under GNU AGPLv3.  See COPYING.
 
