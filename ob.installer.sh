@@ -186,7 +186,11 @@ rm $WEBROOT/ob.installer.sh
 
 echo "Site files are in place..."
 
-##Set up any cron jobs:
+## Symlink avconv to ffmpeg to support modern Linux distributions
+ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
+ln -s /usr/bin/ffprobe /usr/local/bin/avprobe
+
+## Set up any cron jobs:
 echo "*/5 * * * * $WEBUSER /usr/bin/php $WEBROOT/cron.php" > /etc/cron.d/openbroadcaster
 
 ## We need to create a file full of variables for OB to access the DB and such.  
