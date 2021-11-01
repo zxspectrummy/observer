@@ -18,7 +18,7 @@
 # along with OpenBroadcaster Server. If not, see <http://www.gnu.org/licenses/>.
 
 ## install these packages before running this script:
-apt-get install apache2 apg mysql-server libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-mbstring php7.0-xml php7.0-gd php7.0-curl php7.0-imagick imagemagick libav-tools vorbis-tools festival libavcodec-extra libavfilter-extra
+apt-get install apache2 apg mariadb-server libapache2-mod-php7.3 php7.3 php7.3-mysql php7.3-mbstring php7.3-xml php7.3-gd php7.3-curl php7.3-imagick imagemagick ffmpeg vorbis-tools festival libavcodec-extra libavfilter-extra
 
 ## As root, run this script as an argument to the bash command, or by setting the executable bit.
 
@@ -186,7 +186,11 @@ rm $WEBROOT/ob.installer.sh
 
 echo "Site files are in place..."
 
-##Set up any cron jobs:
+## Symlink avconv to ffmpeg to support modern Linux distributions
+ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
+ln -s /usr/bin/ffprobe /usr/local/bin/avprobe
+
+## Set up any cron jobs:
 echo "*/5 * * * * $WEBUSER /usr/bin/php $WEBROOT/cron.php" > /etc/cron.d/openbroadcaster
 
 ## We need to create a file full of variables for OB to access the DB and such.  

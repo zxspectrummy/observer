@@ -9,7 +9,7 @@ Dependencies are Debian 10 Stable package names.
 - festival 
 - ffmpeg 
 - imagemagick 
-- libavcodec-extra **
+- libavcodec-extra
 - libavfilter-extra
 - mariadb-server 
 - php 
@@ -20,8 +20,3 @@ Dependencies are Debian 10 Stable package names.
 - php-mysql 
 - php-xml 
 - vorbis-tools 
-
-** If libav-tools package is not available, install ffmpeg package instead, and symlink the following:
-
-ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
-ln -s /usr/bin/ffprobe /usr/local/bin/avprobe
