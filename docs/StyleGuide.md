@@ -1,3 +1,5 @@
+# OBServer Coding Standards#
+
 ## OBServer (Clientside) ##
 
 __HTML/CSS__
@@ -24,6 +26,7 @@ __JavaScript Naming Conventions__
 - Methods/functions should use lowerCamelCase.
 
 - CONSTANTS should use UPPERCASE_WITH_UNDERSCORES.
+
 
 ## OBServer (Serverside) ##
 
