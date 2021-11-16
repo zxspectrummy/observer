@@ -2,7 +2,7 @@
 
 OB has a translation function specified in OB.UI.translate and aliased as OB.t. Use OB.t to translate. OB.t accepts 1, 2, or 3 arguments.
 
-- 1 argument: if argument is a string, this string gets returned. ­ if argument is an array, this gets converted to 1, 2, or 3 arguments. (so arguments can be accepted as array too).
+- 1 argument: if argument is a string, this string gets returned. If argument is an array, this gets converted to 1, 2, or 3 arguments. (so arguments can be accepted as array too).
 
 - 2 arguments: first argument is namespace, second argument is the string ID. see strings/*.txt for how this looks.
 
