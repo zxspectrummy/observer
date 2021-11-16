@@ -39,7 +39,7 @@ Add "sync" as last argument to do a synchronous request.
 
 ~~~~
 OB.API.multiPost (array of arrays containing controller/action/data, callback_function)
-~~~
+~~~~
 
 (optional sync as last argument) See settings.js (getMediaSettings) for an example of this in use. Responses then come in as array with same indices as controller/action/data array.
 
