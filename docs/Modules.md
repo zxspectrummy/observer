@@ -1,5 +1,8 @@
 # OBServer Modules Development
 
+* TOC
+{:toc}
+
 ## Module Support 
 
 OpenBroadcaster v5.X supports modules with a plugin architecture.
