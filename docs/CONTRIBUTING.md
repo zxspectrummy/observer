@@ -1,7 +1,7 @@
 ## How to contribute
 
 First of all, thank you for taking the time to contribute to this project. We've tried to make a stable project and try to fix bugs and add new features continuously. You can help us do more.
-Before you start, read the **[README.md](/README.md)** file for info on the project and how to set it up.
+Before you start, read the **[README.md](https://github.com/openbroadcaster/observer/blob/main/README.MD)** file for info on the project and how to set it up.
 
 ## Finding first issue
 
