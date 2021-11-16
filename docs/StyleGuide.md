@@ -10,12 +10,12 @@ __HTML/CSS__
 
 - Keep things clean and themeable, avoid internal stylesheets and inline styles.
 
-'___JavaScript___
+__JavaScript__
 
 - For indentation, use 2 space characters instead of Tabs
 
 
-___JavaScript Naming Conventions___
+__JavaScript Naming Conventions__
 
 - Class names should use CamelCase / CapsWords. i.e., ClassName. Core classes go in OB object. Modules should create their own object to use (i.e., OBModuleName).
 
@@ -25,11 +25,11 @@ ___JavaScript Naming Conventions___
 
 - CONSTANTS should use UPPERCASE_WITH_UNDERSCORES.
 
-==OBServer (Serverside) ==
+## OBServer (Serverside) ##
 
 The following is the style guide for the server­side (PHP) code in the OpenBroadcaster Server web application.
 
-___General Notes___
+__General Notes__
 
 - For indentation, use 2 space characters instead of Tabs
 
@@ -40,7 +40,7 @@ This is required to allow modules to hook into model code.
 - Unless it makes things terribly ugly, controllers should not call other controllers. Put reusable code into models.
 
 
-___Naming Conventions___
+__Naming Conventions__
 
 - Class names should use CapsWords. i.e., ClassName
 
