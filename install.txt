@@ -1,7 +1,5 @@
 OpenBroadcaster - Server Installation Instructions
 
-More info at https://wiki.openbroadcaster.com
-
 These instructions are an alternative to using ob.installer.sh.
 
 *** After install, log in as user with Admin privileges and then run https://YOUR_IP/updates ***
