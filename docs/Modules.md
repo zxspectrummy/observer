@@ -1,4 +1,5 @@
 # OBServer Modules Development
+{:.no_toc}
 
 * TOC
 {:toc}
