@@ -49,7 +49,7 @@ OB.Playlist.advancedInit = function()
         {
           $('.sidebar_search_media_selected').each(function(index,element) {
 
-            if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
+            if($(element).attr('data-visibility')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
             {
               private_media_alert = true;
               return true;

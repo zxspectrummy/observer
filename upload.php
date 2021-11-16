@@ -40,26 +40,36 @@ if(!empty($_POST['i']) && !empty($_POST['k']))
   $auth_key = $_POST['k'];
 }
 
+/*
+// disabled, should no longer be used.
 // if not in post, try fetching from cookie.
 elseif(!empty($_COOKIE['ob_auth_id']) && !empty($_COOKIE['ob_auth_key']))
 {
   $auth_id = $_COOKIE['ob_auth_id'];
   $auth_key = $_COOKIE['ob_auth_key'];
 }
+*/
 
-// authorize our user (from post data, cookie data, whatever.)
-$user->auth($auth_id,$auth_key);
+// this is another comment
+if(empty($_POST['appkey']))
+{
+  $user->auth($auth_id,$auth_key);
+} 
+else
+{
+  $user->auth_appkey($_POST['appkey'], [['media','save']]);
+}
 
 // define our class, create instance, handle upload.
-
 class Upload extends OBFController
 {
 
   // used by handle_upload() to get some important information about the uploaded media
   private function media_info($filename)
   {
-    $media_model = $this->load->model('Media');
-    return $media_model('media_info',$filename);
+    // $media_model = $this->load->model('Media');
+    // return $media_model('media_info',$filename);
+    return $this->models->media('media_info', ['filename' => $filename]);
   }
 
 
@@ -68,6 +78,7 @@ class Upload extends OBFController
 
     // max file size in bytes
     // $sizeLimit = 100 * 1024 * 1024;
+    $models = OBFModels::get_instance();
 
     $key = $this->randKey();
     $id = $this->db->insert('uploads',array('key'=>$key, 'expiry'=>strtotime('+24 hours')));
@@ -97,8 +108,7 @@ class Upload extends OBFController
     $result['file_key']=$key;
 
     // get ID3 data.
-    $media_model = $this->load->model('Media');
-    $id3_data = $media_model('getid3', OB_ASSETS . '/uploads/' . $id);
+    $id3_data = $models->media('getid3', ['filename' => OB_ASSETS . '/uploads/' . $id]);
 
     // $result['info'] = array('comments'=>$id3['comments']);
 
@@ -118,8 +128,7 @@ class Upload extends OBFController
 
     $result['media_info'] = $media_info;
 
-    $media_model = $this->load->model('Media');
-    $result['media_supported'] = $media_model('format_allowed',$media_info['type'],$media_info['format']);
+    $result['media_supported'] = $models->media('format_allowed', ['type' => $media_info['type'], 'format' => $media_info['format']]);
 
     // to pass data through iframe you will need to encode all html tags
     echo json_encode($result);

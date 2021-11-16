@@ -32,13 +32,36 @@ $module_model = $load->model('Modules');
 $installed_modules = $module_model('get_installed');
 if(!isset($installed_modules['now_playing'])) die('The "now playing" module is not installed.');
 
-// make sure this device is valid.
-if(!isset($_GET['i']) || !preg_match('/^\d+$/',$_GET['i'])) die('Invalid device.');
-$device_model = $load->model('Devices');
-$device = $device_model('get_one',$_GET['i']);
-if(!$device) die('Invalid device.');
+// make sure this player is valid.
+if(!isset($_GET['i']) || !preg_match('/^\d+$/',$_GET['i'])) die('Invalid player.');
+$player_model = $load->model('Players');
+$player = $player_model('get_one',$_GET['i']);
+if(!$player) die('Invalid player.');
 
-$data = $device_model('now_playing',$_GET['i']);
+$data = $player_model('now_playing',$_GET['i']);
+
+$db->what('file_location');
+$db->where('id', $data['media']['id']);
+$row = $db->get_one('media');
+$file_location = $row['file_location'];
+$thumbnail = OB_CACHE.'/thumbnails/'.$file_location[0].'/'.$file_location[1].'/'.$data['media']['id'].'.jpg';
+$data['media']['thumbnail'] = file_exists($thumbnail);
+
+// output thumbnail if requested
+if(!empty($_GET['thumbnail']))
+{
+    if(!file_exists($thumbnail))
+    {
+        http_response_code(404);
+        die();
+    }
+    else
+    {
+        header('Content-Type: image/jpeg');
+        readfile($thumbnail);
+        die();
+    }
+}
 
 // return information via JSON if requested as such.
 if(!empty($_GET['json'])) { echo json_encode($data); die(); }

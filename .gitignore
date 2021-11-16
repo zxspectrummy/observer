@@ -8,4 +8,5 @@ modules/*
 .*.swo
 .well-known
 tools/stream/transcode.log
+tools/subsonic/*.json
 **/.sass-cache

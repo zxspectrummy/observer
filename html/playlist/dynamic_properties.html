@@ -17,7 +17,17 @@
 
 <div class="fieldrow">
   <label class="required" data-t>Image Duration</label>
-  <input type="text" size="5" id="dynamic_image_duration"> (<span data-t>in seconds</span>)
+  <input type="text" size="5" id="dynamic_image_duration"> <span data-t>seconds</span>
+</div>
+
+<div class="fieldrow" hidden>
+  <label class="required" data-t>Crossfade Items</label>
+  <input type="number" min="0" max="30" value="0" step="0.1" id="dynamic_crossfade"> <span data-t>seconds</span>
+</div>
+
+<div class="fieldrow" hidden>
+  <label class="required" data-t>Crossfade With Next</label>
+  <input type="number" min="0" max="30" value="0" step="0.1" id="dynamic_crossfade_last"> <span data-t>seconds</span>
 </div>
 </fieldset>
 

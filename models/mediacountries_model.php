@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,13 +19,23 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Secondary model for managing media countries.
+ *
+ * @package Model
+ */
 class MediaCountriesModel extends OBFModel
 {
+  /**
+   * Get all countries from the database.
+   *
+   * @return countries
+   */
   public function get_all()
   {
     $this->db->orderby('name');
-    $types = $this->db->get('media_countries'); 
-    
+    $types = $this->db->get('media_countries');
+
     return $types;
   }
 }

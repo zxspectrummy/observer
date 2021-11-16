@@ -18,7 +18,7 @@
 
     <div class="fieldrow">
       <label class="required" data-t>Type</label>
-      <select id="metadata_type"><option data-t value="text">Text (single line)</option><option data-t value="textarea">Text (multiple lines)</option><option data-t value="bool">Yes/No</option><option data-t value="select">Drop-Down Selection</option><option data-t value="tags">Tags</option></select>
+      <select id="metadata_type"><option data-t value="text">Text (single line)</option><option data-t value="textarea">Text (multiple lines)</option><option data-t value="integer">Number (Integer)</option><option data-t value="bool">Yes/No</option><option data-t value="select">Drop-Down Selection</option><option data-t value="tags">Tags</option><option data-t value="hidden">Hidden</option></select>
     </div>
 
     <div class="fieldrow">
@@ -34,6 +34,7 @@
     <div class="fieldrow">
       <label data-t>Default</label>
       <input type="text" class="hidden metadata_default metadata_default_text">
+      <input type="number" class="hidden metadata_default metadata_default_integer">
       <textarea class="hidden metadata_default metadata_default_textarea"></textarea>
       <select class="hidden metadata_default metadata_default_bool"><option value="1" data-t>Yes</option><option value="0" data-t>No</option></select>
       <select class="hidden metadata_default metadata_default_select"></select>

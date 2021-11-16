@@ -24,7 +24,7 @@
 
     <div class="fieldrow">
       <label data-t>Status</label>
-      <select id="playlist_status_input"><option value="private" data-t>Private (available to you only)</option><option value="public" data-t>Public (available to everyone)</option></select>
+      <select id="playlist_status_input"><option value="private" data-t>Private (available to you only)</option><option value="visible" data-t>Visible (available to all users)</option><option value="public" data-t>Public (available to everyone)</option></select>
     </div>
 
     <div class="fieldrow">
@@ -32,7 +32,7 @@
       <select id="playlist_type_input" onchange="OB.Playlist.addeditTypeChange();">
         <option value="standard" data-t>Standard</option>
         <option value="advanced" data-t>Advanced</option>
-        <option value="live_assist" data-t>LiveAssist</option>
+        <option value="live_assist" data-t>Live Assist</option>
       </select>
     </div>
 
@@ -101,9 +101,9 @@
     </p>
 
     <div class="playlist_data_save">
-      <button onclick="OB.Playlist.addeditInsertDynamic(true,OB.Sidebar.media_search_last_query);" data-t>Add Dynamic Selection</button>
-      <button onclick="OB.Playlist.addeditInsertStationId();" data-t>Add Station ID</button>
-      <button class="hidden" id="playlist_insert_breakpoint_button" onclick="OB.Playlist.addeditInsertBreakpoint();" data-t>Add Breakpoint</button>
+      <button onclick="OB.Playlist.addeditInsertDynamic(true,OB.Sidebar.media_search_last_query);" data-t>Dynamic Selection</button>
+      <button onclick="OB.Playlist.addeditInsertStationId();" data-t>Station ID</button>
+      <button class="hidden" id="playlist_insert_breakpoint_button" onclick="OB.Playlist.addeditInsertBreakpoint();" data-t>Breakpoint</button>
       <button onclick="OB.Playlist.addeditRemoveAll();" class="edit" data-t>Clear</button>
       <button onclick="OB.Playlist.save();" class="add" data-t>Save</button>
     </div>
@@ -111,9 +111,9 @@
     </fieldset>
 
     <fieldset id="playlist_liveassist_buttons">
-    <legend data-t>LiveAssist Buttons</legend>
+    <legend data-t>Live Assist Buttons</legend>
 
-      <p data-t>Drag playlists to this area to program the LiveAssist button area.  Each playlist will be a column of buttons, with one button per playlist item.</p>
+      <p data-t>Drag playlists to this area to program the Live Assist button area.  Each playlist will be a column of buttons, with one button per playlist item.</p>
 
       <div id="playlist_liveassist_items" class="droppable_target_playlist">
           <div id="playlist_liveassist_drag_help" data-t>Drag Items Here</div>

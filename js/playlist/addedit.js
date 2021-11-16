@@ -22,10 +22,11 @@ OB.Playlist.newPage = function()
 
   OB.Playlist.advanced_items = [];
 
-  OB.API.post('device','station_id_avg_duration', {}, function(data) {
+  OB.API.post('player','station_id_avg_duration', {}, function(data) {
     OB.Playlist.station_id_avg_duration=data.data;
 
     OB.UI.replaceMain('playlist/addedit.html');
+    OB.Playlist.addCustomTypeButtons();
     OB.UI.permissionsUpdate();
 
     //T New Playlist
@@ -65,7 +66,7 @@ OB.Playlist.editPage = function(id)
   }
 
   var post = [];
-  post.push(['device','station_id_avg_duration', {}]);
+  post.push(['player','station_id_avg_duration', {}]);
   post.push(['playlist','get', { 'id': id }]);
 
   OB.API.multiPost(post, function(response)
@@ -77,6 +78,7 @@ OB.Playlist.editPage = function(id)
     if(response[1].status==false) { OB.Playlist.newPage(); return; }
 
     OB.UI.replaceMain('playlist/addedit.html');
+    OB.Playlist.addCustomTypeButtons();
     OB.UI.permissionsUpdate();
 
     //T Edit Playlist
@@ -109,10 +111,25 @@ OB.Playlist.editPage = function(id)
 
       else
       {
-        if(item['type']=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['dynamic_query'],item['dynamic_duration'],item['dynamic_name'],item['dynamic_num_items'],item['dynamic_image_duration']);
+        if(item['type']=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['properties']['query'],item['duration'],item['properties']['name'],item['properties']['num_items'],item['properties']['image_duration'],item['properties']['crossfade'] ?? 0,item['properties']['crossfade_last'] ?? 0);
         else if(item['type']=='station_id') OB.Playlist.addeditInsertStationId();
         else if(item['type']=='breakpoint') OB.Playlist.addeditInsertBreakpoint();
-        else OB.Playlist.addeditInsertItem(item['id'],item['artist']+' - '+item['title'],item['duration'],item['type']);
+        else if(item['type']=='custom')
+        {
+          var custom_item_name = item['properties']['name'];
+          var custom_item_description = null;
+          var custom_item_duration = null;
+          $.each(OB.Settings.playlist_item_types, function(playlist_item_type_index, playlist_item_type)
+          {
+            if(playlist_item_type['name']==custom_item_name)
+            {
+              custom_item_duration = playlist_item_type['duration'];
+              custom_item_description = playlist_item_type['description'];
+            }
+          });
+          if(custom_item_duration!==null) OB.Playlist.addeditInsertCustom(custom_item_name,custom_item_description,custom_item_duration);
+        }
+        else OB.Playlist.addeditInsertItem(item['id'],item['artist']+' - '+item['title'],item['duration'],item['type'],item['properties']);
       }
 
     });
@@ -130,6 +147,37 @@ OB.Playlist.editPage = function(id)
     if(playlist_data.permissions_users) $('#playlist_users_permissions_input').val(playlist_data.permissions_users);
   });
 
+}
+
+OB.Playlist.addCustomTypeButtons = function()
+{
+  $.each(OB.Settings.playlist_item_types, function(index, type)
+  {
+    $('#playlist_edit_standard_container .playlist_data_save').prepend( $('<button></button>').text(type.description).attr('data-name',type.name).attr('data-duration',type.duration).click(function() { OB.Playlist.addeditInsertCustom(type.name,type.description,type.duration); }) );
+  });
+}
+
+OB.Playlist.addeditInsertCustom = function(name, description, duration)
+{
+  OB.Playlist.addedit_item_last_id += 1;
+
+  var $button = $('<div data-type="custom" class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"></div>');
+  $button.attr('data-name',name);
+  $button.attr('data-duration',duration);
+  $button.append( $('<span class="playlist_addedit_thumbnail"></span>') );
+  $button.append( $('<i class="playlist_addedit_description"></i>').text(description) );
+  $button.append( $('<span class="playlist_addedit_duration"></span>').text(secsToTime(duration)) );
+  // $('#playlist_items').append( $('<div data-type="custom" class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_duration">*'+secsToTime(duration)+'</span><i></i></div>').text(name) );
+  $('#playlist_items').append($button);
+
+  // item select
+  $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).click(OB.Playlist.addeditItemSelect);
+
+  // hide our 'drag items here' help.
+  $('#playlist_items_drag_help').hide();
+
+  OB.Playlist.addeditTotalDuration();
+  $('#playlist_items').sortable({ start: OB.Playlist.addeditSortStart, stop: OB.Playlist.addeditSortStop });
 }
 
 // remove all playlist items from all playlist types/containers.
@@ -188,6 +236,8 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
     $('#dynamic_name').val($('#playlist_addedit_item_'+id).attr('data-name'));
     $('#dynamic_num_items').val( $('#playlist_addedit_item_'+id).attr('data-num_items') ? $('#playlist_addedit_item_'+id).attr('data-num_items') : 10); // 10 is default.
     $('#dynamic_image_duration').val( $('#playlist_addedit_item_'+id).attr('data-image_duration') ? $('#playlist_addedit_item_'+id).attr('data-image_duration') : 15); // 15 is default.
+    $('#dynamic_crossfade').val( $('#playlist_addedit_item_'+id).attr('data-crossfade') ? $('#playlist_addedit_item_'+id).attr('data-crossfade') : 0 );
+    $('#dynamic_crossfade_last').val( $('#playlist_addedit_item_'+id).attr('data-crossfade_last') ? $('#playlist_addedit_item_'+id).attr('data-crossfade_last') : 0 );
 
     $('#dynamic_num_items_all').change(function()
     {
@@ -235,6 +285,20 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
 
   }
 
+  // initialize properties window for audio item.
+  else if(type=='audio')
+  {
+    if($('#playlist_type_input').val()=='standard')
+    {
+      $('#audio_properties_crossfade').val($('#playlist_addedit_item_'+id).attr('data-crossfade'));
+    }
+
+    else // advanced
+    {
+      $('#audio_properties_crossfade').val(OB.Playlist.advanced_items[id].crossfade);
+    }
+  }
+
   // initialize properties window for image item.
   else if(type=='image')
   {
@@ -268,6 +332,8 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
       var num_items_all = $('#dynamic_num_items_all').is(':checked');
       var image_duration = $('#dynamic_image_duration').val();
       var search_query = $('#playlist_addedit_item_'+id).attr('data-query');
+      var crossfade = $('#dynamic_crossfade').val();
+      var crossfade_last = $('#dynamic_crossfade_last').val();
 
       $('#item_properties_message').hide();
 
@@ -280,12 +346,29 @@ OB.Playlist.addeditItemProperties = function(id,type,required)
 
         else
         {
-          OB.Playlist.addeditSetDynamicItemProperties( id, data.data.duration, selection_name, num_items, num_items_all, image_duration );
+          OB.Playlist.addeditSetDynamicItemProperties( id, data.data.duration, selection_name, num_items, num_items_all, image_duration, crossfade, crossfade_last );
           OB.Playlist.addeditTotalDuration();
           OB.UI.closeModalWindow();
         }
 
       });
+    }
+
+    if(type=="audio")
+    {
+      // okay to save, standard playlist.
+      if($('#playlist_type_input').val()=='standard')
+      {
+        $('#playlist_addedit_item_'+id).attr('data-crossfade', $('#audio_properties_crossfade').val());
+        OB.UI.closeModalWindow();
+      }
+
+      // okay to save, advanced playlist.
+      else
+      {
+        OB.Playlist.advanced_items[id].crossfade = $('#audio_properties_crossfade').val();
+        OB.UI.closeModalWindow();
+      }
     }
 
     // image properties could be for standard or advanced playlist.
@@ -351,7 +434,7 @@ OB.Playlist.save = function()
 
   $('#playlist_addedit_message').hide();
 
-  OB.API.post('playlist','edit', {
+  OB.API.post('playlist','save', {
     'id': id,
     'name': playlist_name,
     'description': description,

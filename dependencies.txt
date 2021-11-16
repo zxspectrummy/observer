@@ -1,22 +1,27 @@
 Dependencies for OpenBroadcaster Server.  This list may be incomplete.
 
-Check for updated installation info at https://wiki.openbroadcaster.com 
+Check for updated installation info at http://wiki.openbroadcaster.com 
 
-Dependencies are Debian 10 Stable package names.
+Dependencies are Debian/Ubuntu package names.
 
-- apache2 
-- apg 
-- festival 
-- ffmpeg 
-- imagemagick 
+- apache2
+- apg
+- festival
+- imagemagick
+- libav-tools **
 - libavcodec-extra
 - libavfilter-extra
-- mariadb-server 
-- php 
-- php-curl
-- php-gd 
-- php-imagick 
-- php-mbstring 
-- php-mysql 
-- php-xml 
-- vorbis-tools 
+- mysql-server
+- php7.0
+- php7.0-mysql
+- php7.0-mbstring
+- php7.0-xml
+- php7.0-gd
+- php7.0-curl
+- php7.0-imagick
+- vorbis-tools
+
+** If libav-tools package is not available, install ffmpeg package instead, and symlink the following:
+
+ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
+ln -s /usr/bin/ffprobe /usr/local/bin/avprobe

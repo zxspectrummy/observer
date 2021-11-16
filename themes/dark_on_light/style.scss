@@ -32,6 +32,16 @@ fieldset, #layout_footer
   background-color: #2e3436;
 }
 
+ob-tab-select button
+{  
+  color: #333336;
+
+  &.active
+  {
+    border: 1px solid #333336;
+  }
+}
+
 button, 
 input[type=submit], 
 input[type=reset], 
@@ -119,7 +129,9 @@ button.edit, a.button.edit
   border: 1px solid #333336;
 }
 
-.playlist_addedit_item[data-type=dynamic], .playlist_addedit_liveassist_item
+.playlist_addedit_item[data-type=dynamic], 
+.playlist_addedit_item[data-type=custom],
+.playlist_addedit_liveassist_item
 {
   background-color: #d3d7cf;
 }
@@ -148,6 +160,17 @@ button.edit, a.button.edit
 {
   background-color: #a3c77f;
 } 
+
+#schedule_details > div
+{
+  background-color: #ededf1; /**/
+  border-color:#333336; /**/
+}
+
+.schedule_data > div
+{
+  color: #eeeeec;
+}
 
 #layout_modal_window
 {

@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -40,43 +40,46 @@ class OBFAPI
 
     $auth_id = null;
     $auth_key = null;
-  
+
+    // we might get a post, or multi-post. standardize to multi-post.
+    if(isset($_POST['m']) && is_array($_POST['m']))
+      $requests = $_POST['m'];
+
+    elseif(isset($_POST['c']) && isset($_POST['a']) && isset($_POST['d']))
+    {
+      $requests = array( array($_POST['c'],$_POST['a'],$_POST['d']) );
+    }
+
+    else
+    {
+      $this->io->error(OB_ERROR_BAD_POSTDATA);
+      return;
+    }
+    
+    // preliminary request validity check
+    foreach($requests as $request)
+    {
+      if(!is_array($request) || count($request)!=3) { $this->io->error(OB_ERROR_BAD_POSTDATA); return; }
+    }
+    
     // try to get an ID/key pair for user authorization.
-    if(!empty($_POST['i']) && !empty($_POST['k'])) 
+    if(!empty($_POST['i']) && !empty($_POST['k']))
     {
       $auth_id = $_POST['i'];
       $auth_key = $_POST['k'];
     }
 
-    // authorize our user (from post data, cookie data, whatever.)
-    $this->user->auth($auth_id,$auth_key);
-
-    // we might get a post, or multi-post. standardize to multi-post.
-    if(isset($_POST['m']) && is_array($_POST['m'])) 
-      $requests = $_POST['m'];
-
-    elseif(isset($_POST['c']) && isset($_POST['a']) && isset($_POST['d'])) 
-    {
-      $requests = array( array($_POST['c'],$_POST['a'],$_POST['d']) );
-      
-      // access control for public API access. note that public API cannot use multi-post at this time.
-      $controller_action = strtolower($_POST['c'].'.'.$_POST['a']);
-      if(defined('OB_PUBLIC_API') && is_array(OB_PUBLIC_API) && $auth_id==null && $auth_key==null && array_search($controller_action,array_map('strtolower',OB_PUBLIC_API))!==FALSE)
-      {
-        header("Access-Control-Allow-Origin: *");
-      }
+    if (empty($_POST['appkey'])) {
+      // authorize our user (from post data, cookie data, whatever.)
+      $this->user->auth($auth_id,$auth_key);
+    } else {
+      $this->user->auth_appkey($_POST['appkey'], $requests);
     }
-
-    else 
-    { 
-      $this->io->error(OB_ERROR_BAD_POSTDATA); 
-      return; 
-    }
-
-    // make sure the postdata is valid for each request.
+    
+    // make sure each request has a valid controller (not done above since auth required before controller load)
     foreach($requests as $request)
     {
-      if( !is_array($request) || count($request)!=3 || !$this->load->controller($request[0]) ) { $this->io->error(OB_ERROR_BAD_POSTDATA); return; }
+      if(!$this->load->controller($request[0])) { $this->io->error(OB_ERROR_BAD_POSTDATA); return; }
     }
 
     $responses = array();
@@ -99,7 +102,7 @@ class OBFAPI
       $cb_return = $this->callback_handler->fire($cb_name,'init',$null,$this->controller->data);
 
       // do callbacks all main process to be run?
-      if(empty($cb_return->r)) 
+      if(empty($cb_return->r))
       {
         // run main process.
         $output = $this->controller->handle($action);
@@ -112,7 +115,7 @@ class OBFAPI
         // callback changes output.
         if(!empty($cb_return->r)) $output = $cb_return->v;
       }
-      
+
       // init callbacks requested an early return.
       else $output = $cb_return->v;
 
@@ -131,4 +134,3 @@ class OBFAPI
 }
 
 $api = new OBFAPI();
-

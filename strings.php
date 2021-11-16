@@ -21,8 +21,6 @@
 
 require('components.php');
 
-$load = OBFLoad::get_instance();
-
 if(!empty($_COOKIE['ob_auth_id']) && !empty($_COOKIE['ob_auth_key']))
 {
   $auth_id = $_COOKIE['ob_auth_id'];
@@ -32,9 +30,9 @@ if(!empty($_COOKIE['ob_auth_id']) && !empty($_COOKIE['ob_auth_key']))
   $user->auth($auth_id,$auth_key);
 }
 
-$ui_model = $load->model('ui');
-$strings = $ui_model->strings();
-$language = $ui_model->get_user_language();
+$models = OBFModels::get_instance();
+$strings  = $models->ui('strings');
+$language = $models->ui('get_user_language');
 
 header('Content-type: text/javascript');
 

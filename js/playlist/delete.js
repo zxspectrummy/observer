@@ -42,22 +42,20 @@ OB.Playlist.deletePage = function(ids)
   if(ids.length < 1) { return; }
 
   var post = [];
-  ids.forEach(function(id) { post.push(['playlist','get',{'id':id}]); });
-  post.push(['playlist','used', {'id': ids}]);
+  ids.forEach(function(id) { post.push(['playlist','get',{'id':id,'where_used':true}]); });
 
   OB.API.multiPost(post, function(response) {
 
     OB.UI.replaceMain('playlist/delete.html');
 
-    var used_info = response[response.length-1].data;
     var append_html = '';
 
     var playlists = {};
     response.forEach(function(item) { if(!item.data.name) return true; playlists[item.data.id] = item.data; });
 
-    $.each(used_info,function(used_index,used) {
+    $.each(playlists, function (index, playlist) {
 
-      var playlist = playlists[used.id];
+      var used = playlist.where_used;
 
       if(used.can_delete)
       {

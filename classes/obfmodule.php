@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,36 +19,49 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages modules.
+ *
+ * @package Class
+ */
 class OBFModule
 {
 
   public $db;
   public $callback_handler;
 
-  // make database (db) and base framwork (ob) available. 
+  /**
+   * Create instance of OBFModules, makes database (db) and base framwork (ob)
+   * available.
+   */
   public function __construct()
   {
     $this->db = OBFDB::get_instance();
     $this->callback_handler = OBFCallbacks::get_instance();
   }
 
-  // placeholder
+  /**
+   * Placeholder for module to override.
+   */
   public function callbacks()
   {
 
   }
 
-  // placeholder
+  /**
+   * Placeholder for module to override.
+   */
   public function install()
   {
     return true;
   }
 
-  // placeholder
+  /**
+   * Placeholder for module to override.
+   */
   public function uninstall()
   {
     return true;
   }
 
 }
-

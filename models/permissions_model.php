@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,18 +19,29 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Group and user permissions model.
+ *
+ * @package Model
+ */
 class PermissionsModel extends OBFModel
 {
 
   var $permission_cache=FALSE;
 
-  // get group permissions, given the group ID.
+  /**
+   * Get group permissions from group ID.
+   *
+   * @param id
+   *
+   * @return permissions
+   */
   function get_group_permissions($id) {
 
     $r = array();
 
     // special handling for admin group.  admins get all permissions.
-    if($id==1) 
+    if($id==1)
     {
       $permissions = $this->db->get('users_permissions');
       foreach($permissions as $permission) $r[] = $permission['name'];
@@ -46,16 +57,23 @@ class PermissionsModel extends OBFModel
     $permissions = $this->db->get('users_permissions_to_groups');
 
     if(!empty($permissions)) foreach($permissions as $permission) $r[]=$permission['name'].($permission['item_id'] ? ':'.$permission['item_id'] : '');
-  
-    return $r;    
+
+    return $r;
 
 
   }
 
-  // determine the permission set for the user.  (this is the most liberal permissions when combining the groups they are in)
+  /**
+   * Determine the permissions for the user ID. This is the most liberal set of
+   * permissions when combined with the groups they are in.
+   *
+   * @param id
+   *
+   * @return permissions
+   */
   function get_user_permissions($id) {
 
-    if(!isset($this->permission_cache[$id])) { 
+    if(!isset($this->permission_cache[$id])) {
 
       $this->db->what('group_id');
       $this->db->where('user_id',$id);
@@ -79,7 +97,13 @@ class PermissionsModel extends OBFModel
 
   }
 
-  // return a names of user groups.
+  /**
+   * Get names of groups user ID is in.
+   *
+   * @param id
+   *
+   * @return group_names
+   */
   function get_user_groups($id)
   {
 
@@ -96,8 +120,16 @@ class PermissionsModel extends OBFModel
 
   }
 
-  // see if user has permisison.  return permission (first found) or FALSE
-  function check_permission($permission,$userid) 
+  /**
+   * Check if user has a permission. Return the first found permission or FALSE
+   * if none can be found.
+   *
+   * @param permission
+   * @param userid
+   *
+   * @return permission
+   */ 
+  function check_permission($permission,$userid)
   {
 
     $p=$this('get_user_permissions',$userid);
@@ -109,7 +141,7 @@ class PermissionsModel extends OBFModel
       // if we are looking for an item specific permission, then we will also accept the permission without the item id specified.
       // in this case the permission is valid for all items.
       $check_permission_array = explode(':',$check_permission);
-      if(count($check_permission_array)>1) 
+      if(count($check_permission_array)>1)
       {
         if(array_search($check_permission_array[0], $p)!==false) return true;
 

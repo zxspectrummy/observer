@@ -81,12 +81,6 @@
     <button class="copy_to_all" data-field="copyright_field" onclick="OB.Media.copyField(this);" title="Copy To All"><i class="far fa-copy"></i></button>
   </div>
 
-  <div class="fieldrow">
-    <label data-t>Allow public access</label>
-    <select class="public_field"><option value="0" data-t>No</option><option value="1" data-t>Yes</option></select>
-    <button class="copy_to_all" data-field="public_field" onclick="OB.Media.copyField(this);" title="Copy To All"><i class="far fa-copy"></i></button>
-  </div>
-
   <div class="fieldrow" data-permissions="approve_own_media manage_media">
     <label data-t>Is media approved</label>
     <select class="approved_field"><option value="0" data-t>No</option><option value="1" selected="selected" data-t>Yes</option></select>
@@ -95,7 +89,7 @@
 
   <div class="fieldrow">
     <label data-t>Status</label>
-    <select class="status_field"><option value="private" data-t>Private (available to you only)</option><option value="public" data-t>Public (available to everyone)</option></select>
+    <select class="status_field"><option value="private" data-t>Private (available to you only)</option><option value="visible" data-t>Visible (available to all users)</option><option value="public" data-t>Public (available to everyone)</option></select>
     <button class="copy_to_all" data-field="status_field" onclick="OB.Media.copyField(this);" title="Copy To All"><i class="far fa-copy"></i></button>
   </div>
 

@@ -18,9 +18,19 @@ define('OB_SITE','http://example.com/'); // where do you access OB?
 define('OB_EMAIL_REPLY','noreply@example.com'); // emails to users come from this address
 define('OB_EMAIL_FROM','OpenBroadcaster'); // emails to users come from this name
 
+define('OB_UPDATES_USER','updates'); // username/password for updates area 
+define('OB_UPDATES_PW','PASSWORD_HASH'); // get password hash with: php -r "echo password_hash('password',PASSWORD_DEFAULT).\"\n\";"
+
 //
 // THE FOLLOWING ARE OPTIONAL SETTINGS
 //
+
+// custom SMTP server (all must be defined)
+// define('OB_EMAIL_HOST', 'hostname');
+// define('OB_EMAIL_USER', 'username');
+// define('OB_EMAIL_PASS', 'password');
+// define('OB_EMAIL_TYPE', 'ssl');
+// define('OB_EMAIL_PORT', 443);
 
 // verify audio/video media validity, possibly slow (default true)
 // define('OB_MEDIA_VERIFY',true);
@@ -40,16 +50,11 @@ define('OB_EMAIL_FROM','OpenBroadcaster'); // emails to users come from this nam
 // external database for filetype identification if php-bundled database is not adequate. (see php info).
 // define('OB_MAGIC_FILE','');
 
-// set for debugging remote.php (remote.php?devmode=CHANGEME sets $_POST = $_GET and skips device authentication).
+// set for debugging remote.php (remote.php?devmode=CHANGEME sets $_POST = $_GET and skips player authentication).
 // define('OB_REMOTE_DEBUG','CHANGEME');
 
 // uncomment to log slow SQL queries using php error_log().
 // define('OB_LOG_SLOW_QUERIES',TRUE);
-
-// set optional username/password for updates area. (if not set, you can log in as an OB admin first.)
-// get password hash with: php -r "echo password_hash('password',PASSWORD_DEFAULT).\"\n\";"
-// define('OB_UPDATES_USER','updates');
-// define('OB_UPDATES_PW','PASSWORD_HASH');
 
 // set custom audio transcode command (outputting to mp3 or ogg).
 // define('OB_TRANSCODE_AUDIO_MP3','transcode {infile} {outfile}');
@@ -59,8 +64,10 @@ define('OB_EMAIL_FROM','OpenBroadcaster'); // emails to users come from this nam
 // define('OB_TRANSCODE_VIDEO_MP4','transcode {infile} -s {width}x{height} {outfile}');
 // define('OB_TRANSCODE_VIDEO_OGV','transcode {infile} -s {width}x{height} {outfile}');
 
-// allow api access without login. use carefully as this overrides the authentication requirement in the permission system.
-// define('OB_PUBLIC_API', ['Settings.category_list','Settings.genre_list']);
-
 // enable public media browsing and streaming
-// define('OB_STREAM_API',true); 
+// define('OB_STREAM_API',true);
+
+// import tool settings
+// OB_SYNC_USERID = 1; // owner for imported media
+// OB_SYNC_SOURCE = '/mnt/media';
+// OB_ACOUSTID_KEY = '';

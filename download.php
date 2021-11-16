@@ -29,19 +29,12 @@ class ObDownload
 
   public function __construct()
   {
-
-    //$this->io = OBFIO::get_instance();
-    //$this->load = OBFLoad::get_instance();
-    //$this->user = OBFUser::get_instance();
     $this->db = OBFDB::get_instance();
-
     $this->download();
   }
 
   public function download()
   {
-
-    //$media_id = $this->data('media_id');
     $media_id = $_GET['media_id'];
 
     if(!$media_id) return false;
@@ -50,7 +43,6 @@ class ObDownload
     $media = $this->db->get_one('media');
     if(empty($media)) die();
 
-    if(!$media['is_public']) die();
     if($media['status'] != 'public') die();
 
     if($media['is_archived']==1) $filedir=OB_MEDIA_ARCHIVE;

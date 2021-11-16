@@ -19,10 +19,21 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages emergency broadcasts, also commonly referred to as priorities or
+ * priority broadcasts.
+ *
+ * @package Model
+ */
 class EmergenciesModel extends OBFModel
 {
 
-  public function get_init()
+  /**
+   * Set up the initial parts of a database query, selecting media and
+   * emergency items from the tables, and joining media items on the item ID
+   * in emergencies.
+   */
+  public function get_init($args = [])
   {
 
     $this->db->what('media.title','title');
@@ -36,18 +47,26 @@ class EmergenciesModel extends OBFModel
     $this->db->what('emergencies.name','name');
     $this->db->what('emergencies.start','start');
     $this->db->what('emergencies.stop','stop');
-    $this->db->what('emergencies.device_id','device_id');
+    $this->db->what('emergencies.player_id','player_id');
 
     $this->db->leftjoin('media','emergencies.item_id','media.id');
 
   }
 
-  public function get_one($id)
+  /**
+   * Get an emergency and its associated media item.
+   *
+   * @param id
+   *
+   * @return emergency
+   */
+  public function get_one($args = [])
   {
+    OBFHelpers::require_args($args, ['id']);
 
     $this('get_init');
 
-    $this->db->where('emergencies.id',$id);
+    $this->db->where('emergencies.id',$args['id']);
 
     $emergency = $this->db->get_one('emergencies');
 
@@ -64,12 +83,20 @@ class EmergenciesModel extends OBFModel
 
   }
 
-  public function get_for_device($device_id)
+  /**
+   * Get the emergencies associated with a player.
+   *
+   * @param player_id
+   *
+   * @return emergencies
+   */
+  public function get_for_player($args = [])
   {
+    OBFHelpers::require_args($args, ['player_id']);
 
     $this('get_init');
 
-    $this->db->where('emergencies.device_id',$device_id);
+    $this->db->where('emergencies.player_id', $args['player_id']);
 
     $emergencies = $this->db->get('emergencies');
 
@@ -87,24 +114,35 @@ class EmergenciesModel extends OBFModel
 
   }
 
-  public function validate($data,$id=false)
+  /**
+   * Validate the data for updating or inserting an emergency.
+   *
+   * @param data
+   * @param id FALSE by default, set when updating existing emergency.
+   *
+   * @return is_valid
+   */
+  public function validate($args = [])
   {
+    OBFHelpers::require_args($args, ['data']);
+    OBFHelpers::default_args($args, ['id' => false]);
 
-    foreach($data as $key=>$value) $$key=$value;
+    foreach($args['data'] as $key=>$value) $$key=$value;
 
     // required fields?
-    if(empty($name) || empty($device_id) || empty($item_id) || empty($frequency) || empty($start) || empty($stop)) return array(false,'Required Field Missing');
+    if(empty($name) || empty($player_id) || empty($item_id) || empty($frequency) || empty($start) || empty($stop)) return array(false,'Required Field Missing');
 
     // check if ID is valid (if editing)
-    if(!empty($id))
+
+    if(!empty($args['id']))
     {
       //T The item you are attempting to edit does not appear to exist.
-      if(!$this->db->id_exists('emergencies',$id)) return array(false,'The item you are attempting to edit does not appear to exist.');
+      if(!$this->db->id_exists('emergencies',$args['id'])) return array(false,'The item you are attempting to edit does not appear to exist.');
     }
 
-    // check if device ID is valid
+    // check if player ID is valid
     //T This player does not appear to exist.
-    if(!$this->db->id_exists('devices',$device_id)) return array(false,'This player does not appear to exist.');
+    if(!$this->db->id_exists('players',$player_id)) return array(false,'This player does not appear to exist.');
 
     // check if media ID is valid
     if(empty($item_id)) return array(false,'Media Invalid');
@@ -135,24 +173,40 @@ class EmergenciesModel extends OBFModel
 
   }
 
-  public function save($data,$id=false)
+  /**
+   * Update or insert an emergency.
+   *
+   * @param data
+   * @param id FALSE by default, set when updating existing emergency.
+   */
+  public function save($args = [])
   {
-    $this->db->where('id',$data['item_id']);
-    $media = $this->db->get_one('media');
-    if($media['type']!='image') unset($data['duration']); // duration not needed unless this is an image.
+    OBFHelpers::require_args($args, ['data']);
+    OBFHelpers::default_args($args, ['id' => false]);
 
-    if(empty($id)) $this->db->insert('emergencies',$data);
+    $this->db->where('id',$args['data']['item_id']);
+    $media = $this->db->get_one('media');
+    if($media['type']!='image') unset($args['data']['duration']); // duration not needed unless this is an image.
+
+    if(empty($args['id'])) $this->db->insert('emergencies', $args['data']);
 
     else
     {
-      $this->db->where('id',$id);
-      $this->db->update('emergencies',$data);
+      $this->db->where('id', $args['id']);
+      $this->db->update('emergencies', $args['data']);
     }
   }
 
-  public function delete($id)
+  /**
+   * Delete an emergency.
+   *
+   * @param id
+   */
+  public function delete($args = [])
   {
-    $this->db->where('id',$id);
+    OBFHelpers::require_args($args, ['id']);
+
+    $this->db->where('id', $args['id']);
     $this->db->delete('emergencies');
   }
 

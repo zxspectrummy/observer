@@ -96,6 +96,11 @@ now_playing_update_tick = function()
 			$('#now_playing_show_name').text(now_playing_data.show_name);
 			$('#now_playing_track_name').text(now_playing_data.media.artist+' - '+now_playing_data.media.title);
 
+			if(now_playing_data.media.thumbnail)
+			{
+				$('#now_playing_thumbnail').html('<img src="/modules/now_playing/now_playing.php?i='+vars.i+'&thumbnail=1"/>');
+			}
+
 
 		},'json');
 
@@ -109,13 +114,6 @@ now_playing_update_tick = function()
 
 }
 
-// vertical center
-now_playing_center = function()
-{
-	var offset = Math.round( ($(document).height() - $('#now_playing').height())/2 );
-	if(offset>0) $('#now_playing').css('margin-top',offset+'px');
-}
-
 $(document).ready(function()
 {
 
@@ -123,8 +121,4 @@ $(document).ready(function()
 	$(document).ajaxStop(function() { now_playing_ajax_running = false; });
 
 	now_playing_tick_id = setInterval(now_playing_update_tick,1000);
-
-	$(window).resize(now_playing_center);
-	now_playing_center();
-
 });

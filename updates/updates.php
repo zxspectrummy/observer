@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -25,10 +25,12 @@ class OBUpdate
   {
     $this->error = false;
     $this->db = new OBFDB();
+    $this->load = OBFLoad::get_instance();
+    $this->models = OBFModels::get_instance();
   }
 }
 
-// verify the OB installation. each method will be run, and should return array(NAME, DESCRIPTION (string or array), STATUS=success (0) / warning (1) / error (2) ). 
+// verify the OB installation. each method will be run, and should return array(NAME, DESCRIPTION (string or array), STATUS=success (0) / warning (1) / error (2) ).
 // if error is returned, subsequent methods will not be run.
 class OBFChecker
 {
@@ -77,7 +79,7 @@ class OBFChecker
   {
     $oggenc = !!exec('which oggenc');
     $text2wave = !!exec('which text2wave');
-    
+
     if(!$oggenc && !$text2wave) return array('Text-to-Speech','Text-to-speech support requires programs oggenc and text2wave.  Install vorbis-tools and festival packages on Debian/Ubuntu.',1);
     elseif(!$oggenc) return array('Text-to-Speech','Text-to-speech support requires program oggenc.  Install vorbis-tools package on Debian/Ubuntu.',1);
     elseif(!$text2wave) return array('Text-to-Speech','Text-to-speech support requires program text2wave.  Install festival package on Debian/Ubinti.',1);
@@ -99,7 +101,7 @@ class OBFChecker
 
   public function config_file_valid()
   {
-  
+
     require('../components.php');
 
     $fatal_error = false;
@@ -122,7 +124,7 @@ class OBFChecker
     // if everything is defined, validate settings.
     if(empty($errors))
     {
-      
+
       $connection = mysqli_connect(OB_DB_HOST, OB_DB_USER, OB_DB_PASS);
       if(!$connection) $errors[] = 'Unable to connect to database (check database settings).';
       elseif(!mysqli_select_db($connection, OB_DB_NAME)) $error[] = 'Unable to select database (check database name).';
@@ -180,7 +182,7 @@ class OBFChecker
       if(defined('OB_UPDATES_PW') && !defined('OB_UPDATES_USER')) $errors[]='OB_UPDATES_PW (update area password) is set, but does not have an associated username (OB_UPDATES_USER).';
 
     }
-    
+
     if(!empty($errors)) return array('Settings file',$errors,2);
     else return array('Settings file','Settings file (config.php) is valid.',0);
 
@@ -193,7 +195,7 @@ class OBFChecker
 
     if(!is_dir(OB_ASSETS.'/uploads')) return array('Assets directory','The assets/uploads directory does not exist.',2);
     if(!is_writable(OB_ASSETS.'/uploads')) return array('Assets directory','The assets/uploads directory is not writable by the server.',2);
-  
+
     return array('Assets directory','Assets and assets/uploads directories exist and are writable by the server.',0);
   }
 
@@ -212,7 +214,7 @@ class OBFChecker
     $this->dbver = $dbver['value'];
 
     return array('Database Version', 'Database version found: '.$dbver['value'].'.',0);
-  }  
+  }
 }
 
 class OBFUpdates
@@ -242,36 +244,17 @@ class OBFUpdates
 
   public function auth()
   {
-    $user = OBFUser::get_instance();
-  
-    $auth_id = null;
-    $auth_key = null;
-
-    // are we logged in?
-    if(!empty($_COOKIE['ob_auth_id']) && !empty($_COOKIE['ob_auth_key']))
+    // no user or password set for updates.
+    if(!defined('OB_UPDATES_USER') || !defined('OB_UPDATES_PW'))
     {
-      $auth_id = $_COOKIE['ob_auth_id'];
-      $auth_key = $_COOKIE['ob_auth_key'];
-    } 
+      die('Please set OB_UPDATES_USER and OB_UPDATES_PW in config.php. Administrator login is no longer supported for OB updates since July 2020.');
+    }
 
-    // authorize our user (from post data, cookie data, whatever.)
-    $user->auth($auth_id,$auth_key);  
-
-    // if not logged into OB as admin, then see if we can use updates user/password set in config.php
-    if(!$user->is_admin) 
-    {
-      // no user or password set for updates.
-      if(!defined('OB_UPDATES_USER') || !defined('OB_UPDATES_PW'))
-      {
-        die('Please login as an OpenBroadcaster administrator, or set OB_UPDATES_USER and OB_UPDATES_PW in config.php.');
-      }
-
-      // use http auth.
-      if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!=OB_UPDATES_USER || !password_verify($_SERVER['PHP_AUTH_PW'], OB_UPDATES_PW)) {
-          header('WWW-Authenticate: Basic realm="OpenBroadcaster Updates"');
-          header('HTTP/1.0 401 Unauthorized');
-          die();
-      }
+    // use http auth.
+    if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']) || $_SERVER['PHP_AUTH_USER']!=OB_UPDATES_USER || !password_verify($_SERVER['PHP_AUTH_PW'], OB_UPDATES_PW)) {
+        header('WWW-Authenticate: Basic realm="OpenBroadcaster Updates"');
+        header('HTTP/1.0 401 Unauthorized');
+        die();
     }
   }
 
@@ -295,7 +278,7 @@ class OBFUpdates
 
       $updates[] = $update_class;
     }
-    
+
     return $updates;
   }
 
@@ -318,4 +301,3 @@ class OBFUpdates
 }
 
 $u = new OBFUpdates();
-

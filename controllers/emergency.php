@@ -19,6 +19,12 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages emergency broadcasts, also commonly referred to as priorities or
+ * priority broadcasts.
+ *
+ * @package Controller
+ */
 class Emergency extends OBFController
 {
 
@@ -28,69 +34,106 @@ class Emergency extends OBFController
 
     $this->user->require_authenticated();
 
-    $this->EmergenciesModel = $this->load->model('Emergencies');
-
   }
 
-  public function emergencies()
-  {
-
+  /**
+   * Return data about a specific emergency ID. 'manage_emergency_broadcasts' is
+   * a required permission.
+   *
+   * @param id
+   *
+   * @return emergency
+   */
+  public function get () {
     $id = trim($this->data('id'));
 
-    $device_id = trim($this->data('device_id'));
-
-    if(!empty($id))
-    {
-
-      $emergency = $this->EmergenciesModel('get_one',$id);
+    if (!empty($id)) {
+      $emergency = $this->models->emergencies('get_one', ['id' => $id]);
       //T Priority
       //T Priority broadcast not found.
-      if(!$emergency) return array(false,['Priority','Priority broadcast not found.']);
-
-      $this->user->require_permission('manage_emergency_broadcasts:'.$emergency['device_id']);
+      if(!$emergency) return array(false, 'Priority broadcast not found.');
+      $this->user->require_permission('manage_emergency_broadcasts:' . $emergency['player_id']);
       //T Priority Broadcast
-      return array(true,'Priority Broadcast',$emergency);
-
+      return array(true, 'Priority Broadcast', $emergency);
     }
-    else
-    {
-      $this->user->require_permission('manage_emergency_broadcasts:'.$device_id);
-      //T Priority Broadcast
-      return array(true,'Emergency Broadcasts',$this->EmergenciesModel('get_for_device',$device_id));
-    }
-
   }
 
-  public function emergencies_set_last_device()
+  /**
+   * Get all priority broadcasts for a specific player ID. 'manage_emergency_broadcasts'
+   * is a required permission.
+   *
+   * @param player_id
+   *
+   * @return emergencies
+   */
+  public function search () {
+    $player_id = trim($this->data('player_id'));
+
+    if (!empty($player_id)) {
+      $this->user->require_permission('manage_emergency_broadcasts:' . $player_id);
+      //T Priority Broadcasts
+      return array(true, 'Priority Broadcasts', $this->models->emergencies('get_for_player', ['player_id' => $player_id]));
+    }
+  }
+
+  /**
+   * Set the last selected player so we can view emergency broadcasts for that
+   * player immediately when loading the page again some other time. This will
+   * have to be generalized for other UI elements at some point. This is a
+   * user-specific setting, so no special permissions are necessary.
+   *
+   * @param player
+   */
+  public function set_last_player()
   {
-    $device_id = $this->data('device');
+    $player_id = $this->data('player');
 
-    $this->db->where('id',$device_id);
-    $device_data = $this->db->get_one('devices');
+    $this->db->where('id',$player_id);
+    $player_data = $this->db->get_one('players');
 
-    if($device_data)
+    if($player_data)
     {
-      $this->user->set_setting('last_emergencies_device',$device_id);
-      return array(true,'Set last emergencies device.');
+      $this->user->set_setting('last_emergencies_player',$player_id);
+      return array(true,'Set last emergencies player.');
     }
     //T This player no longer exists.
     else return array(false,'This player no longer exists.');
   }
 
-  public function emergencies_get_last_device()
+  /**
+   * Get the last selected player on the priority broadcasts page for the
+   * current user.
+   *
+   * @return player
+   */
+  public function get_last_player()
   {
-    $device_id = $this->user->get_setting('last_emergencies_device');
-    if($device_id) return array(true,'Last emergencies device.',$device_id);
-    else return array(false,'Last emergencies device not found.');
+    $player_id = $this->user->get_setting('last_emergencies_player');
+    if($player_id) return array(true,'Last emergencies player.',$player_id);
+    else return array(false,'Last emergencies player not found.');
   }
 
-  public function save_emergency()
+  /**
+   * Save a new emergency broadcast. The 'user_id' is set to the currently logged
+   * in user for the new broadcast. Requires the 'manage_emergency_broadcasts'
+   * permission.
+   *
+   * @param id ID of emergency broadcast. Update a pre-existing emergency if set.
+   * @param item_id ID of the media item linked to the emergency broadcast.
+   * @param player_id
+   * @param name
+   * @param frequency
+   * @param duration
+   * @param start
+   * @param stop
+   */
+  public function save()
   {
 
     $id = trim($this->data('id'));
     $data['item_id'] = trim($this->data('item_id'));
 
-    $data['device_id'] = trim($this->data('device_id'));
+    $data['player_id'] = trim($this->data('player_id'));
 
     $data['name'] = trim($this->data('name'));
 
@@ -101,31 +144,37 @@ class Emergency extends OBFController
 
     $data['user_id']=$this->user->param('id');
 
-    $validation = $this->EmergenciesModel('validate',$data,$id);
+    $validation = $this->models->emergencies('validate', ['data' => $data, 'id' => $id]);
     //T Priority
-    if($validation[0]==false) return array(false,['Priority',$validation[1]]);
+    if($validation[0]==false) return array(false,$validation[1]);
 
-    // check permission on this device.
-    $this->user->require_permission('manage_emergency_broadcasts:'.$data['device_id']);
+    // check permission on this player.
+    $this->user->require_permission('manage_emergency_broadcasts:'.$data['player_id']);
 
-    $this->EmergenciesModel('save',$data,$id);
+    $this->models->emergencies('save', ['data' => $data, 'id' => $id]);
 
     return array(true,'Emergency broadcast saved.');
 
   }
 
-  public function delete_emergency()
+  /**
+   * Delete an emergency broadcast. Requries the 'manage_emergency_broadcasts'
+   * permission.
+   *
+   * @param id
+   */
+  public function delete()
   {
 
     $id = trim($this->data('id'));
 
-    $emergency = $this->EmergenciesModel('get_one',$id);
+    $emergency = $this->models->emergencies('get_one', ['id' => $id]);
     if(!$emergency) return array(false,'Emergency broadcast not found.');
 
-    // check permission on appropriate device.
-    $this->user->require_permission('manage_emergency_broadcasts:'.$emergency['device_id']);
+    // check permission on appropriate player.
+    $this->user->require_permission('manage_emergency_broadcasts:'.$emergency['player_id']);
 
-    $this->EmergenciesModel('delete',$id);
+    $this->models->emergencies('delete', ['id' => $id]);
 
     return array(true,'Emergency deleted.');
 

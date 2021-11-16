@@ -36,18 +36,18 @@ if(!isset($_COOKIE['ob_auth_id']) || !isset($_COOKIE['ob_auth_key']) || !$user->
 }
 
 // we're logged in! continue with load.
-$load = OBFLoad::get_instance();
-$ui_model = $load->model('ui');
-$js_files = $ui_model->js_files();
-$css_files = $ui_model->css_files();
-$image_files = $ui_model->image_files();
+$models = OBFModels::get_instance();
+$js_files    = $models->ui('js_files');
+$css_files   = $models->ui('css_files');
+$image_files = $models->ui('image_files');
+
 
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>OpenBroadcaster</title>
-  
+
   <script type="text/javascript" src="extras/jquery.min.js?v=<?=filemtime('extras/jquery.min.js')?>"></script>
   <script type="text/javascript" src="extras/jquery-migrate.min.js?v=<?=filemtime('extras/jquery-migrate.min.js')?>"></script>
   <script type="text/javascript" src="extras/jquery-ui.min.js?v=<?=filemtime('extras/jquery-ui.min.js')?>"></script>
@@ -60,6 +60,9 @@ $image_files = $ui_model->image_files();
   <script type="text/javascript" src="extras/jquery.mousewheel.min.js?v=<?=filemtime('extras/jquery.mousewheel.min.js')?>"></script>
   <script type="text/javascript" src="extras/jquery.contextMenu.js?v=<?=filemtime('extras/jquery.contextMenu.js')?>"></script>
   <script type="text/javascript" src="extras/dateformat.js?v=<?=filemtime('extras/dateformat.js')?>"></script>
+  <script type="text/javascript" src="extras/moment.min.js?v=<?=filemtime('extras/moment.min.js')?>"></script>
+  <script type="text/javascript" src="extras/moment.parseformat.js?v=<?=filemtime('extras/moment.parseformat.js')?>"></script>
+  <script type="text/javascript" src="extras/parseduration.js?v=<?=filemtime('extras/parseduration.js')?>"></script>
   <script type="text/javascript" src="extras/tinymce/js/tinymce/tinymce.min.js?v=<?=filemtime('extras/tinymce/js/tinymce/tinymce.min.js')?>"></script>
 
   <script type="text/javascript" src="extras/simplebar/simplebar.min.js?v=<?=filemtime('extras/simplebar/simplebar.min.js')?>"></script>
@@ -72,7 +75,7 @@ $image_files = $ui_model->image_files();
   <?php foreach($js_files as $file) { ?>
     <script type="text/javascript" src="<?=$file?>?v=<?=filemtime($file)?>"></script>
   <?php } ?>
-  
+
   <?php /* TODO should have a "last updated" time for strings */ ?>
   <script type="text/javascript" src="strings.php?v=<?=time()?>"></script>
 
@@ -84,7 +87,7 @@ $image_files = $ui_model->image_files();
     <link rel="stylesheet" type="text/css" href="extras/opendyslexic/opendyslexic.css?v=<?=urlencode($version)?>">
   <?php } ?>
 
-  <link rel="stylesheet" type="text/css" href="extras/fontawesome-free-5.9.0-web/css/all.css?v=<?=filemtime('extras/fontawesome-free-5.9.0-web/css/all.css')?>">
+  <link rel="stylesheet" type="text/css" href="extras/fontawesome-free-5.15.3-web/css/all.css?v=<?=filemtime('extras/fontawesome-free-5.15.3-web/css/all.css')?>">
 
 </head>
 

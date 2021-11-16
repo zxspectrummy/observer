@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,14 +19,26 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class OBFLoad 
+/**
+ * Loading class. Manages the loading of OpenBroadcaster files, models, and
+ * controllers.
+ *
+ * @package Class
+ */
+class OBFLoad
 {
 
   private $model_files;
   private $controller_files;
   private $db;
 
-  public function __construct() 
+  /**
+   * Construct an instance of OBFLoad. It scans the models directory first, adding
+   * the appropriate files to an array of models, then does the same for the
+   * controllers. Finally, it goes through all the module directories, and does
+   * the same for the models and controllers there.
+   */
+  public function __construct()
   {
 
     $this->db = OBFDB::get_instance();
@@ -47,7 +59,7 @@ class OBFLoad
       if(count($name_split)!=2) continue;
       $this->model_files[$name_split[0]] = 'models/'.$file;
     }
-    
+
     // find core controllers.
     $files = scandir('controllers');
 
@@ -88,7 +100,7 @@ class OBFLoad
         }
 
       }
-  
+
       // get module controllers
       if(is_dir('modules/'.$dir.'/controllers'))
       {
@@ -106,7 +118,7 @@ class OBFLoad
 
       }
 
-      if(is_file('modules/'.$dir.'/module.php')) 
+      if(is_file('modules/'.$dir.'/module.php'))
       {
 
         require_once('modules/'.$dir.'/module.php');
@@ -124,10 +136,16 @@ class OBFLoad
 
   }
 
+
+  /**
+   * Create an instance of OBFLoad or return the already-created instance.
+   *
+   * @return instance
+   */
   static public function &get_instance() {
 
     static $instance;
-  
+
     if (isset( $instance )) {
       return $instance;
     }
@@ -138,8 +156,15 @@ class OBFLoad
 
   }
 
-  // load a model and return the instance (likely to a controller or model)
-  public function model($model) 
+  /**
+   * Load a model and return the instance. Used primarly by controllers to
+   * access associated data.
+   *
+   * @param model
+   *
+   * @return model_instance
+   */
+  public function model($model)
   {
     if(!preg_match('/^[a-z0-9_]+$/i',$model)) return false;
     if(!isset($this->model_files[strtolower($model)])) return false;
@@ -149,8 +174,15 @@ class OBFLoad
     return new $model_name();
   }
 
-  // load a controller and return the instance (likely to the api)
-  public function controller($controller) 
+  /**
+   * Load a controller and return the instance. Used primarily by the API to
+   * access its methods.
+   *
+   * @param controller
+   *
+   * @return controller_instance
+   */
+  public function controller($controller)
   {
     if(!preg_match('/^[a-z0-9_]+$/i',$controller)) return false;
     if(!isset($this->controller_files[strtolower($controller)])) return false;
@@ -160,4 +192,3 @@ class OBFLoad
   }
 
 }
-

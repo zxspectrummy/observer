@@ -21,9 +21,8 @@
 OB.Playlist.detailsPage = function(id)
 {
   var post = [];
-  post.push(['device','station_id_avg_duration', {}]);
-  post.push(['playlist', 'get', { 'id': id }]);
-  post.push(['playlist','get_details',{'id': id}]);
+  post.push(['player','station_id_avg_duration', {}]);
+  post.push(['playlist', 'get', {'id': id, 'where_used': true}]);
 
   OB.API.multiPost(post, function(response)
   {
@@ -33,7 +32,7 @@ OB.Playlist.detailsPage = function(id)
 
     if(response[1].status==false) return;
     var pldata = response[1].data;
-    var used = response[2].data;
+    var used = response[1].data.where_used.used;
 
     // if we have permission, show edit/delete buttons.
     if(pldata.can_edit)
@@ -48,7 +47,9 @@ OB.Playlist.detailsPage = function(id)
     $('#playlist_details_description').text(pldata.description);
 
     //T Private
-    if(OB.Playlist.status=='private') $('#playlist_details_visibility').text(OB.t('Private'));
+    if(pldata.status=='private') $('#playlist_details_visibility').text(OB.t('Private'));
+    //T Visible
+    else if(pldata.status=='visible') $('#playlist_details_visibility').text(OB.t('Visible'));
     //T Public
     else $('#playlist_details_visibility').text(OB.t('Public'));
 
@@ -87,9 +88,9 @@ OB.Playlist.detailsPage = function(id)
         {
           //T Dynamic Selection
           //T estimated
-          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Dynamic Selection'))+': '+htmlspecialchars(item.dynamic_name)+'</td><td>'+secsToTime(item.dynamic_duration)+' ('+htmlspecialchars(OB.t('estimated'))+')</td></tr>');
+          $('#playlist_details_items_table').append('<tr><td>'+htmlspecialchars(OB.t('Dynamic Selection'))+': '+htmlspecialchars(item.properties.name)+'</td><td>'+secsToTime(item.duration)+' ('+htmlspecialchars(OB.t('estimated'))+')</td></tr>');
           pl_item_time_estimated = true;
-          pl_item_time_total += parseFloat(item.dynamic_duration);
+          pl_item_time_total += parseFloat(item.duration);
         }
 
         else

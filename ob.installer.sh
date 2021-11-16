@@ -18,7 +18,7 @@
 # along with OpenBroadcaster Server. If not, see <http://www.gnu.org/licenses/>.
 
 ## install these packages before running this script:
-apt-get install apache2 apg mariadb-server libapache2-mod-php7.3 php7.3 php7.3-mysql php7.3-mbstring php7.3-xml php7.3-gd php7.3-curl php7.3-imagick imagemagick ffmpeg vorbis-tools festival libavcodec-extra libavfilter-extra
+apt-get install apache2 apg mysql-server libapache2-mod-php7.0 php7.0 php7.0-mysql php7.0-mbstring php7.0-xml php7.0-gd php7.0-curl php7.0-imagick imagemagick libav-tools vorbis-tools festival libavcodec-extra libavfilter-extra
 
 ## As root, run this script as an argument to the bash command, or by setting the executable bit.
 
@@ -160,7 +160,7 @@ OBSLTPASS=$(php tools/password_hash.php "$OBADMINPASS" "$SALT")
 
 if [[ $USEDBRT == "y" ]]; then
 	mysqladmin -u $DBSU -p"$DBSUPASS" create $OBDBNM
-	mysql -u $DBSU -p$DBSUPASS -e "GRANT CREATE,SELECT,INSERT,UPDATE,DELETE,ALTER on $OBDBNM.* to '$OBDBUSER'@'$DBHOST' IDENTIFIED BY '$OBDBPASS';"
+	mysql -u $DBSU -p$DBSUPASS -e "GRANT CREATE,SELECT,INSERT,UPDATE,DELETE,ALTER,DROP on $OBDBNM.* to '$OBDBUSER'@'$DBHOST' IDENTIFIED BY '$OBDBPASS';"
 fi
 mysql -u $OBDBUSER -p"$OBDBPASS" $OBDBNM < $CWD/db/dbclean.sql
 mysql -u $OBDBUSER -p"$OBDBPASS" $OBDBNM -e "UPDATE users SET password='$OBSLTPASS' WHERE username='admin';"
@@ -186,11 +186,7 @@ rm $WEBROOT/ob.installer.sh
 
 echo "Site files are in place..."
 
-## Symlink avconv to ffmpeg to support modern Linux distributions
-ln -s /usr/bin/ffmpeg /usr/local/bin/avconv
-ln -s /usr/bin/ffprobe /usr/local/bin/avprobe
-
-## Set up any cron jobs:
+##Set up any cron jobs:
 echo "*/5 * * * * $WEBUSER /usr/bin/php $WEBROOT/cron.php" > /etc/cron.d/openbroadcaster
 
 ## We need to create a file full of variables for OB to access the DB and such.  

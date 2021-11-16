@@ -47,6 +47,16 @@ fieldset, #layout_footer
   opacity: 1 !important;
 }
 
+ob-tab-select button
+{  
+  color: #000;
+
+  &.active
+  {
+    border: 1px solid #000;
+  }
+}
+
 button, 
 input[type=submit], 
 input[type=reset], 
@@ -268,7 +278,9 @@ button.delete, a.button.delete
   border: 1px solid #000000; /**/
 }
 
-.playlist_addedit_item[data-type=dynamic], .playlist_addedit_liveassist_item
+.playlist_addedit_item[data-type=dynamic], 
+.playlist_addedit_item[data-type=custom],
+.playlist_addedit_liveassist_item
 {
   background-color: #babcb8; /**/
 }
@@ -304,10 +316,10 @@ button.delete, a.button.delete
   background: transparent;
 }
 
-#schedule_details
+#schedule_details > div
 {
   background-color: #ededf1; /**/
-  border: 1px solid #000000; /**/
+  border-color:#000000; /**/
 }
 
 .schedule_data > div

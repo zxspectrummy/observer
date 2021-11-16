@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,19 +19,46 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Module management.
+ *
+ * @package Model
+ */
 class ModulesModel extends OBFModel
 {
 
+  /**
+   * Get all installed modules.
+   *
+   * @param object Return as module object or information array. Default FALSE.
+   *
+   * @return modules
+   */
   public function get_installed($object=false)
   {
     return $this('get_all',true,$object);
   }
 
+  /**
+   * Get all available modules.
+   *
+   * @param object Return as module object or information array. Default FALSE.
+   *
+   * @return modules
+   */
   public function get_not_installed($object=false)
   {
     return $this('get_all',false,$object);
   }
 
+  /**
+   * Get all modules of a certain type.
+   *
+   * @param installed Installed (TRUE) or available (FALSE) modules. Default TRUE.
+   * @param object Return as module object or information array. Default FALSE.
+   *
+   * @return modules
+   */
   public function get_all($installed=true,$object=false)
   {
 
@@ -52,7 +79,7 @@ class ModulesModel extends OBFModel
 
       if($module=='..' || $module=='.' || !is_dir('modules/'.$module)) continue;
 
-      if(is_file('modules/'.$module.'/module.php')) 
+      if(is_file('modules/'.$module.'/module.php'))
       {
         require_once('modules/'.$module.'/module.php');
         $module_class_name = $module.'Module';
@@ -73,6 +100,13 @@ class ModulesModel extends OBFModel
 
   }
 
+  /**
+   * Install a module.
+   *
+   * @param module_name
+   *
+   * @return status
+   */
   public function install($module_name)
   {
 
@@ -94,6 +128,13 @@ class ModulesModel extends OBFModel
 
   }
 
+  /**
+   * Uninstall a module.
+   *
+   * @param module_name
+   *
+   * @return status
+   */
   public function uninstall($module_name)
   {
 

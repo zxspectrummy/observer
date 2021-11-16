@@ -21,18 +21,13 @@
 OB.Media.detailsPage = function(id)
 {
 
-  var post = [];
-  post.push(['media', 'get', {'id': id}]);
-  post.push(['media', 'get_details', {'id': id}]);
+  OB.API.post('media', 'get', {'id': id, 'where_used': true}, function (response) {
+    if(response.status==false) return;
 
-  OB.API.multiPost(post, function(response)
-  {
-    if(response[0].status==false) return;
+    OB.UI.replaceMain('media/details.html', {'data-media_id': id});
 
-    OB.UI.replaceMain('media/details.html');
-
-    var item = response[0].data;
-    var used = response[1].data;
+    var item = response.data;
+    var used = response.data.where_used.used;
 
     // handle buttons
 
@@ -66,6 +61,34 @@ OB.Media.detailsPage = function(id)
     $('#media_details_language').text(item.language_name);
     $('#media_details_genre').text(item.genre_name);
     $('#media_details_comments').text(item.comments);
+    
+    // add custom metadata
+    $.each(OB.Settings.media_metadata, function(index, metadata)
+    {
+      if(metadata.type=='hidden') return;
+      
+      var value = item['metadata_'+metadata.name] ?? '';
+      if(metadata.type=='tags') value = value.split(',').join(', ');
+
+      var $metadata = $('<div class="fieldrow"><label data-t></label><span></span></div>');
+      $metadata.find('label').text(metadata.description);
+      $metadata.find('span').text(value);
+      $('#media_details_metadata').append($metadata);
+    });
+    
+    // add thumbnail if available
+    if(item.thumbnail)
+    {
+      $('#media_details_fieldset > legend').after('<img alt="" id="media_thumbnail" src="/thumbnail.php?id='+item.id+'">');
+    }
+    
+    // remove unused metadata
+    $.each(OB.Settings.media_required_fields, function(field, status)
+    {
+      field = field.replace(/_id$/,'');
+      if(status=='disabled') $('#media_details_'+field).parent().hide();
+      if(status=='disabled' && field=='category') $('#media_details_genre').parent().hide();
+    });
 
     //T Archived
     if(item.is_archived==1) $('#media_details_approval').text(OB.t('Archived'));
@@ -80,6 +103,8 @@ OB.Media.detailsPage = function(id)
 
     //T Private
     if(item.status=='private') $('#media_details_visibility').text(OB.t('Private'));
+    //T Visible
+    else if(item.status=='visible') $('#media_details_visibility').text(OB.t('Visible'));
     //T Public
     else $('#media_details_visibility').text(OB.t('Public'));
 
@@ -106,7 +131,7 @@ OB.Media.detailsPage = function(id)
         //T dynamic playlist
         if(used_detail.where=='playlist_dynamic') $('#media_details_used ul').append('<li>*'+htmlspecialchars(OB.t('dynamic playlist'))+': <a href="javascript: OB.Playlist.detailsPage('+used_detail.id+');">'+htmlspecialchars(used_detail.name)+'</a></li>');
         //T station ID
-        if(used_detail.where=='device') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('station ID'))+': '+htmlspecialchars(used_detail.name)+'</li>');
+        if(used_detail.where=='player') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('station ID'))+': '+htmlspecialchars(used_detail.name)+'</li>');
         //T priority broadcast
         if(used_detail.where=='emergency') $('#media_details_used ul').append('<li>'+htmlspecialchars(OB.t('priority broadcast'))+': '+htmlspecialchars(used_detail.name)+'</li>');
         //T schedule for player

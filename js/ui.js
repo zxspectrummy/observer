@@ -29,7 +29,7 @@ OB.UI.init = function()
   }).observe(document.querySelector('html'), { attributes: false, childList: true, characterData: false, subtree: true });
 
   OB.Callbacks.add('ready',-50,OB.UI.initLayout);
-  
+
   // add drag helper html
   $('body').append('<div id="drag_helper"></div>');
   $('body').on('mousemove',OB.UI.dragHelperMove);
@@ -67,10 +67,10 @@ OB.UI.dragHelperOff = function()
 OB.UI.dragHelperMove = function(e)
 {
   if(!$('#drag_helper').hasClass('active')) return;
-  
+
   var left = e.pageX - $('#drag_helper').outerWidth()/2;
   var top = e.pageY - $('#drag_helper').outerHeight()/2;
-  
+
   $('#drag_helper').css({
     'left': left+'px',
     'top': top+'px'
@@ -107,6 +107,30 @@ OB.UI.domChangeCallback = function()
 {
   OB.UI.sidebarSearchResultsHeight();
 
+  $('ob-tabs').each(function (index, container) {
+    OB.UI.tabsInit(container);
+  });
+
+  $('ob-duration-input').each(function(index, input)
+  {
+    OB.UI.durationInputInit(input);
+  });
+
+  $('ob-datetime-input').each(function(index, input)
+  {
+    OB.UI.datetimeInputInit(input);
+  });
+  
+  $('ob-date-input').each(function(index, input)
+  {
+    OB.UI.dateInputInit(input);
+  });
+  
+  $('ob-time-input').each(function(index, input)
+  {
+    OB.UI.timeInputInit(input);
+  });
+
   $('ob-tag-input').each(function(index,tag)
   {
     OB.UI.tagInputInit(tag);
@@ -135,6 +159,288 @@ OB.UI.domChangeCallback = function()
   });
 
   OB.UI.translateHTML();
+}
+
+OB.UI.tabsInit = function (container) {
+  
+  if($(container).attr('data-ready')) return true;
+  
+  var tabs = $(container).find('> ob-tab');
+  var $select = $('<ob-tab-select></ob-tab-select>');
+  
+  $(tabs).each(function(index, tab)
+  {
+    var name = $(tab).attr('data-name');
+    if(!name) name = 'Untitled';
+    $select.append( $('<button></button').text(name).attr('data-index',index).click(OB.UI.tabsClick) );
+    $(tab).attr('data-index', index);
+  });
+  $(container).prepend($select);
+  $(container).find('> ob-tab-select > button').first().click();
+  $(container).attr('data-ready',true);
+}
+
+OB.UI.tabsClick = function() {
+  var $container = $(this).parents('ob-tabs').first();
+  $container.find('> ob-tab').hide();
+  $container.find('> ob-tab-select > button').removeClass('active');
+  $container.find('> ob-tab[data-index='+$(this).attr('data-index')+']').show();
+  $(this).addClass('active');
+}
+
+OB.UI.formVal = function (form, value) {
+
+  if(typeof(value)=='object')
+  {
+    $(form).find('[name], [data-name]').each(function(index, input)
+    {
+      var type = ($(input).attr('type') ?? '').toLowerCase();
+      var name = $(input).attr('data-name');
+      if(!name) name = $(input).attr('name');
+      if(name)
+      {
+        // for checkbox, check if found in comma separated list
+        if(type=='checkbox')
+        {
+          var values = (value[name] ?? '').split(',');
+          if(values.indexOf($(input).val())!=-1) $(input).prop('checked', true);
+        }
+  
+        // non-checkbox value set
+        else
+        {
+          $(input).val(value[name]);
+          $(input).trigger('change');
+        }
+      }
+    });
+  }
+
+  else
+  {
+    var values = {};
+
+    $(form).find('[name], [data-name]').each(function(index, input)
+    {
+      var type = ($(input).attr('type') ?? '').toLowerCase();
+
+      // skip unchecked checkbox
+      if(type=='checkbox' && !$(input).is(':checked')) return;
+
+      // skip hidden item (unless type hidden)
+      if(type!='hidden' && !$(input).is(':visible')) return;
+
+      var name = $(input).attr('data-name');
+      if(!name) name = $(input).attr('name');
+      if(name)
+      {
+        if(typeof(values[name])=='undefined') values[name] = $(input).val();
+
+        // handle multiple values by putting them in an array (i.e., checkboxes)
+        else if(typeof(values[name])=='object') values[name].push($(input).val());
+        else values[name] = [values[name], $(input).val()];
+      }
+    });
+
+    return values;
+  }
+}
+
+OB.UI.durationInputInit = function (input) {
+  if($(input).attr('data-ready')) return true;
+  
+  $(input).html('<input type="text" placeholder="e.g. &quot;90 minutes&quot;" />');
+  $(input).find('input').change(function() {
+  
+    var duration = null;
+    var string = $(this).val().trim();
+    
+    // try to parse as hh:mm:ss
+    var string_split = string.split(':');
+    var digits = /^[0-9]+$/;
+    if(string_split.length==1 && string_split[0].match(digits)) duration = string_split[0]*1000;
+    else if(string_split.length==2 && string_split[0].match(digits) && string_split[1].match(digits)) duration = string_split[1]*1000 + string_split[0]*1000*60;
+    else if(string_split.length==3 && string_split[0].match(digits) && string_split[1].match(digits) && string_split[2].match(digits)) duration = string_split[2]*1000 + string_split[1]*1000*60 + string_split[0]*1000*3600;
+
+    // if not yet parsed, try string parse
+    if(duration===null) duration = parseDuration(string);
+    
+    // still nothing, clear value to restore placeholder
+    if(duration===null)
+    {
+     $(this).val('');
+     $(this).parent().removeAttr('data-duration');
+    }
+    
+    // set duration
+    else
+    {
+      duration = Math.floor(duration/1000);
+      
+      var tmp = duration;
+      var seconds = tmp%60;
+      tmp = (tmp-seconds)/60;
+      var minutes = tmp%60;
+      tmp = (tmp-minutes)/60;
+      var hours = tmp;
+      
+      seconds = seconds.toString().padStart(2,'0');
+      minutes = minutes.toString().padStart(2,'0');
+      hours = hours.toString().padStart(2,'0');
+      
+      $(this).val(hours+':'+minutes+':'+seconds);
+      $(this).parent().attr('data-duration', duration);
+    }
+  });
+  
+  $(input).attr('data-ready',true);
+  
+  if($(input).attr('data-value')) { $(input).val($(input).attr('data-value')); $(input).removeAttr('data-value'); }
+}
+
+OB.UI.durationInputVal = function (input, value) {
+  if(typeof(value)=='number' || typeof(value)=='string')
+  {
+    $(input).find('input').val(value).change();
+  }
+  else
+  {
+    var duration = $(input).attr('data-duration');
+    if(!duration) return '';
+    else return duration;
+  }
+}
+
+OB.UI.datetimeInputInit = function (input) {
+  if($(input).attr('data-ready')) return true;
+  
+  $(input).html('<input type="text" placeholder="e.g. &quot;Dec 16 5pm&quot;" />');
+  $(input).find('input').change(function() {
+    var string = $(this).val();
+    var format = moment.parseFormat(string);
+    var datetime = moment(string,format);
+    if(isNaN(datetime.hour()))
+    {
+     $(this).val('');
+     $(this).parent().removeAttr('data-date');
+     $(this).parent().removeAttr('data-time');
+    }
+    else
+    {
+      $(this).val(datetime.format('YYYY-MM-DD HH:mm:ss'));
+      $(this).parent().attr('data-date', datetime.format('YYYY-MM-DD'));
+      $(this).parent().attr('data-time', datetime.format('HH:mm:ss'));
+    }
+  });
+  
+  $(input).attr('data-ready',true);
+  
+  if($(input).attr('data-value')) { $(input).val($(input).attr('data-value')); $(input).removeAttr('data-value'); }
+}
+
+OB.UI.datetimeInputVal = function(input, value) {
+  if(value && value instanceof Date)
+  {
+    $(input).find('input').val(moment(value).format('YYYY-MM-DD HH:mm:ss')).change();
+  }
+  else if(value)
+  {
+    $(input).find('input').val(value).change();
+  }
+  else
+  {
+    var date = $(input).attr('data-date');
+    var time = $(input).attr('data-time');
+    if(!date) return '';
+    else return date+' '+time;
+  }
+}
+
+OB.UI.dateInputInit = function (input) {
+  if($(input).attr('data-ready')) return true;
+  
+  var placeholder = $(input).attr('data-placeholder') ?? 'e.g. "Mar 2, 2021"';
+  var display = $(input).attr('data-format') ?? 'YYYY-MM-DD';
+  
+  $(input).html( $('<input type="text" />').attr('placeholder', placeholder) );
+  $(input).find('input').change(function() {
+    var string = $(this).val();
+    var format = moment.parseFormat(string);
+    var datetime = moment(string,format);
+    if(isNaN(datetime.hour()))
+    {
+     $(this).val('');
+     $(this).parent().removeAttr('data-date');
+    }
+    else
+    {
+      $(this).val(datetime.format(display));
+      $(this).parent().attr('data-date', datetime.format('YYYY-MM-DD'));
+    }
+  });
+  
+  $(input).attr('data-ready',true);
+  
+  if($(input).attr('data-value')) { $(input).val($(input).attr('data-value')); $(input).removeAttr('data-value'); }
+}
+
+OB.UI.dateInputVal = function(input, value) {
+  if(value && value instanceof Date)
+  {
+    $(input).find('input').val(moment(value).format('YYYY-MM-DD')).change();
+  }
+  else if(value)
+  {
+    $(input).find('input').val(value).change();
+  }
+  else
+  {
+    var date = $(input).attr('data-date');
+    if(!date) return '';
+    else return date;
+  }
+}
+
+OB.UI.timeInputInit = function (input) {
+  if($(input).attr('data-ready')) return true;
+  
+  $(input).html('<input type="text" placeholder="e.g. &quot;11:30am&quot;" />');
+  $(input).find('input').change(function() {
+    var string = $(this).val();
+    var format = moment.parseFormat(string);
+    var datetime = moment(string,format);
+    if(isNaN(datetime.hour()))
+    {
+     $(this).val('');
+     $(this).parent().removeAttr('data-time');
+    }
+    else
+    {
+      $(this).val(datetime.format('HH:mm:ss'));
+      $(this).parent().attr('data-time', datetime.format('HH:mm:ss'));
+    }
+  });
+  
+  $(input).attr('data-ready',true);
+  
+  if($(input).attr('data-value')) { $(input).val($(input).attr('data-value')); $(input).removeAttr('data-value'); }
+}
+
+OB.UI.timeInputVal = function(input, value) {
+  if(value && value instanceof Date)
+  {
+    $(input).find('input').val(moment(value).format('HH:mm:ss')).change();
+  }
+  else if(value)
+  {
+    $(input).find('input').val(value).change();
+  }
+  else
+  {
+    var time = $(input).attr('data-time');
+    if(!time) return '';
+    else return time;
+  }
 }
 
 OB.UI.htmlInputInit = function (input) {
@@ -199,7 +505,7 @@ OB.UI.mediaInputInit = function (input) {
             return true;
           }
 
-          if ($(element).attr('data-public_status') != "public") {
+          if ($(element).attr('data-visibility') == "private") {
             OB.UI.alert("Private media items not allowed.");
             return true;
           }
@@ -243,8 +549,13 @@ OB.UI.mediaInputVal = function (input, value) {
     value.forEach(function (media_id) {
       post.push(['media', 'get', {'id': media_id}]);
     })
-
+    
+    $(input).attr('data-loading','true');
+    
     OB.API.multiPost(post, function (data) {
+      
+      $(input).removeAttr('data-loading');
+    
       data.forEach(function (response) {
         if (response.status != true) return false;
         var media_item = $('<ob-media/>').attr('data-id', response.data.id);
@@ -288,7 +599,7 @@ OB.UI.playlistInputInit = function (input) {
             return true;
           }
 
-          if ($(element).attr('data-status') != "public") {
+          if ($(element).attr('data-visbility') == "private") {
             //T Private playlist items not allowed.
             OB.UI.alert("Private playlist items not allowed.");
             return true;
@@ -334,7 +645,12 @@ OB.UI.playlistInputVal = function (input, value) {
       post.push(['playlist', 'get', {'id': playlist_id}]);
     })
 
+    $(input).attr('data-loading','true');
+
     OB.API.multiPost(post, function (data) {
+    
+      $(input).removeAttr('data-loading');
+      
       data.forEach(function (response) {
         if (response.status != true) return false;
         var playlist_item = $('<ob-playlist/>').attr('data-id', response.data.id);
@@ -887,12 +1203,16 @@ OB.UI.permissionsUpdate = function(context)
 
 }
 
-OB.UI.replaceMain = function(file)
+OB.UI.replaceMain = function(file, attrs)
 {
   $('#layout_main').html(OB.UI.getHTML(file));
+  $('#layout_main').attr('data-src', file);
 
   // form tag is used for layout information, but we never do a regular form submit.
   $('#layout_main form').submit(function() { event.preventDefault(); });
+  
+  // add attributes if we have them
+  if(attrs) $.each(attrs, function(key,value) { $('#layout_main').attr(key,value); });
 
   OB.UI.widgetHTML( $('#layout_main') );
 }
@@ -935,6 +1255,9 @@ OB.UI.openModalWindow = function(file)
 
   // reset/init simplebar
   new SimpleBar(document.getElementById('layout_modal_window'));
+  
+  // trigger dom callback, mutation observer not always called in time.
+  OB.UI.domChangeCallback();
 }
 
 OB.UI.closeModalWindow = function()
@@ -1053,6 +1376,11 @@ $.fn.val = function(value)
 {
   var tag = $(this).prop('tagName');
 
+  if(tag == 'OB-FORM') return typeof(value)=='undefined' ? OB.UI.formVal($(this)) : OB.UI.formVal($(this),value);
+  if(tag == 'OB-DURATION-INPUT') return typeof(value)=='undefined' ? OB.UI.durationInputVal($(this)) : OB.UI.durationInputVal($(this),value);
+  if(tag == 'OB-DATETIME-INPUT') return typeof(value)=='undefined' ? OB.UI.datetimeInputVal($(this)) : OB.UI.datetimeInputVal($(this),value);
+  if(tag == 'OB-DATE-INPUT') return typeof(value)=='undefined' ? OB.UI.dateInputVal($(this)) : OB.UI.dateInputVal($(this),value);
+  if(tag == 'OB-TIME-INPUT') return typeof(value)=='undefined' ? OB.UI.timeInputVal($(this)) : OB.UI.timeInputVal($(this),value);
   if(tag == 'OB-TAG-INPUT') return typeof(value)=='undefined' ? OB.UI.tagInputVal($(this)) : OB.UI.tagInputVal($(this),value);
   if(tag == 'OB-USER-INPUT') return typeof(value)=='undefined' ? OB.UI.userInputVal($(this)) : OB.UI.userInputVal($(this),value);
   if(tag == 'OB-GROUP-INPUT') return typeof(value)=='undefined' ? OB.UI.groupInputVal($(this)) : OB.UI.groupInputVal($(this),value);

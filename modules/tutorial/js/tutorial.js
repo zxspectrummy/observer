@@ -238,7 +238,7 @@ OBModules.Tutorial = new function()
 		this.init = function()
 		{
 			OBModules.Tutorial.giveInstructions('Select a timeslot to schedule your show, then click save.\
-				<br><br>If you have the ability to schedule anywhere on the device, you may alternatively provide a scheduling mode, start time, and duration.');
+				<br><br>If you have the ability to schedule anywhere on the player, you may alternatively provide a scheduling mode, start time, and duration.');
 		}
 
 		this.nextCondition = function()

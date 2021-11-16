@@ -35,6 +35,8 @@ OB.Sidebar.sidebarInit = function()
   {
     $('body').addClass('sidebar-right');
   }
+  
+  OB.Sidebar.mediaDetails();
 
   $('#sidebar_player').droppable({
     drop: function(event, ui) {
@@ -73,20 +75,20 @@ OB.Sidebar.sidebarInit = function()
   OB.Sidebar.playlistEditDeleteVisibility();
   OB.Sidebar.mediaSearchFilter('approved');
   OB.Sidebar.playlistSearch();
-  
+
   var media_simplebar = new SimpleBar(document.getElementById('sidebar_search_media_results_container'));
-  media_simplebar.getScrollElement().addEventListener('scroll', function() 
+  media_simplebar.getScrollElement().addEventListener('scroll', function()
   {
     var distance_to_bottom = $('#sidebar_search_media_results_container .simplebar-content').height() - $(this).scrollTop() - $('#sidebar_search_media_results_container').height();
     if(distance_to_bottom<50 && $('#sidebar_search_media_loadmore').is(':visible')) OB.Sidebar.mediaSearchMore();
-  }); 
+  });
 
   var playlist_simplebar = new SimpleBar(document.getElementById('sidebar_search_playlist_results_container'));
-  playlist_simplebar.getScrollElement().addEventListener('scroll', function() 
+  playlist_simplebar.getScrollElement().addEventListener('scroll', function()
   {
     var distance_to_bottom = $('#sidebar_search_playlist_results_container .simplebar-content').height() - $(this).scrollTop() - $('#sidebar_search_playlist_results_container').height();
     if(distance_to_bottom<50 && $('#sidebar_search_playlist_loadmore').is(':visible')) OB.Sidebar.playlistSearchMore();
-  }); 
+  });
 }
 
 OB.Sidebar.playerToggle = function()
@@ -190,7 +192,12 @@ OB.Sidebar.mediaDetailedToggle = function()
     $('#sidebar_search_media_container').addClass('sidebar_search_media_container_detailed');
 
     // show detailed columns
-    $('.sidebar_search_media_detailed_column').show();
+    $('.sidebar_search_media_detailed_column').each(function(index, column)
+    {
+      var name = $(column).attr('data-column');
+      if(name=='genre') name = 'category';
+      if(OB.Settings.media_required_fields[name]!='disabled' && OB.Settings.media_required_fields[name+'_id']!='disabled') $(column).show();
+    });
 
     // update detailed toggle link
     $('#media_detailed_toggle_text').text(OB.t('less'));
@@ -419,6 +426,16 @@ OB.Sidebar.mediaSearchMode = function(mode)
 
 }
 
+OB.Sidebar.mediaDetails = function()
+{
+  $('#sidebar_search_media_container').removeClass('thumbnails').addClass('details');
+}
+
+OB.Sidebar.mediaThumbnails = function()
+{
+  $('#sidebar_search_media_container').removeClass('details').addClass('thumbnails');
+}
+
 OB.Sidebar.mediaSearch = function(more)
 {
 
@@ -451,7 +468,7 @@ OB.Sidebar.mediaSearch = function(more)
   $('#sidebar_search_media_loading').show();
   $('#sidebar_search_media_loadmore').hide();
 
-  OB.API.post('media','media_search',{ save_history: true, sort_by: OB.Sidebar.media_search_sort_by, sort_dir: OB.Sidebar.media_search_sort_dir, q: search_query, s: OB.Sidebar.media_search_filters.mode, l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.media_search_offset, my: OB.Sidebar.media_search_filters.my },function (data)
+  OB.API.post('media','search',{ save_history: true, sort_by: OB.Sidebar.media_search_sort_by, sort_dir: OB.Sidebar.media_search_sort_dir, q: search_query, s: OB.Sidebar.media_search_filters.mode, l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.media_search_offset, my: OB.Sidebar.media_search_filters.my },function (data)
   {
     var media_class = media; // media singleton is needed, but media local variable below overrides.
 
@@ -484,9 +501,12 @@ OB.Sidebar.mediaSearch = function(more)
           media_type_symbol = '<i class="fas fa-image"></i>';
         break;
       }
+      
+      var thumbnail = media[i]['thumbnail'] ? '<img loading="lazy" src="/thumbnail.php?id='+media[i]['id']+'" />' : '';
 
       $('#sidebar_search_media_results tbody').append('\
         <tr class="sidebar_search_media_result" id="sidebar_search_media_result_'+media[i]['id']+'" data-mode="'+data_mode+'">\
+          <td class="sidebar_search_media_thumbnail hidden" data-column="thumbnail">'+thumbnail+'</td>\
           <td class="sidebar_search_media_type" data-column="type">'+media_type_symbol+'</td>\
           <td class="sidebar_search_media_artist" data-column="artist">'+htmlspecialchars(media[i]['artist'])+'</td>\
           <td class="sidebar_search_media_detailed_column hidden" data-column="album">'+htmlspecialchars(media[i]['album'])+'</td>\
@@ -498,6 +518,8 @@ OB.Sidebar.mediaSearch = function(more)
           <td class="sidebar_search_media_detailed_column hidden" data-column="language">'+htmlspecialchars(media[i]['language_name'])+'</td>\
           <td class="sidebar_search_media_time" data-column="time">'+duration+'</td>\
         </tr>');
+        
+      if(OB.Settings.media_required_fields.artist=='disabled') $('.sidebar_search_media_artist').hide();
 
       $('#sidebar_search_media_result_'+media[i]['id']).click(function(e) {
 
@@ -544,8 +566,7 @@ OB.Sidebar.mediaSearch = function(more)
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-comments', media[i]['comments']);
 
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-is_copyright_owner', media[i]['is_copyright_owner']);
-      $('#sidebar_search_media_result_'+media[i]['id']).attr('data-is_public', media[i]['is_public']);
-      $('#sidebar_search_media_result_'+media[i]['id']).attr('data-public_status', media[i]['status']);
+      $('#sidebar_search_media_result_'+media[i]['id']).attr('data-visibility', media[i]['status']);
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-dynamic_select', media[i]['dynamic_select']);
 
       $('#sidebar_search_media_result_'+media[i]['id']).attr('data-owner_id', media[i]['owner_id']);
@@ -558,6 +579,7 @@ OB.Sidebar.mediaSearch = function(more)
       // set custom metadata
       $.each(OB.Settings.media_metadata, function(index, metadata)
       {
+        if(metadata.type=='hidden') return;
         $('#sidebar_search_media_result_'+media[i]['id']).attr('data-metadata_'+metadata.name, media[i]['metadata_'+metadata.name]);
       });
 
@@ -619,7 +641,7 @@ OB.Sidebar.mediaSearch = function(more)
 
           if(num_selected==1) var helper_html = htmlspecialchars($(ui.helper).attr('data-artist')) + '<br>' + htmlspecialchars($(ui.helper).attr('data-title'));
           else var helper_html = htmlspecialchars(num_selected+' items');
-          
+
           $(ui.helper).html('');
           OB.UI.dragHelperOn(helper_html);
 
@@ -832,7 +854,7 @@ OB.Sidebar.playlistSearch = function(more)
   $('#sidebar_search_playlist_loading').show();
   $('#sidebar_search_playlist_loadmore').hide();
 
-  OB.API.post('playlist','playlist_search',{ sort_by: OB.Sidebar.playlist_search_sort_by, sort_dir: OB.Sidebar.playlist_search_sort_dir, q: $('#sidebar_search_playlist_input').val(), l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.playlist_search_offset, my: OB.Sidebar.playlist_search_filters.my },function (data) {
+  OB.API.post('playlist','search',{ sort_by: OB.Sidebar.playlist_search_sort_by, sort_dir: OB.Sidebar.playlist_search_sort_dir, q: $('#sidebar_search_playlist_input').val(), l: OB.ClientStorage.get('results_per_page'), o: OB.Sidebar.playlist_search_offset, my: OB.Sidebar.playlist_search_filters.my },function (data) {
 
     var playlist = data.data.playlists;
     var num_results = data.data.num_results;
@@ -885,7 +907,7 @@ OB.Sidebar.playlistSearch = function(more)
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-id', playlist[i]['id']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-name', playlist[i]['name']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-description', playlist[i]['description']);
-      $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-status', playlist[i]['status']);
+      $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-visibility', playlist[i]['status']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-owner_id', playlist[i]['owner_id']);
       $('#sidebar_search_playlist_result_'+playlist[i]['id']).attr('data-can_edit', playlist[i]['can_edit']);
 
@@ -1199,7 +1221,7 @@ OB.Sidebar.mySearchesEdit = function()
 
 OB.Sidebar.advancedSearchWindowInit = function()
 {
-  
+
   // refresh settings and then load window
   OB.Settings.getSettings(function() {
 
@@ -1227,11 +1249,15 @@ OB.Sidebar.advancedSearchWindowInit = function()
 
     $.each(OB.Settings.media_metadata,function(index,metadata)
     {
+      // skip hidden metadata
+      if(metadata.type=='hidden') return;
+    
       $metadata = $('<option></option>').text(metadata.description).attr('value','metadata_'+metadata.name);
 
       if(metadata.type=='text' || metadata.type=='textarea') $metadata.attr('data-compare','text').attr('data-value','text');
+      else if(metadata.type=='integer') $metadata.attr('data-compare','number').attr('data-value','text');
       else if(metadata.type=='bool') $metadata.attr('data-compare','select').attr('data-value','bool');
-      else if(metadata.type=='tags') 
+      else if(metadata.type=='tags')
       {
         $metadata.attr('data-compare','tags').attr('data-value','metadata_'+metadata.name);
         var $select = $('<select></select>').attr('data-type','value').attr('data-name','metadata_'+metadata.name).addClass('hidden');
@@ -1250,7 +1276,7 @@ OB.Sidebar.advancedSearchWindowInit = function()
     });
 
     $('#advanced_search_value').focus();
-  
+
   });
 
 }

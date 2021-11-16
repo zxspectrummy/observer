@@ -85,6 +85,13 @@ button:first-child, input[type=submit]:first-child, input[type=reset]:first-chil
   margin-left: 0;
 }
 
+input::placeholder
+{
+  text-align: left;
+  opacity: 1;
+  font-weight: 300;
+}
+
 button.add, a.button.add
 {
   background-color: #9de259;
@@ -143,7 +150,7 @@ legend
   margin: 7px 0;
 }
 
-label
+.fieldrow > label
 {
   display: inline-block;
   width: 200px;
@@ -153,17 +160,17 @@ label
   /* vertical-align: middle; */
 }
 
-label.required
+.fieldrow > label.required
 {
   font-weight: 800;
 }
 
-label:after
+.fieldrow > label:after
 {
   content: ':';
 }
 
-label.empty:after
+.fieldrow > label.empty:after
 {
   content: '';
 }
@@ -190,7 +197,10 @@ textarea, ob-tag-input, ob-user-input, ob-group-input, ob-media-input, ob-playli
   vertical-align: top;
 }
 
-
+textarea::placeholder
+{
+  text-align: left;
+}
 
 input[type=checkbox], input[type=radio]
 {
@@ -271,6 +281,23 @@ input[type=range], input[type=color]
 .ui-datepicker-calendar
 {
   table-layout: fixed;
+}
+
+ob-tab-select
+{
+  display: block;
+  
+  button
+  {
+    background-color: transparent !important;
+    color: #eeeeec;
+    border: 0;
+
+    &.active
+    {
+      border: 1px solid #eeeeec;
+    }
+  }
 }
 
 ob-user-input,
@@ -365,6 +392,12 @@ ob-media-input:empty::after
   display: block;
   text-align: center;
   line-height: 96px;
+}
+
+ob-playlist-input[data-loading]:empty::after,
+ob-media-input[data-loading]:empty::after
+{
+  content: 'Loading...';
 }
 
 ob-tag-suggestions

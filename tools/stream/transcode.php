@@ -44,7 +44,7 @@ $db->query('
   SELECT stream_version, thumbnail_version, file_location, filename, id, type, duration
   FROM media 
   WHERE
-    is_public=1 
+    status="public" 
     AND is_approved=1 
     AND is_archived=0 
     AND (

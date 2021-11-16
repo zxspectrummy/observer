@@ -112,3 +112,13 @@ ob-tag-suggestions
 {
   background-color: rgba(0,0,0,0.9);
 }
+
+ob-tab-select button
+{  
+  color: #eeeeec !important;
+
+  &.active
+  {
+    border: 1px solid #e09529;
+  }
+}

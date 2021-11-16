@@ -1,4 +1,4 @@
-$(document).ready(function() { 
+$(document).ready(function() {
 
 	$('#login_password').add('#forgotpass_email').add('#newaccount_email').keypress(function (e) {
 		if (e.which == 13) {
@@ -27,7 +27,7 @@ OB.Welcome.login = function()
 
   $.post('../api.php', {'c': 'account', 'a': 'login', 'd': $.toJSON(data) },function(response) {
 
-    if(response.status==false) 
+    if(response.status==false)
     {
       $('#login_message').text(response.msg);
 
@@ -51,7 +51,7 @@ OB.Welcome.forgotpass = function()
 
 	$('#forgotpass_message').text('');
 
-	$.post('../api.php', {'c': 'account', 'a': 'forgotpass', 'd': $.toJSON(data)}, function(response) 
+	$.post('../api.php', {'c': 'account', 'a': 'forgotpass', 'd': $.toJSON(data)}, function(response)
 	{
 		$('#forgotpass_message').text(response.msg);
 	},'json');
@@ -67,10 +67,30 @@ OB.Welcome.newaccount = function()
 
 	$('#newaccount_message').text('');
 
-	$.post('../api.php', {'c': 'account', 'a': 'newaccount', 'd': $.toJSON(data)},function(response) 
+	$.post('../api.php', {'c': 'account', 'a': 'newaccount', 'd': $.toJSON(data)},function(response)
 	{
 		$('#newaccount_message').html(response.msg);
 		if(response.status==true) $('#newaccount_form').hide();
 	},'json');
 
+}
+
+OB.Welcome.appkeyPost = function (appkey, controller, action, sdata, callback_function, mode) {
+  var async = (mode == 'sync') ? false : true;
+
+  var xhr = $.ajax( {
+    'async': async,
+    'type': 'POST',
+    'url': '/api.php',
+    'dataType': 'json',
+    'data': {
+      "c": controller,
+      "a": action,
+      "d": $.toJSON(sdata),
+      "appkey": appkey
+    },
+    'success': function (response) {
+      callback_function(response);
+    }
+  });
 }

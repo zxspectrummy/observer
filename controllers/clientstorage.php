@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,16 +19,29 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// allow clients (like the main javascript/web client, or a third party client) to store data associated with a user.
+/**
+ * Allow clients (like the main Javascript/web client, or a third party client)
+ * to store data associated with a user. DEPRECATED.
+ *
+ * @package Controller
+ */
 class ClientStorage extends OBFController
 {
 
   public function __construct()
   {
     parent::__construct();
-    $this->ClientStorageModel = $this->load->model('ClientStorage');  
   }
 
+  /**
+   * Store client information. Takes the name of the client and some data, then
+   * stores that in the database. Requires the user to be authenticated, as well
+   * as a specific permission if global data is being stored.
+   *
+   * @param client_name The name of the client requesting to store data.
+   * @param data The data being stored.
+   * @param global A boolean set to TRUE if trying to store global data. Requires the manage_global_client_storage permission.
+   */
   public function store()
   {
 
@@ -44,15 +57,24 @@ class ClientStorage extends OBFController
     }
     else $data['user_id'] = $this->user->param('id');
 
-    $validation = $this->ClientStorageModel('validate',$data);
+    $validation = $this->models->clientstorage('validate', $data);
     if($validation[0]==false) return $validation;
 
-    $this->ClientStorageModel('store',$data);
+    $this->models->clientstorage('store', $data);
 
     return array(true,'Data has been stored.');
 
   }
 
+  /**
+  * Retrieve client information. Requires authentication if retrieving non-global
+  * authentication.
+  *
+  * @param client_name The name of the client requesting to retrieve data.
+  * @param global A boolean set to TRUE if trying to retrieve global data. Does NOT require authentication in this case.
+  *
+  * @return storage_data_array
+  */
   public function get()
   {
 
@@ -61,13 +83,13 @@ class ClientStorage extends OBFController
 
     // global data or user data?  global is for all users.
     if($global) $user_id = 0;
-    else 
+    else
     {
       $user_id = $this->user->param('id');
       $this->user->require_authenticated(); // require authenticated if it's user-dependent.
     }
 
-    return $this->ClientStorageModel('get',$client_name,$user_id);
+    return $this->models->clientstorage('get', ['client_name' => $client_name, 'user_id' => $user_id]);
 
   }
 

@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,6 +19,11 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Input/Output class. Outputs data and error messages.
+ *
+ * @package Class
+ */
 class OBFIO
 {
 
@@ -26,12 +31,17 @@ class OBFIO
   {
 
   }
-  
-  static function &get_instance() 
+
+  /**
+   * Create an instance of OBFIO or return the already-created instance.
+   *
+   * @return instance
+   */
+  static function &get_instance()
   {
 
     static $instance;
-  
+
     if (isset( $instance )) {
       return $instance;
     }
@@ -42,17 +52,24 @@ class OBFIO
 
   }
 
-  public function error($error_no) 
+  /**
+   * Echo JSON encoded error message based on the error code. Errors include
+   * OB_ERROR_BAD_POSTDATA, OB_ERROR_BAD_CONTROLLER, OB_ERROR_BAD_DATA, and
+   * OB_ERROR_DENIED.
+   *
+   * @param error_no
+   */
+  public function error($error_no)
   {
 
     $user = OBFUser::get_instance();
 
-    switch($error_no) 
+    switch($error_no)
     {
       case OB_ERROR_BAD_POSTDATA:
         $msg = 'Invalid POST data.';
         break;
-      
+
       case OB_ERROR_BAD_CONTROLLER:
         $msg = 'Invalid controller.';
         break;
@@ -60,7 +77,7 @@ class OBFIO
       case OB_ERROR_BAD_DATA:
         $msg = 'Invalid controller data.';
         break;
-      
+
       case OB_ERROR_DENIED:
         $msg = 'Access denied.';
         break;
@@ -71,7 +88,12 @@ class OBFIO
 
   }
 
-  public function output($data) 
+  /**
+   * JSON-encode data and echo it.
+   *
+   * @param data
+   */
+  public function output($data)
   {
 
     echo json_encode($data);

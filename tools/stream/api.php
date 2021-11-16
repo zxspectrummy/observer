@@ -73,7 +73,7 @@ $db->what('media.stream_version');
 $db->what('media.thumbnail_version');
 
 // public approved unarchived only
-$db->where('media.is_public',1);
+$db->where('media.status','public');
 $db->where('media.is_approved',1);
 $db->where('media.is_archived',0);
 

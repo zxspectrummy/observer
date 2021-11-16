@@ -38,7 +38,7 @@ if(!defined('OB_ASSETS')) define('OB_ASSETS',OB_LOCAL.'/assets');
 if(!defined('OB_MEDIA_FILESIZE_LIMIT')) define('OB_MEDIA_FILESIZE_LIMIT',1024);
 if(!defined('OB_MEDIA_VERIFY')) define('OB_MEDIA_VERIFY',true);
 
-// most things are done in UTC.  sometimes the tz is set to the device's tz for a 'strtotime' +1month,etc. type calculation which considers DST.
+// most things are done in UTC.  sometimes the tz is set to the player's tz for a 'strtotime' +1month,etc. type calculation which considers DST.
 date_default_timezone_set('Etc/UTC'); 
 
 // load core components
@@ -49,6 +49,7 @@ require('classes/obfcontroller.php');
 require('classes/obfcallbacks.php');
 require('classes/obfhelpers.php');
 require('classes/obfmodel.php');
+require('classes/obfmodels.php');
 require('classes/obfuser.php');
 require('classes/obfmodule.php');
 

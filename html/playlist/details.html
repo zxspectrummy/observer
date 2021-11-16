@@ -1,4 +1,5 @@
-<div>
+<ob-tabs>
+<ob-tab data-name="Details">
 
 <h1 id="playlist_heading" data-t>Playlist Details</h1>
 
@@ -10,19 +11,6 @@
 <div id="playlist_details" class="hidden">
 
   <fieldset>
-  <legend data-t>Items</legend>
-
-  <table class="table" id="playlist_details_items_table">
-  <tr>
-    <th data-t>Description</th>
-    <th data-t>Duration</th>
-  </tr>
-  </table>
-  </fieldset>
-
-  <fieldset>
-  <legend data-t>Details</legend>
-
   <div id="playlist_details_table">
 
     <div class="fieldrow">
@@ -64,16 +52,25 @@
 
   </fieldset>
 
-  <fieldset>
-  <legend data-t>Where is this playlist used?</legend>
+</div>
 
+</ob-tab>
+
+<ob-tab data-name="Items">
+  <h1 data-t>Playlist Items</h1>
+  <table class="table" id="playlist_details_items_table">
+  <tr>
+    <th data-t>Description</th>
+    <th data-t>Duration</th>
+  </tr>
+  </table>
+</ob-tab>
+
+<ob-tab data-name="Where Used">
+  <h1 data-t>Where is this playlist used?</h1>
   <div id="playlist_details_used">
   <ul>
   </ul>
   </div>
-
-  </fieldset>
-
-</div>
-
-</div>
+</ob-tab>
+</ob-tabs>

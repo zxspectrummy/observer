@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,6 +19,12 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages callbacks. Returns an OBFCallbackReturn when firing, which is also
+ * defined in the same file.
+ *
+ * @package Class
+ */
 class OBFCallbacks
 {
 
@@ -32,6 +38,11 @@ class OBFCallbacks
     $this->retvals = array();
   }
 
+  /**
+   * Create an instance of OBFCallbacks or return the already created instance.
+   *
+   * @return instance
+   */
   static function &get_instance() {
     static $instance;
     if (isset( $instance )) {
@@ -41,34 +52,66 @@ class OBFCallbacks
     return $instance;
   }
 
+  /**
+   * Reset the return values for the associated hook.
+   *
+   * @param hook Hook string in Class.method format.
+   */
   public function reset_retvals($hook)
   {
     if(!isset($this->retvals[$hook])) return false;
     $this->retvals[$hook] = array();
   }
 
+  /**
+   * Store the return values for the associated hook from the provided callback
+   * and value.
+   *
+   * @param hook Hook string in Class.method format.
+   * @param callback Callback string in Class.method format.
+   * @param value Return values to store.
+   */
   public function store_retval($hook,$callback,$value)
   {
     if(!isset($this->retvals[$hook])) $this->retvals[$hook] = array();
     $this->retvals[$hook][$callback] = $value;
   }
 
+  /**
+   * Get the return values from a hook.
+   *
+   * @param hook Hook string in Class.method format.
+   *
+   * @return retvals
+   */
   public function get_retvals($hook)
   {
     if(!isset($this->retvals[$hook])) return false;
     return $this->retvals[$hook];
   }
 
+  /**
+   * Register callback hooks.
+   *
+   * Available positions: init (run before the controller); return (run after
+   * the controller).
+   *
+   * @param callback Callback string in Class.method format.
+   * @param hook Hook string in Class.method format.
+   * @param position Position in the method the callback is run, e.g. 'return'.
+   * @param weight Lower numbers are run first. Can be negative. Default 0.
+   *
+   */
   public function register_callback($callback,$hook,$position,$weight=0)
   {
-  
+
     /*
       callback: what to call back?  must be model or controller method... in "SomeModel.method" or "ControllerName.method" format.
       hook: what to hook into? Class.method.
       position: where in this method is our callback run?
       weight: lower numbers are run first.   can be negative.
       return: whether the callback should hijack the method's return (will prevent further execution of method or additional callbacks)
-    
+
       standard positions for models (might not be available, others will be used too):
 
         init: found before the method.
@@ -87,7 +130,7 @@ class OBFCallbacks
     if(!isset($this->callbacks[$hook][$position])) $this->callbacks[$hook][$position]=array();
 
     $cb = new stdClass;
-    $cb->callback = $callback;  
+    $cb->callback = $callback;
     $cb->hook = $hook;
     $cb->position = $position;
     $cb->weight = $weight;
@@ -100,11 +143,30 @@ class OBFCallbacks
 
   }
 
+  /**
+   * Sort two callbacks by their weight. Returns -1 if a takes priority, 1 if
+   * b takes priority.
+   *
+   * @param a Callback 1.
+   * @param b Callback 2.
+   *
+   * @return -1 | 1
+   */
   private function callbacks_sort($a,$b)
   {
     return ($a->weight < $b->weight) ? -1 : 1;
   }
 
+  /**
+   * Fire a callback. Returns a new instance of OBFCallbackReturn.
+   *
+   * @param hook Hook string in Class.method format.
+   * @param position Position in the method the callback is run, e.g. 'return'.
+   * @param args Reference to arguments. NULL by default.
+   * @param data Reference to data. NULL by default.
+   *
+   * @return obfcallback_return
+   */
   public function fire($hook,$position,&$args=null,&$data=null)
   {
 
@@ -139,7 +201,7 @@ class OBFCallbacks
 
       // callback is forcing an early return.
       if(!empty($cb_return) && $cb_return->r)
-      { 
+      {
         return $cb_return;
       }
 
@@ -151,6 +213,12 @@ class OBFCallbacks
 
 }
 
+/**
+ * OBFCallbackReturn instances are created when firing callbacks. It contains two
+ * public variables, $r and $v. $r is the first argument passed when creating a
+ * new instance, and $v is set to TRUE if more arguments have been passed to it,
+ * FALSE otherwise.
+ */
 class OBFCallbackReturn
 {
   public $r;
@@ -158,7 +226,7 @@ class OBFCallbackReturn
 
   public function __construct()
   {
-    
+
     $args = func_get_args();
 
     if(isset($args[0])) $this->v = $args[0];

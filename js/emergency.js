@@ -30,14 +30,14 @@ OB.Emergency.initMenu = function()
   OB.UI.addSubMenuItem('schedules', 'Priority Broadcasts', 'emergency', OB.Emergency.emergency, 30, 'manage_emergency_broadcasts');
 }
 
-OB.Emergency.device_id = null;
+OB.Emergency.player_id = null;
 
 OB.Emergency.emergency = function()
 {
 
   OB.UI.replaceMain('emergency/emergency.html');
 
-  OB.Emergency.device_id = null;
+  OB.Emergency.player_id = null;
 
   OB.Emergency.emergencyInit();
 
@@ -79,32 +79,32 @@ OB.Emergency.emergencyInit = function()
 {
 
   var post = [];
-  post.push(['device','device_list', {}]);
-  post.push(['emergency','emergencies_get_last_device', {}]);
+  post.push(['player','search', {}]);
+  post.push(['emergency','get_last_player', {}]);
 
   OB.API.multiPost(post, function(responses)
   {
 
-    var devices = responses[0].data;
-    var last_device = responses[1];
+    var players = responses[0].data;
+    var last_player = responses[1];
 
-    $.each(devices,function(index,item) {
+    $.each(players,function(index,item) {
 
-      if(item.use_parent_emergency=='1') return; // device uses parent emergency broadcasts, setting them here would not do anything.
+      if(item.use_parent_emergency=='1') return; // player uses parent emergency broadcasts, setting them here would not do anything.
 
       // make sure we have permission for this
       if(OB.Settings.permissions.indexOf('manage_emergency_broadcasts')==-1 && OB.Settings.permissions.indexOf('manage_emergency_broadcasts:'+item.id)==-1) return;
 
 
-      if(OB.Emergency.device_id==null) OB.Emergency.device_id = item.id; // default to first device.
-      $('#emergency_device_select').append('<option value="'+item.id+'">'+htmlspecialchars(item.name)+'</option>');
+      if(OB.Emergency.player_id==null) OB.Emergency.player_id = item.id; // default to first player.
+      $('#emergency_player_select').append('<option value="'+item.id+'">'+htmlspecialchars(item.name)+'</option>');
 
     });
 
-    if(last_device.status && $('#emergency_device_select option[value='+last_device.data+']').length)
+    if(last_player.status && $('#emergency_player_select option[value='+last_player.data+']').length)
     {
-      $('#emergency_device_select').val(last_device.data);
-      OB.Emergency.device_id = last_device.data;
+      $('#emergency_player_select').val(last_player.data);
+      OB.Emergency.player_id = last_player.data;
     }
 
     OB.Emergency.loadEmergencies();
@@ -113,10 +113,10 @@ OB.Emergency.emergencyInit = function()
 
 }
 
-OB.Emergency.deviceChange = function()
+OB.Emergency.playerChange = function()
 {
 
-  OB.Emergency.device_id = $('#emergency_device_select').val();
+  OB.Emergency.player_id = $('#emergency_player_select').val();
   OB.Emergency.loadEmergencies();
 
 }
@@ -125,8 +125,8 @@ OB.Emergency.loadEmergencies = function()
 {
 
   var post = [];
-  post.push(['emergency','emergencies',{ 'device_id': OB.Emergency.device_id }]);
-  post.push(['emergency','emergencies_set_last_device', { 'device': OB.Emergency.device_id}]);
+  post.push(['emergency','search',{ 'player_id': OB.Emergency.player_id }]);
+  post.push(['emergency','set_last_player', { 'player': OB.Emergency.player_id}]);
 
   OB.API.multiPost(post, function(responses)
   {
@@ -175,25 +175,23 @@ OB.Emergency.saveEmergency = function()
 
   fields.name = $('#emergency_name').val();
 
-  fields.device_id = OB.Emergency.device_id;
+  fields.player_id = OB.Emergency.player_id;
 
   fields.frequency = $('#emergency_frequency').val();
   fields.duration = parseInt($('#emergency_duration_minutes').val()*60) + parseInt($('#emergency_duration_seconds').val());
 
-  var start_date_array = $('#emergency_start_date').val().split('-');
-  var start_time_array = $('#emergency_start_time').val().split(':');
-  var start_time = new Date(start_date_array[0],start_date_array[1]-1,start_date_array[2],start_time_array[0],start_time_array[1],start_time_array[2],0);
-  fields.start = Math.round(start_time.getTime()/1000)+'';
+  var start_date = new Date($('#emergency_start_datetime').val());
+  if(!start_date) fields.start = '';
+  else fields.start = Math.round(start_date.getTime()/1000)+'';
 
-  var stop_date_array = $('#emergency_stop_date').val().split('-');
-  var stop_time_array = $('#emergency_stop_time').val().split(':');
-  var stop_time = new Date(stop_date_array[0],stop_date_array[1]-1,stop_date_array[2],stop_time_array[0],stop_time_array[1],stop_time_array[2],0);
-  fields.stop = Math.round(stop_time.getTime()/1000)+'';
+  var stop_date = new Date($('#emergency_stop_datetime').val());
+  if(!stop_date) fields.stop = '';
+  else fields.stop = Math.round(stop_date.getTime()/1000)+'';
 
   fields.id = $('#emergency_id').val();
   fields.item_id = $('#emergency_item_id').val();
 
-  OB.API.post('emergency','save_emergency',fields,function(data)
+  OB.API.post('emergency','save',fields,function(data)
   {
 
     if (data.status == true)
@@ -213,20 +211,12 @@ OB.Emergency.saveEmergency = function()
 OB.Emergency.addeditEmergencyWindow = function()
 {
   OB.UI.openModalWindow('emergency/addedit.html');
-
-  // friendly date picker
-  $('#emergency_start_date').datepicker({ dateFormat: "yy-mm-dd" });
-  $('#emergency_stop_date').datepicker({ dateFormat: "yy-mm-dd" });
-
-  // friendly time picker
-  $('#emergency_start_time').timepicker({timeFormat: 'hh:mm:ss',showSecond: true});
-  $('#emergency_stop_time').timepicker({timeFormat: 'hh:mm:ss',showSecond: true});
 }
 
 OB.Emergency.editEmergency = function(id)
 {
 
-  OB.API.post('emergency','emergencies',{ 'device_id': OB.Emergency.device_id, 'id': id }, function(data)
+  OB.API.post('emergency','get',{ 'id': id }, function(data)
   {
 
     if(data.status==true)
@@ -256,15 +246,8 @@ OB.Emergency.editEmergency = function(id)
       $('#emergency_item_id').val(emerg.item_id);
       $('#emergency_id').val(emerg.id);
 
-      var start_time = new Date(parseInt(emerg.start)*1000);
-      var stop_time = new Date(parseInt(emerg.stop)*1000);
-
-      $('#emergency_start_date').val(start_time.getFullYear()+'-'+timepad(start_time.getMonth()+1)+'-'+timepad(start_time.getDate()));
-      $('#emergency_start_time').val(timepad(start_time.getHours())+':'+timepad(start_time.getMinutes())+':'+timepad(start_time.getSeconds()));
-
-      $('#emergency_stop_date').val(stop_time.getFullYear()+'-'+timepad(stop_time.getMonth()+1)+'-'+timepad(stop_time.getDate()));
-      $('#emergency_stop_time').val(timepad(stop_time.getHours())+':'+timepad(stop_time.getMinutes())+':'+timepad(stop_time.getSeconds()));
-
+      $('#emergency_start_datetime').val(new Date(parseInt(emerg.start)*1000));
+      $('#emergency_stop_datetime').val(new Date(parseInt(emerg.stop)*1000));
     }
 
     else OB.UI.alert(data.msg);
@@ -293,7 +276,7 @@ OB.Emergency.deleteEmergency = function(confirm)
   if(confirm)
   {
 
-    OB.API.post('emergency','delete_emergency',{ 'id': $('#emergency_id').val() }, function(data)
+    OB.API.post('emergency','delete',{ 'id': $('#emergency_id').val() }, function(data)
     {
 
       if(data.status==true)

@@ -31,7 +31,7 @@ OB.Playlist.addeditInit = function()
         {
           $('.sidebar_search_media_selected').each(function(index,element) {
 
-            if($(element).attr('data-public_status')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
+            if($(element).attr('data-visibility')=='private' && ($(element).attr('data-owner_id')!=playlist_owner_id))
             {
               private_media_alert = true;
               return true;
@@ -63,7 +63,7 @@ OB.Playlist.addeditInit = function()
               var playlist_data = data.data;
 
               $.each(playlist_data['items'], function(index, item) {
-                if(item.type=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['dynamic_query'],item['dynamic_duration'],item['dynamic_name'],item['dynamic_num_items'],item['dynamic_image_duration']);
+                if(item.type=='dynamic') OB.Playlist.addeditInsertDynamic(false,item['properties']['query'],item['duration'],item['properties']['name'],item['properties']['num_items'],item['properties']['image_duration'],item['properties']['crossfade'] ?? 0,item['properties']['crossfade_last'] ?? 0);
                 else if(item.type=='station_id') OB.Playlist.addeditInsertStationId();
                 else if(item.status=='private' && item.owner_id!=playlist_owner_id)
                 {
@@ -124,7 +124,7 @@ OB.Playlist.addeditKeypress = function(e)
 OB.Playlist.addedit_item_last_id = 0;
 
 // used by new / edit to add item to playlist
-OB.Playlist.addeditInsertItem = function(id,description,duration,type)
+OB.Playlist.addeditInsertItem = function(id,description,duration,type,properties)
 {
   OB.Playlist.addedit_item_last_id += 1;
 
@@ -133,7 +133,14 @@ OB.Playlist.addeditInsertItem = function(id,description,duration,type)
 
   var duration_text = secsToTime(duration);
 
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'" data-id="'+id+'" data-type="'+type+'">'+htmlspecialchars(description)+'<span class="playlist_addedit_duration">'+duration_text+'</span></div>');
+  $('#playlist_items').append(
+    $('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'" data-id="'+id+'" data-type="'+type+'"></div>')
+    .append($('<span></span>').append('<img src="/thumbnail.php?id='+id+'" onerror="this.remove()" />').addClass('playlist_addedit_thumbnail'))
+    .append($('<span></span>').text(description).addClass('playlist_addedit_description'))
+    .append($('<span></span>').text(duration_text).addClass('playlist_addedit_duration'))
+  );
+  //'+htmlspecialchars(description)+'<span class="playlist_addedit_duration">'+duration_text+'</span></div>');
+  if(properties && properties['crossfade']) $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-crossfade', properties['crossfade']);
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-duration',duration);
 
@@ -243,14 +250,14 @@ OB.Playlist.addeditTotalDuration = function()
 }
 
 // add a dynamic selection
-OB.Playlist.addeditInsertDynamic = function(is_new,query,duration,selection_name,num_items,image_duration)
+OB.Playlist.addeditInsertDynamic = function(is_new,query,duration,selection_name,num_items,image_duration, crossfade, crossfade_last)
 {
   if(typeof(query)=='object') query = $.toJSON(query); // we can get this in json (string) or object format.
 
   OB.Playlist.addedit_item_last_id += 1;
 
   //T Dynamic Selection
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'">'+htmlspecialchars( OB.t('Dynamic Selection') )+': <span id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_name"></span><span class="playlist_addedit_duration" id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_duration"></span></div>');
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_thumbnail"></span><span class="playlist_addedit_description">'+htmlspecialchars( OB.t('Dynamic Selection') )+': <span id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_name"></span></span><span class="playlist_addedit_duration" id="playlist_dynamic_selection_'+OB.Playlist.addedit_item_last_id+'_duration"></span></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-query',query);
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','dynamic');
@@ -268,7 +275,7 @@ OB.Playlist.addeditInsertDynamic = function(is_new,query,duration,selection_name
   }
   else
   {
-    OB.Playlist.addeditSetDynamicItemProperties(OB.Playlist.addedit_item_last_id,duration,selection_name,(num_items ? num_items : 0),!num_items,image_duration);
+    OB.Playlist.addeditSetDynamicItemProperties(OB.Playlist.addedit_item_last_id,duration,selection_name,(num_items ? num_items : 0),!num_items,image_duration, crossfade, crossfade_last);
   }
 
   // hide our 'drag items here' help.
@@ -281,7 +288,7 @@ OB.Playlist.addeditInsertStationId = function()
   OB.Playlist.addedit_item_last_id += 1;
 
   //T Station ID
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_duration">*'+secsToTime(OB.Playlist.station_id_avg_duration)+'</span><i>'+htmlspecialchars( OB.t('Station ID') )+'</i></div>');
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_thumbnail"></span><i class="playlist_addedit_description">'+htmlspecialchars( OB.t('Station ID') )+'</i><span class="playlist_addedit_duration">*'+secsToTime(OB.Playlist.station_id_avg_duration)+'</span></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','station_id');
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-duration',OB.Playlist.station_id_avg_duration);
@@ -297,7 +304,7 @@ OB.Playlist.addeditInsertStationId = function()
   $('#playlist_items').sortable({ start: OB.Playlist.addeditSortStart, stop: OB.Playlist.addeditSortStop });
 }
 
-OB.Playlist.addeditSetDynamicItemProperties = function(id,duration,selection_name,num_items,num_items_all,image_duration)
+OB.Playlist.addeditSetDynamicItemProperties = function(id,duration,selection_name,num_items,num_items_all,image_duration, crossfade, crossfade_last)
 {
   $('#playlist_dynamic_selection_'+id+'_name').text(selection_name);
   $('#playlist_dynamic_selection_'+id+'_duration').text('*'+secsToTime(duration));
@@ -307,6 +314,8 @@ OB.Playlist.addeditSetDynamicItemProperties = function(id,duration,selection_nam
   $('#playlist_addedit_item_'+id).attr('data-num_items',num_items);
   $('#playlist_addedit_item_'+id).attr('data-num_items_all',num_items_all);
   $('#playlist_addedit_item_'+id).attr('data-name',selection_name);
+  $('#playlist_addedit_item_'+id).attr('data-crossfade',crossfade);
+  $('#playlist_addedit_item_'+id).attr('data-crossfade_last',crossfade_last);
 }
 
 OB.Playlist.addeditGetItems = function()
@@ -322,12 +331,20 @@ OB.Playlist.addeditGetItems = function()
       'num_items_all': $(element).attr('data-num_items_all')=='true' ? true : false,
       'image_duration': $(element).attr('data-image_duration'),
       'query': $(element).attr('data-query'),
-      'name': $(element).attr('data-name')
+      'name': $(element).attr('data-name'),
+      'crossfade': $(element).attr('data-crossfade'),
+      'crossfade_last': $(element).attr('data-crossfade_last')
     });
 
     else if($(element).attr('data-type')=='station_id') items.push( { 'type': 'station_id' });
     else if($(element).attr('data-type')=='breakpoint') items.push( { 'type': 'breakpoint' });
-    else items.push({ 'type': 'media', 'id': $(element).attr('data-id'), 'duration': $(element).attr('data-duration') });
+    else if($(element).attr('data-type')=='custom') items.push( { 'type': 'custom', 'query': {'name': $(element).attr('data-name')}} );
+    else items.push({ 
+      'type': 'media',
+      'id': $(element).attr('data-id'),
+      'duration': $(element).attr('data-duration'),
+      'crossfade': $(element).attr('data-crossfade')
+    });
 
   });
 
@@ -336,7 +353,12 @@ OB.Playlist.addeditGetItems = function()
 
 OB.Playlist.addeditItemUnselect = function(e)
 {
-  if(e && ($(e.target).hasClass('playlist_addedit_item') || $(e.target).hasClass('playlist_addedit_liveassist_item'))) return;
+  if(e && (
+    $(e.target).hasClass('playlist_addedit_item') || 
+    $(e.target).parents('.playlist_addedit_item').length || 
+    $(e.target).hasClass('playlist_addedit_liveassist_item') || 
+    $(e.target).parents('.playlist_addedit_liveassist_item').length
+  )) return;
   $('.playlist_addedit_item').removeClass('selected');
   $('.playlist_addedit_liveassist_item').removeClass('selected');
 }

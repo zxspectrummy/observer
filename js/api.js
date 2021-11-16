@@ -84,7 +84,7 @@ OB.API.post = function(controller,action,sdata,callback_function,mode)
     'success': function(data) {
       OB.API.postSuccess(controller,action,callback_function,sdata,data);
     }
-  })
+  });
 
   OB.API.ajax_list.push(xhr);
   OB.API.ajaxStatus();

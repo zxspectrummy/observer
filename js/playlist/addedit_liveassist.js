@@ -25,7 +25,7 @@ OB.Playlist.addeditInsertBreakpoint = function()
   OB.Playlist.addedit_item_last_id += 1;
 
   //T Breakpoint
-  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><i>'+htmlspecialchars(OB.t('Breakpoint'))+'</i></div>');
+  $('#playlist_items').append('<div class="playlist_addedit_item" id="playlist_addedit_item_'+OB.Playlist.addedit_item_last_id+'"><span class="playlist_addedit_thumbnail"></span><i class="playlist_addedit_description">'+htmlspecialchars(OB.t('Breakpoint'))+'</i></div>');
 
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-type','breakpoint');
   $('#playlist_addedit_item_'+OB.Playlist.addedit_item_last_id).attr('data-duration','0');
@@ -72,8 +72,8 @@ OB.Playlist.liveassistButtonItems = function()
 
 OB.Playlist.liveassistRemoveAll = function()
 {
-  //T Clear all LiveAssist buttons?
-  if($('#playlist_edit_standard_container .playlist_addedit_liveassist_item').length && confirm( OB.t('Clear all LiveAssist buttons?') ) )
+  //T Clear all Live Assist buttons?
+  if($('#playlist_edit_standard_container .playlist_addedit_liveassist_item').length && confirm( OB.t('Clear all Live Assist buttons?') ) )
   {
     $('#playlist_edit_standard_container .playlist_addedit_liveassist_item').remove();
     $('#playlist_liveassist_drag_help').show();

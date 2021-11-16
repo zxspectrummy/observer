@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -21,7 +21,13 @@
 
 if(!defined('TABLE_PREFIX')) define('TABLE_PREFIX','');
 
-class OBFDB 
+/**
+ * Database class. Manages SQL connections and queries, keeps track of last query
+ * and errors. Also hosts some utility methods.
+ *
+ * @package Class
+ */
+class OBFDB
 {
 
   private $connection;
@@ -43,7 +49,12 @@ class OBFDB
 
   private $hl_where_mode='AND';
 
-  public function __construct() 
+  /**
+   * OBFDB constructor. Adds connection information to the instance based on what's
+   * defined in OB global setting (OB_DB_HOST, OB_DB_USER, OB_DB_PASS, OB_DB_NAME),
+   * and fires a few queries to set the SQL mode.
+   */
+  public function __construct()
   {
     $this->connection = mysqli_connect(OB_DB_HOST, OB_DB_USER, OB_DB_PASS);
     mysqli_select_db($this->connection, OB_DB_NAME);
@@ -67,10 +78,15 @@ class OBFDB
     mysqli_query($this->connection, "SET SESSION sql_mode = '".mysqli_real_escape_string($this->connection, $new_modes)."'");
   }
 
+  /**
+   * Create an instance of OBFDB or return the already created instance.
+   *
+   * @return instance
+   */
   static function &get_instance() {
 
     static $instance;
-  
+
     if (isset( $instance )) {
       return $instance;
     }
@@ -81,23 +97,41 @@ class OBFDB
 
   }
 
-  // basic profiling functionality.
+  /**
+   * Enable database profiling. Note that this clears any pre-existing profiles
+   * set for this instance by assigning a new empty array to it.
+   */
   public function enable_profiling()
   {
     $this->profiling = true;
     $this->profiles = array();
   }
 
+  /**
+   * Disable database profiling.
+   */
   public function disable_profiling()
   {
     $this->profiling = false;
   }
 
+  /**
+   * Get database profiles.
+   */
   public function get_profiles()
   {
     return $this->profiles;
   }
 
+  /**
+   * Add a database profile. Returns FALSE if profiling is disabled for this
+   * instance.
+   *
+   * @param query
+   * @param duration
+   *
+   * @return status
+   */
   public function add_profile($query, $duration)
   {
     if(!$this->profiling) return false;
@@ -105,16 +139,27 @@ class OBFDB
     $this->profiles[] = array('query'=>$query, 'duration'=>(float) $duration);
     return true;
   }
-    
+
   // basic sql query
-  public function query($sql) 
+  /**
+   * Basic SQL query. Pass SQL to the method which will be run on the configured
+   * database.
+   *
+   * Note that this method does NOT provide the safeties in place in query-builders.
+   * As a result, be EXTRA sure to strip any possible problematic characters from
+   * queries, and just entirely avoid using this with user-controlled input if at
+   * all possible.
+   *
+   * @param sql The SQL query to run on the database.
+   */
+  public function query($sql)
   {
     $this->last_query = $sql;
 
     $start_time = microtime(true);
     $this->result = mysqli_query($this->connection, $sql);
     $duration = round(((microtime(true)-$start_time)),4);
-    
+
     if(defined('OB_LOG_SLOW_QUERIES') && OB_LOG_SLOW_QUERIES==TRUE && $duration>1)
     {
       error_log('SLOW SQL ('.$duration.'s): '.$sql);
@@ -124,26 +169,38 @@ class OBFDB
     if($this->result) return true;
   }
 
-  // get last query
+  /**
+   * Get the last query.
+   *
+   * @return last_query
+   */
   public function last_query() {
     return $this->last_query;
   }
 
-  // sql error
+  /**
+   * Get a string description of the last error.
+   *
+   * @return error
+   */
   public function error()
   {
     return mysqli_error($this->connection);
   }
 
-  // return an assoc_list from the previous query as an array.
-  public function assoc_list() 
+  /**
+   * Get an associative list from the previous query as an array.
+   *
+   * @return assoc_list
+   */
+  public function assoc_list()
   {
 
     if(empty($this->result)) return false;
-  
+
     $return = array();
 
-    for($i=0;$i<$this->num_rows();$i++) 
+    for($i=0;$i<$this->num_rows();$i++)
     {
 
       $return[$i]=mysqli_fetch_assoc($this->result);
@@ -154,22 +211,31 @@ class OBFDB
 
   }
 
-  // return the next assoc array from the last query.  useful when there is only one row (i.e.,selecting where id = x).
+  /**
+   * Get the next associative array from the last query. Useful when there is
+   * only one presumed row (e.g. when selecting with WHERE ID = x).
+   *
+   * @return assoc_row
+   */
   public function assoc_row()
   {
     if(empty($this->result)) return false;
-    return mysqli_fetch_assoc($this->result);  
+    return mysqli_fetch_assoc($this->result);
   }
 
-  // return an indexed array from the last query. 
+  /**
+   * Get an indexed array from the last query.
+   *
+   * @return index_list
+   */
   public function indexed_list()
   {
 
     if(empty($this->result)) return false;
-  
+
     $return = array();
 
-    for($i=0;$i<$this->num_rows();$i++) 
+    for($i=0;$i<$this->num_rows();$i++)
     {
 
       $return[$i]=mysqli_fetch_array($this->result);
@@ -180,42 +246,69 @@ class OBFDB
 
   }
 
-  // return the next indexed array from the last query.
+  /**
+   * Get the next indexed row from the last query.
+   *
+   * @return index_row
+   */
   public function indexed_row()
   {
     if(empty($this->result)) return false;
-    return mysqli_fetch_array($this->result);  
+    return mysqli_fetch_array($this->result);
   }
 
-  // return the insert id of the last insert.
-  public function insert_id() 
+  /**
+   * Get the ID of the last insert query.
+   *
+   * @return id
+   */
+  public function insert_id()
   {
     return mysqli_insert_id($this->connection);
   }
 
-  // return the number of affected rows from the last query.
-  public function affected_rows() 
+  /**
+   * Get the number of affected rows from the last query.
+   *
+   * @return num_affected
+   */
+  public function affected_rows()
   {
     return mysqli_affected_rows($this->connection);
   }
 
-  // return the number of rows from the last select.
+  /**
+   * Get the number of rows from the last select query.
+   *
+   * @return num_rows
+   */
   public function num_rows()
   {
     return mysqli_num_rows($this->result);
   }
 
-  // the very important SQL escape function. 
+  /**
+   * Escape a string.
+   *
+   * @param str
+   *
+   * @return escaped_str
+   */
   public function escape($str)
   {
     return mysqli_real_escape_string($this->connection, $str);
   }
 
-
-
   /* HIGHER-LEVEL HELPER FUNCTIONS - Simple Active-Record Style System.  Room for improvement, but covers the basics. */
   /* not designed to replace every function, only most. */
 
+  /**
+   * Active-Record, add WHAT to query.
+   *
+   * @param column
+   * @param as
+   * @param escape Escape column string, default TRUE.
+   */
   public function what($column,$as=null,$escape=true)
   {
 
@@ -223,7 +316,7 @@ class OBFDB
 
     if($escape) $what = $this->format_table_column($column);
     else $what = $column;
-    
+
     if(!empty($as)) $what.= ' AS '.$this->format_backticks($as);
 
     $this->hl_what[] = $what;
@@ -231,21 +324,37 @@ class OBFDB
     return true;
   }
 
-  // compares a column to a value.
+  /**
+   * Active-Record, add WHERE to query.
+   *
+   * @param column
+   * @param value
+   * @param operator Comparison operator, default '='.
+   */
   public function where($column,$value,$operator='=')
   {
     if(!is_array($this->hl_where)) $this->hl_where=array();
 
     if(array_search($operator,array('=','>','<','>=','<=','!='))===FALSE) $operator='=';
-  
-    $where = $this->format_table_column($column).$operator.$this->format_value($value);
+
+    // handle null
+    if($value===NULL && $operator='=') $where = $this->format_table_column($column).' IS NULL';
+    elseif($value===NULL && $operator='!=') $where = $this->format_table_column($column).' IS NOT NULL';
+    
+    // default
+    else $where = $this->format_table_column($column).$operator.$this->format_value($value);
 
     $this->hl_where[]=$where;
 
     return true;
   }
 
-  // compares a column to a value, using LIKE.
+  /**
+   * Active-Record, add WHERE LIKE to query.
+   *
+   * @param column
+   * @param value
+   */
   public function where_like($column,$value)
   {
 
@@ -258,6 +367,12 @@ class OBFDB
 
   }
 
+  /**
+   * Active-Record, add WHERE NOT LIKE to query.
+   *
+   * @param column
+   * @param value
+   */
   public function where_not_like($column,$value)
   {
 
@@ -270,33 +385,50 @@ class OBFDB
 
   }
 
-  // sets where_mode to 'or' or 'and'
-  public function where_mode($mode) 
+  /**
+   * Set the WHERE mode for the query to OR or AND. Returns FALSE when an invalid
+   * mode is selected.
+   *
+   * @param mode
+   *
+   * @return status
+   */
+  public function where_mode($mode)
   {
 
-    $mode=strtoupper($mode);  
+    $mode=strtoupper($mode);
 
     if($mode!='OR' && $mode!='AND') return false;
 
     $this->hl_where_mode=$mode;
     return true;
   }
-  
-  // compares a column to a column.
+
+  /**
+   * Equivalent to where().
+   *
+   * @param column
+   * @param value
+   * @param operator Comparison operator, default '='.
+   */
   public function where_col($column,$value,$operator='=')
   {
     if(!is_array($this->hl_where)) $this->hl_where=array();
 
     if(array_search($operator,array('=','>','<','>=','<=','!='))===FALSE) $operator = '=';
-  
+
     $where = $this->format_table_column($column).$operator.$this->format_table_column($value);
 
     $this->hl_where[]=$where;
 
-    return true;  
+    return true;
   }
 
-  // custom where string
+  /**
+   * Set a custom WHERE string. Is NOT escaped, so needs to be used with care.
+   *
+   * @param string
+   */
   public function where_string($string)
   {
 
@@ -305,12 +437,21 @@ class OBFDB
 
   }
 
+  /**
+   * Return query result in random order.
+   */
   public function random_order()
   {
     $this->hl_orderby = 'rand()';
   }
 
-  public function orderby($column,$dir='asc') 
+  /**
+   * Active-Record, add ORDER BY to query.
+   *
+   * @param column
+   * @param dir Direction, default 'asc'.
+   */
+  public function orderby($column,$dir='asc')
   {
     if(!preg_match('/asc/i',$dir) && !preg_match('/desc/i',$dir)) $dir='asc';
 
@@ -318,12 +459,24 @@ class OBFDB
     return true;
   }
 
+  /**
+   * Set a custom ORDER BY string. Is NOT escaped, so needs to be used with care.
+   *
+   * @param string
+   */
   public function orderby_string($string)
   {
     $this->hl_orderby = trim($string);
     return true;
   }
 
+  /**
+   * Active-Record, add LIMIT to query. Returns FALSE if no valid integer provided.
+   *
+   * @param limit
+   *
+   * @return status
+   */
   public function limit($limit)
   {
     if(!preg_match('/^[0-9]+$/',$limit)) return false;
@@ -331,6 +484,13 @@ class OBFDB
     return true;
   }
 
+  /**
+   * Active-Record, add OFFSET to query. Returns FALSE if no valid integer provided.
+   *
+   * @param offset
+   *
+   * @return status
+   */
   public function offset($offset)
   {
     if(!preg_match('/^[0-9]+$/',$offset)) return false;
@@ -338,6 +498,13 @@ class OBFDB
     return true;
   }
 
+  /**
+   * Active-Record, add LEFT JOIN to query.
+   *
+   * @param table
+   * @param column1
+   * @param column2
+   */
   public function leftjoin($table,$column1,$column2)
   {
     $table = $this->format_backticks($table);
@@ -349,6 +516,9 @@ class OBFDB
     $this->hl_leftjoin[] = array($table,$column1,$column2);
   }
 
+  /**
+   * Reset the Active-Record query.
+   */
   private function reset_hlvars()
   {
     $this->hl_table = null;
@@ -362,31 +532,60 @@ class OBFDB
     $this->hl_foundrows = null;
   }
 
-  // generate a sql formatted datetime from a timestamp.
+  /**
+   * Generate a SQL-formatted datetime from a timestamp.
+   *
+   * @param timestamp
+   *
+   * @return sql_timestamp
+   */
   public function format_datetime( $timestamp = null )
   {
     if(empty($timestamp)) $timestamp = time();
     return date('Y-m-d H:i:s', $timestamp);
   }
 
+  /**
+   * Format a value to be used in SQL queries, escaping it and wrapping quotes
+   * around it if it's not an integer.
+   *
+   * @param value
+   *
+   * @return formatted_value
+   */
   public function format_value($value)
   {
     if(!is_int($value)) $value = '"'.$this->escape($value).'"';
-    return $value;    
+    return $value;
   }
 
+  /**
+   * Format a value by escaping it and wrapping backticks around it.
+   *
+   * @param value
+   *
+   * @return formatted_value
+   */
   public function format_backticks($value)
   {
     return '`'.$this->escape($value).'`';
   }
 
-  public function format_table_column($value) 
+  /**
+   * Format a table.column value by wrapping backticks around both table and
+   * column.
+   *
+   * @param value
+   *
+   * @return formatted_value
+   */
+  public function format_table_column($value)
   {
 
     $table_column = explode('.',$value);
 
-    if(count($table_column)>1) 
-    { 
+    if(count($table_column)>1)
+    {
       $table = $this->format_backticks($table_column[0]);
       unset($table_column[0]);
       $column = implode('.',$table_column);
@@ -401,11 +600,19 @@ class OBFDB
   }
 
 
-  // high-level get function. returns assoc-list with results or false.
-  // param function in approximate order of use-frequency.
-  /* select WHAT from TABLE left join LEFTJOIN on COLUMN1=COLUMN2 where WHERE order by ORDERBY limit LIMIT offset OFFSET. */
-  public function get($table) 
+  /**
+   * High-level get function, using previously set parameters in Active-Record.
+   * Returns associative list with results or FALSE.
+   *
+   * @param table
+   *
+   * @return assoc_list
+   */
+  public function get($table)
   {
+    // param function in approximate order of use-frequency.
+    /* select WHAT from TABLE left join LEFTJOIN on COLUMN1=COLUMN2 where WHERE order by ORDERBY limit LIMIT offset OFFSET. */
+
 
     if(empty($table)) return false; // we need a table!
 
@@ -439,28 +646,40 @@ class OBFDB
 
   }
 
-  // same as above, but returns only the first result.  (useful when selecting based on a specific id, and not wanting 
-  // to use $return[0][column], but just $return[column] instead.)
-  // returns false if unavailable.
-  public function get_one($table) 
+  /**
+   * Same as get(), but returns only the first result. Useful when selecting based
+   * on a specific ID. Returns FALSE if no row is returned.
+   *
+   * @param table
+   *
+   * @return assoc_list
+   */
+  public function get_one($table)
   {
 
     $this->limit(1); // just need one.
     $assoc_list = $this->get($table);
-    
+
     if(!is_array($assoc_list) || count($assoc_list)<1) return false;
 
     return $assoc_list[0];
 
   }
 
-  // call this to be able to use found_rows() after the select.
+  /**
+   * Call this to be able to use found_rows() after the select.
+   */
   public function calc_found_rows()
   {
     $this->hl_foundrows = true;
   }
 
-  // get the number of 'found rows' (ignoring limit/offset) from the last query.
+  /**
+   * Get the number of 'found rows' (ignoring limit/offset) from the last query.
+   * Returns FALSE if no rows were found or calc_found_rows() wasn't used.
+   *
+   * @return num_rows
+   */
   public function found_rows()
   {
 
@@ -477,7 +696,15 @@ class OBFDB
   }
 
 
-  // high-level insert function
+  /**
+   * High-level insert function using parameters set with Active-Record methods.
+   * Returns insertion ID or FALSE if the query failed.
+   *
+   * @param table
+   * @param data
+   *
+   * @return insert_id
+   */
   public function insert($table,$data)
   {
 
@@ -493,7 +720,7 @@ class OBFDB
 
     $this->reset_hlvars(); // resets all higher level variables for the next query data. (hl vars not used, done for consistency)
 
-    if($this->query($sql)) 
+    if($this->query($sql))
     {
       return $this->insert_id();
     }
@@ -503,17 +730,25 @@ class OBFDB
 
   }
 
-  // high-level update function
+  /**
+   * High-level update function using parameters set with Active-Record methods.
+   * Returns the result from query(), or TRUE if nothing to update.
+   *
+   * @param table
+   * @param data
+   *
+   * @return result
+   */
   public function update($table,$data)
   {
-  
+
     // nothing to update, but this isn't an error.
-    if(!is_array($data) || count($data)==0) 
-    { 
+    if(!is_array($data) || count($data)==0)
+    {
       $this->reset_hlvars();
       return true;
     }
-    
+
     // avoid inadvertantly updating all rows.
     if((!is_array($this->hl_where) || count($this->hl_where)<1) && empty($this->hl_where_string)) return false;
 
@@ -543,8 +778,16 @@ class OBFDB
 
   }
 
-  // high-level delete function
-  public function delete($table) 
+  /**
+   * High-level delete function using parameters set by Active-Record methods.
+   * Returns the result of query() or FALSE if no WHERE is set (to avoid
+   * inadvertently deleting all rows).
+   *
+   * @param table
+   *
+   * @return result
+   */
+  public function delete($table)
   {
 
     if((!is_array($this->hl_where) || count($this->hl_where)<1) && empty($this->hl_where_string)) return false; // avoid inadvertantly updating all rows.
@@ -569,7 +812,12 @@ class OBFDB
 
   }
 
-  // check if id exists
+  /**
+   * Quick query to check if an ID exists in a table.
+   *
+   * @param table
+   * @param id
+   */
   public function id_exists($table,$id)
   {
     $this->where('id',$id);

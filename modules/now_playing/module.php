@@ -23,7 +23,7 @@ class NowPlayingModule extends OBFModule
 {
 
 	public $name = 'Now Playing v1.0';
-	public $description = 'Provide "now playing" information on page at <IP_of_Server>/modules/now_playing/now_playing.php?i=deviceID';
+	public $description = 'Provide "now playing" information on page at <IP_of_Server>/modules/now_playing/now_playing.php?i=playerID';
 
 	public function callbacks()
 	{

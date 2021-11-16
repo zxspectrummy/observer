@@ -158,12 +158,14 @@ OB.Account.settings = function()
   post.push(['account','settings',{}]);
   post.push(['ui','get_languages',{}]);
   post.push(['ui','get_themes',{}]);
+  post.push(['account', 'permissions', {}])
 
   OB.API.multiPost(post,function(data) {
 
     var settings = data[0];
     var languages = data[1];
     var themes = data[2];
+    var permissions = data[3];
 
     OB.UI.replaceMain('account/settings.html');
 
@@ -204,6 +206,11 @@ OB.Account.settings = function()
     else sidebar_display_left = 1;
     $('#account_sidebar_display_left').val(sidebar_display_left);
 
+    if (permissions.data.find(elem => elem == 'manage_appkeys')) {
+      $('#account_settings_appkeys').show();
+      OB.Account.keyLoad();
+    }
+
   });
 
 }
@@ -221,6 +228,13 @@ OB.Account.settingsSubmit = function()
   data['theme'] = $('#account_theme').val();
   data['dyslexia_friendly_font'] = $('#account_dyslexia_friendly_font').val();
   data['sidebar_display_left'] = $('#account_sidebar_display_left').val();
+  data['appkeys'] = new Array();
+  $('#account_appkey_table tbody tr').each(function (index, row) {
+    data['appkeys'].push([
+      $(row).attr('data-id'),
+      $(row).find('.account_appkey_name').val()
+    ]);
+  });
 
   OB.API.post('account','update_settings',data,function(response) {
     $('#account_settings_message').obWidget(response.status ? 'success' : 'error',response.msg);
@@ -232,4 +246,86 @@ OB.Account.settingsSubmit = function()
   settings.results_per_page = parseInt($('#account_user_results_per_page').val());
   OB.ClientStorage.store(settings,function() {});
 
+}
+
+OB.Account.keyAdd = function () {
+  OB.API.post('account', 'key_new', {}, function (response) {
+    if (!response.status) {
+      $('#account_settings_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $('#account_settings_newkeyinfo').show().html(
+      "A new App Key has been created on " +
+      format_timestamp(response.data.created) +
+      ". The secret key to use with your App key requests is:<br><br><code>" +
+      response.data.key +
+      "</code><br><br>Please save this key in a secure place."
+    );
+
+    $tr = $('<tr/>').attr('data-id', response.data.id);
+    $tr.append($('<td/>').html('<input type="text" class="account_appkey_name" value="' + response.data.name + '">'));
+    $tr.append($('<td/>').text(format_timestamp(response.data.created)));
+    $tr.append($('<td/>').text(format_timestamp(response.data.last_access)));
+    $tr.append($('<td/>').html('<button onclick="OB.Account.keyPermissionsOpen(this);">Permissions</button><button class="delete" onclick="OB.Account.keyDelete(this);">Delete</button>'));
+
+    $('#account_appkey_table tbody').append($tr);
+  });
+}
+
+OB.Account.keyPermissionsOpen = function (elem)
+{
+  OB.UI.openModalWindow('account/key_permissions.html');
+  $('#appkey_permissions').val($(elem).parents('tr').first().data('appkey_permissions'));
+  $('#appkey_permissions_id').val($(elem).parents('tr').first().attr('data-id'));
+}
+
+OB.Account.keyPermissionsSave = function()
+{
+  var data = {};
+  data['permissions'] = $('#appkey_permissions').val();
+  data['id'] = $('#appkey_permissions_id').val();
+
+  OB.API.post('account','key_permissions_save', data, function (response) {
+    if (!response.status) {
+      $('#appkey_permissions_message').obWidget('error', response.msg);
+      return;
+    }
+    
+    $('#appkey_permissions_message').obWidget('success', 'Permissions saved.');
+  });
+}
+
+OB.Account.keyDelete = function (elem) {
+  OB.API.post('account', 'key_delete', {
+    'id': $(elem).closest('tr').attr('data-id')
+  }, function (response) {
+    if (!response.status) {
+      $('#account_settings_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $(elem).closest('tr').remove();
+    $('#account_settings_newkeyinfo').hide();
+  });
+}
+
+OB.Account.keyLoad = function () {
+  OB.API.post('account', 'key_load', {}, function (response) {
+    if (!response.status) {
+      $('#account_settings_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $.each(response.data, function (index, row) {
+      $tr = $('<tr/>').attr('data-id', row.id);
+      $tr.append($('<td/>').html('<input type="text" class="account_appkey_name" value="' + row.name + '">'));
+      $tr.append($('<td/>').text(format_timestamp(row.created)));
+      $tr.append($('<td/>').text(format_timestamp(row.last_access)));
+      $tr.append($('<td/>').html('<button onclick="OB.Account.keyPermissionsOpen(this);">Permissions</button><button class="delete" onclick="OB.Account.keyDelete(this);">Delete</button>'));
+      $tr.data('appkey_permissions', row.permissions);
+      
+      $('#account_appkey_table tbody').append($tr);
+    });
+  });
 }

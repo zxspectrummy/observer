@@ -19,8 +19,26 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Secondary model for managing media categories.
+ *
+ * @package Model
+ */
 class MediaCategoriesModel extends OBFModel
 {
+
+  /**
+   * Search media categories.
+   *
+   * @param filters
+   * @param orderby
+   * @param orderdesc
+   * @param limit
+   * @param offset
+   *
+   * @return [id, name]
+   */
+
   public function search($filters,$orderby,$orderdesc,$limit,$offset)
   {
 
@@ -56,6 +74,14 @@ class MediaCategoriesModel extends OBFModel
 
   }
 
+  /**
+   * Save a media category.
+   *
+   * @param data
+   * @param id Optional. Specified when editing a pre-existing category.
+   *
+   * @return id
+   */
   public function save($data,$id=false)
   {
     $set_default = $data['is_default']==1;
@@ -96,6 +122,11 @@ class MediaCategoriesModel extends OBFModel
     return $id;
   }
 
+  /**
+   * Get the default media category. Returns FALSE if no default category is set.
+   *
+   * @return default_category
+   */
   public function get_default()
   {
     $this->db->where('name','media_category_default');
@@ -104,6 +135,14 @@ class MediaCategoriesModel extends OBFModel
     else return false;
   }
 
+  /**
+   * Validate a category before updating or inserting.
+   *
+   * @param data
+   * @param id Optional. Specified when updating an existing category.
+   *
+   * @return is_valid
+   */
   public function validate($data,$id=false)
   {
     //T A category name is required.
@@ -111,6 +150,14 @@ class MediaCategoriesModel extends OBFModel
     return array(true,'Valid.');
   }
 
+  /**
+   * Check whether a category can be deleted. Makes sure that all genres within
+   * the category are deleted first.
+   *
+   * @param id
+   *
+   * @return is_deletable
+   */
   public function can_delete($id)
   {
 
@@ -123,6 +170,11 @@ class MediaCategoriesModel extends OBFModel
 
   }
 
+  /**
+   * Delete a category.
+   *
+   * @param id
+   */
   public function delete($id)
   {
     $this->db->where('id',$id);
@@ -131,6 +183,13 @@ class MediaCategoriesModel extends OBFModel
     return $delete;
   }
 
+  /**
+   * Get the category name and whether or not it's the default category by ID.
+   *
+   * @param id
+   *
+   * @return [id, name, is_default]
+   */
   public function get_by_id($id)
   {
     $this->db->where('media_categories.id',$id);

@@ -1,5 +1,5 @@
 /*
-    Copyright 2012-2020 OpenBroadcaster, Inc.
+    Copyright 2012-2021 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
 
@@ -20,8 +20,6 @@
 // get the media format settings.
 OB.Media.settings = function()
 {
-  $('.sf-submenu').hide();
-
   OB.API.post('media','formats_get',{ }, function(data) {
 
     OB.UI.replaceMain('media/settings.html');
@@ -50,6 +48,7 @@ OB.Media.settings = function()
     OB.Media.categoriesGet();
     OB.Media.metadataGet();
     OB.Media.fieldsGet();
+    OB.Dayparting.load();
 
   });
 
@@ -414,6 +413,11 @@ OB.Media.metadataAddEditWindow = function(id)
 OB.Media.metadataAddEditTypeChange = function()
 {
   var datatype = $('#metadata_type').val();
+
+  // hidden type does not have a default
+  if(datatype=='hidden') $('.metadata_default').parent().hide();
+  else $('.metadata_default').parent().show();
+  
 
   $('.metadata_default').hide().removeAttr('id');
   $('.metadata_default_'+datatype).show().attr('id','metadata_default');

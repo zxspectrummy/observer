@@ -29,16 +29,20 @@
 	<script type="text/javascript" src="/modules/now_playing/now_playing.js"></script>
 </head>
 
-<body class="device-<?=$device['id']?>">
+<body class="player-<?=$player['id']?>">
 
 <?php 
-$device_description = ($device['description'] ? $device['description'] : $device['name']);
+$player_description = ($player['description'] ? $player['description'] : $player['name']);
 ?>
 
 <?php if(empty($data['show_time_left']) || $data['show_time_left']<1 || empty($data['media']['time_left']) || $data['media']['time_left']<1) { ?>
 <div id="now_playing" class="error">An error occurred while trying to determine what's playing.  Perhaps nothing is playing.</p>
 <?php } else { ?>
+<div id="now_playing_container">
 <table id="now_playing">
+<tr>
+	<td colspan="2" id="now_playing_thumbnail"></td>
+</tr>
 <tr>
 	<td class="label">Show:</td>
 	<td>
@@ -54,9 +58,10 @@ $device_description = ($device['description'] ? $device['description'] : $device
 	</td>
 </tr>
 <tr class="powered_by">
-	<td colspan="2">Powered by <a href="http://openbroadcaster.com/">OpenBroadcaster</a></td>
+	<td colspan="2">Powered by <a href="https://openbroadcaster.com/">OpenBroadcaster</a></td>
 </tr>
 </table>
+</div>
 <?php } ?>
 
 </body>

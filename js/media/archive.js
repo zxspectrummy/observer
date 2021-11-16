@@ -42,8 +42,7 @@ OB.Media.deletePage = function(ids)
   if(ids.length < 1) { OB.UI.alert('Select at least one media item to delete.'); return; }
 
   var post = [];
-  ids.forEach(function(id) { post.push(['media','get',{'id':id}]); });
-  post.push(['media','used', {'id': ids}]);
+  ids.forEach(function(id) { post.push(['media','get',{'id':id,'where_used':true}]); });
 
   // get 'where media is used' information, load page.
   OB.API.multiPost(post, function(response)
@@ -62,15 +61,14 @@ OB.Media.deletePage = function(ids)
     //T Media will be permanently deleted.
     else $('#media_second_message').text(OB.t('Media will be permanently deleted.'));
 
-    var used_info = response[response.length-1].data;
     var append_html = '';
 
     var items = {};
     response.forEach(function(item) { if(!item.data.title) return true; items[item.data.id] = item.data; });
 
-    $.each(used_info,function(used_index,used) {
+    $.each(items,function(index,media) {
 
-      var media = items[used.id];
+      var used = media.where_used;
 
       if(used.can_delete)
       {

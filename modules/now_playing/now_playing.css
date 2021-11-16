@@ -1,7 +1,21 @@
+html, body
+{
+	height: 100%;
+}
+
 body
 {
 	font-family:Helvetica,Arial,'DejaVu Sans','Liberation Sans',Freesans,sans-serif;
 	font-size: 14px;
+}
+
+#now_playing_container
+{
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #now_playing_track_countdown_container, #now_playing_show_countdown_container
@@ -29,4 +43,15 @@ text-align: center;
 	padding-top: 25px;
 	text-align: right;
 	font-size: 0.8em;
+}
+
+#now_playing_thumbnail
+{
+	max-width: 300px;
+}
+
+#now_playing_thumbnail img
+{
+	display: block;
+	max-width: 100%;
 }

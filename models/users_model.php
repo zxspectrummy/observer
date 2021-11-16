@@ -19,9 +19,21 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages users, registering new ones, returning and updating lists of user
+ * information, user settings, and forgotten passwords.
+ *
+ * @package Model
+ */
 class UsersModel extends OBFModel
 {
 
+  /**
+   * Set to TRUE or FALSE in the settings table depending on whether new users
+   * can be registered.
+   *
+   * @param value Boolean determing whether new users can register.
+   */
   public function user_registration_set($value)
   {
     // figure out if we have the setting row already
@@ -43,6 +55,11 @@ class UsersModel extends OBFModel
     return true;
   }
 
+  /**
+   * Return the user registration settings.
+   *
+   * @return can_register
+   */
   public function user_registration_get()
   {
     $this->db->where('name','new_user_registration');
@@ -53,6 +70,11 @@ class UsersModel extends OBFModel
     else return false;
   }
 
+  /**
+   * List all users' display names, IDs, and associated email addresses.
+   *
+   * @return users
+   */
   public function user_list()
   {
     $this->db->what('display_name');
@@ -63,6 +85,14 @@ class UsersModel extends OBFModel
     return $rows;
   }
 
+  /**
+   * Return a filtered list of users and their associated groups.
+   *
+   * @param sort_col Column to sort users by. 'display_name' by default.
+   * @param sort_dir Direction to sort. 'asc' by default.
+   *
+   * @return users
+   */
   public function user_manage_list($sort_col='display_name',$sort_dir='asc')
   {
 
@@ -100,6 +130,12 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Update settings table with sorting settings for users list.
+   *
+   * @param sort_col Column to sort users list by.
+   * @param sort_dir Direction to sort users list.
+   */
   public function user_manage_list_set_sort($sort_col,$sort_dir)
   {
     // make sure sort col is value.
@@ -113,6 +149,11 @@ class UsersModel extends OBFModel
     return true;
   }
 
+  /**
+   * Get the user list sorting settings from the settings table.
+   *
+   * @return [sort_col, sort_dir]
+   */
   public function user_manage_list_get_sort()
   {
     $sort = $this->user->get_setting('user_manage_list_sort');
@@ -120,6 +161,130 @@ class UsersModel extends OBFModel
     else return json_decode($sort);
   }
 
+  /**
+   * Generate a new App Key for the provided user ID.
+   *
+   * @param id
+   *
+   * @return [id, name, key, created, last_access]
+   */
+   public function user_manage_key_new ($id) {
+     $name    = 'new key';
+     $key     = base64_encode(openssl_random_pseudo_bytes(32));
+     $created = time();
+
+     $keyid = $this->db->insert('users_appkeys', [
+       'user_id'     => $id,
+       'name'        => $name,
+       'key'         => password_hash($key, PASSWORD_DEFAULT),
+       'created'     => $created,
+       'last_access' => 0
+     ]);
+
+     $full_key = base64_encode($keyid) . ':' . $key;
+     return [
+       'id'          => $keyid,
+       'name'        => $name,
+       'key'         => $full_key,
+       'created'     => $created,
+       'last_access' => 0
+     ];
+   }
+
+  /**
+   * Validate App Key permisisons.
+   *
+   * @param id
+   * @param permissions
+   * @param user_id
+   */
+   public function user_manage_key_permissions_validate($id, $permissions, $user_id)
+   {
+    // make sure this user_id owns this app key.
+    $this->db->where('user_id', $user_id);
+    $this->db->where('id', $id);
+    $appkey = $this->db->get_one('users_appkeys');
+    if(empty($appkey)) return [false, 'AppKey not found.'];
+
+    // make sure permissions are valid
+    if($permissions!=='')
+    {
+      $permissions = preg_split('/\r\n|\r|\n/', $permissions);
+      foreach($permissions as $permission)
+      {
+        $controller_method = explode('/', $permission);
+        if(count($controller_method)!=2 || !preg_match('/^[A-Z0-9_]+$/i', $controller_method[0]) || !preg_match('/^[A-Z0-9_]+$/i', $controller_method[1])) return [false, 'One or more controller/methods are not valid.'];
+      }
+    }
+
+    // got this far, valid.
+    return [true, 'Valid'];
+   }
+
+  /**
+   * Save App Key permisisons (will validate first).
+   *
+   * @param id
+   * @param permissions
+   * @param user_id
+   */
+   public function user_manage_key_permissions_save($id, $permissions, $user_id)
+   {
+    $validation = $this->user_manage_key_permissions_validate($id, $permissions, $user_id);
+    if($validation[0]==false) return $validation;
+
+    $this->db->where('id', $id);
+    $this->db->update('users_appkeys', ['permissions'=>$permissions]);
+
+    return [true, 'Updated.'];
+   }
+
+ /**
+  * Delete an App Key associated with a specified user.
+  *
+  * @param id
+  * @param user_id
+  *
+  * @return is_deleted?
+  */
+  public function user_manage_key_delete ($id, $user_id) {
+    $this->db->where('id', $id);
+    $this->db->where('user_id', $user_id);
+    if (!$this->db->get_one('users_appkeys')) return false;
+
+    $this->db->where('id', $id);
+    $this->db->where('user_id', $user_id);
+    $this->db->delete('users_appkeys');
+
+    return true;
+  }
+
+  /**
+   * Load all App Keys associated with a user.
+   *
+   * @param id
+   *
+   * @return appkeys
+   */
+   public function user_manage_key_load ($id) {
+     $this->db->where('user_id', $id);
+     $this->db->what('id');
+     $this->db->what('user_id');
+     $this->db->what('name');
+     $this->db->what('created');
+     $this->db->what('last_access');
+     $this->db->what('permissions');
+     return $this->db->get('users_appkeys');
+   }
+
+  /**
+   * Validate user fields before updating.
+   *
+   * @param data
+   * @param id User ID. NULL by default if inserting a new user.
+   *
+   * @return [is_valid, msg]
+   */
   public function user_validate($data,$id=null)
   {
 
@@ -154,10 +319,28 @@ class UsersModel extends OBFModel
     //T The password must be at least 6 characters.
     if(!empty($password) && strlen($password)<6) return array(false,['User Edit', 'The password must be at least 6 characters.']);
 
+    foreach ($appkeys as $appkey) {
+      // make sure all App Keys have a name
+      //T App Key name cannot be empty.
+      if (empty(trim($appkey[1]))) return array(false, 'App Key name cannot be empty.');
+
+      // make sure all App Keys exist and are associated with the user being edited
+      $this->db->where('id', $appkey[0]);
+      $this->db->where('user_id', $id);
+      //T Could not find one or more App Keys in database.
+      if (!$this->db->get_one('users_appkeys')) return array(false, 'Could not find one or more App Keys in database.');
+    }
+
     return array(true,'Valid');
 
   }
 
+  /**
+   * Udate or save a new user.
+   *
+   * @param data
+   * @param id User ID. NULL by default if inserting a new user.
+   */
   public function user_save($data,$id=null)
   {
     // add/edit now.
@@ -198,28 +381,38 @@ class UsersModel extends OBFModel
       $this->db->insert('users_to_groups',$group_data);
     }
 
+    foreach ($data['appkeys'] as $appkey) {
+      $this->db->where('id', $appkey[0]);
+      $this->db->update('users_appkeys', [
+        'name' => $appkey[1]
+      ]);
+    }
+
     return true;
   }
 
+  /**
+   * Delete a user.
+   *
+   * @param id
+   */
   public function user_delete($id)
   {
 
     $this->db->where('id',$id);
     $this->db->delete('users');
 
-    $this->db->where('user_id',$id);
-    $this->db->delete('users_to_groups');
-
-    $this->db->where('user_id',$id);
-    $this->db->delete('schedules_permissions');
-
-    $this->db->where('user_id',$id);
-    $this->db->delete('schedules_permissions_recurring');
-
     return true;
 
   }
 
+  /**
+   * Get all groups.
+   *
+   * @param hide_permissions By default this gets all of a groups associated permissions. Set to TRUE to hide these.
+   *
+   * @return groups
+   */
   public function group_list($hide_permissions = false)
   {
     $groups = $this->db->get('users_groups');
@@ -250,6 +443,11 @@ class UsersModel extends OBFModel
     return $groups;
   }
 
+  /**
+   * Get all users permissions as well as the ones linked to each player.
+   *
+   * @return permissions
+   */
   public function permissions_list()
   {
 
@@ -258,22 +456,21 @@ class UsersModel extends OBFModel
 
     $return = array();
 
-    $devices_model = $this->load->model('devices');
-    $devices = $devices_model('get_all');
+    $players = $this->models->players('get_all');
 
     foreach($permissions as $permission)
     {
 
-      if($permission['category']=='device')
+      if($permission['category']=='player')
       {
-        foreach($devices as $device)
+        foreach($players as $player)
         {
-          if(!isset($return['device: '.$device['name']])) $return['device: '.$device['name']] = array();
+          if(!isset($return['player: '.$player['name']])) $return['player: '.$player['name']] = array();
 
           $new_permission = $permission;
-          $new_permission['name'] .= ':'.$device['id'];
+          $new_permission['name'] .= ':'.$player['id'];
 
-          $return['device: '.$device['name']][] = $new_permission;
+          $return['player: '.$player['name']][] = $new_permission;
         }
         continue;
       }
@@ -287,7 +484,11 @@ class UsersModel extends OBFModel
   }
 
 
-
+  /**
+   * Delete a group.
+   *
+   * @param id
+   */
   public function group_delete($id)
   {
     $this->db->where('id',$id);
@@ -302,6 +503,14 @@ class UsersModel extends OBFModel
     return true;
   }
 
+  /**
+   * Validate a group before updating.
+   *
+   * @param data
+   * @param id Group ID. NULL by default when inserting a new group.
+   *
+   * @return [is_valid, msg]
+   */
   public function group_validate($data,$id=null)
   {
 
@@ -331,6 +540,12 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Save or insert a group.
+   *
+   * @param data
+   * @param id Group ID. NULL by default when inserting a new group.
+   */
   public function group_save($data,$id=null)
   {
 
@@ -368,7 +583,7 @@ class UsersModel extends OBFModel
 
       $pdata['permission_id'] = $permission_info['id'];
 
-      // is permission associated with an item id? (like a device id specific permission...)
+      // is permission associated with an item id? (like a player id specific permission...)
       if(count($pname_array)>1) $pdata['item_id'] = $pname_array[1];
       else $pdata['item_id']=null;
 
@@ -380,6 +595,14 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Validate user settings.
+   *
+   * @param user_id
+   * @param data
+   *
+   * @return [is_valid, msg]
+   */
   public function settings_validate($user_id,$data)
   {
 
@@ -403,13 +626,12 @@ class UsersModel extends OBFModel
     }
 
     // make sure language is valid
-    $ui_model = $this->load->model('ui');
-    $languages = array_keys($ui_model->get_languages());
+    $languages = array_keys($this->models->ui('get_languages'));
     //T The language selected is not valid.
     if($data['language']!=='' && array_search($data['language'],$languages)===false) return array(false,'The language selected is not valid.');
 
     // make sure theme is valid
-    $themes = array_keys($ui_model->get_themes());
+    $themes = array_keys($this->models->ui('get_themes'));
     //T The theme selected is not valid.
     if(array_search($data['theme'],$themes)===false) return array(false,'The theme selected is not valid.');
 
@@ -417,6 +639,12 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Update user settings.
+   *
+   * @param user_id
+   * @param data
+   */
   public function settings_update($user_id,$data)
   {
 
@@ -434,6 +662,14 @@ class UsersModel extends OBFModel
     unset($data['theme']);
     unset($data['dyslexia_friendly_font']);
     unset($data['sidebar_display_left']);
+
+    foreach ($data['appkeys'] as $appkey) {
+      $this->db->where('id', $appkey[0]);
+      $this->db->update('users_appkeys', [
+        'name' => $appkey[1]
+      ]);
+    }
+    unset($data['appkeys']);
 
     $this->db->where('id',$user_id);
     $this->db->update('users',$data);
@@ -459,9 +695,15 @@ class UsersModel extends OBFModel
         ) ON DUPLICATE KEY UPDATE value = "'.$this->db->escape($value).'"');
       */
     }
-
   }
 
+  /**
+   * Validate an email address used in the forgotten password form.
+   *
+   * @param email
+   *
+   * @return [is_valid, msg]
+   */
   public function forgotpass_validate($email)
   {
 
@@ -476,6 +718,11 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Start the forgotten pass process for the provided email.
+   *
+   * @param email
+   */
   public function forgotpass_process($email)
   {
 
@@ -493,6 +740,13 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Validate data (name, email, and username) provided for a new account.
+   *
+   * @param data
+   *
+   * @return [is_valid, msg]
+   */
   public function newaccount_validate($data)
   {
 
@@ -516,6 +770,12 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Create a new user account with the provided data, generating a random
+   * password and sending a confirmation email.
+   *
+   * @param data
+   */
   public function newaccount_process($data)
   {
 
@@ -532,7 +792,11 @@ class UsersModel extends OBFModel
 
   }
 
-
+  /**
+   * Generate a random password.
+   *
+   * @return password
+   */
   public function randpass()
   {
 
@@ -545,10 +809,30 @@ class UsersModel extends OBFModel
 
   }
 
+  /**
+   * Email temporary username and password to email address.
+   *
+   * @param email
+   * @param username
+   * @param password
+   */
   public function email_username_password($email,$username,$password)
   {
-
+  
     $mailer = new PHPMailer\PHPMailer\PHPMailer();
+
+    if(defined('OB_EMAIL_HOST') && defined('OB_EMAIL_USER') && defined('OB_EMAIL_PASS') && defined('OB_EMAIL_TYPE') && defined('OB_EMAIL_PORT'))
+    {
+      // WRFL custom code for SMTP email
+      require_once('extras/PHPMailer/src/SMTP.php');
+      $mailer->isSMTP();
+      $mailer->Host = OB_EMAIL_HOST;
+      $mailer->SMTPAuth = true;
+      $mailer->Username = OB_EMAIL_USER;
+      $mailer->Password = OB_EMAIL_PASS;
+      $mailer->SMTPSecure = OB_EMAIL_TYPE;
+      $mailer->Port = OB_EMAIL_PORT;
+    }
 
     $mailer->Body='Here is your username and new password for OpenBroadcaster.  You should immediately log in and reset your password.
 
@@ -569,6 +853,13 @@ Login at '.OB_SITE;
 
   }
 
+  /**
+   * Get a user by ID.
+   *
+   * @param id
+   *
+   * @return user
+   */
   public function get_by_id ($id) {
     $this->db->where('users.id', $id);
     return $this->db->get_one('users');

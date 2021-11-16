@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,6 +19,11 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Model class. Defines basic OB model functionality.
+ *
+ * @package Class
+ */
 class OBFModel
 {
 
@@ -26,11 +31,15 @@ class OBFModel
   public $db;
   public $user;
   public $error;
+  public $models;
 
   protected $helpers;
   protected $callback_handler;
 
-  // make database (db) and base framwork (ob) available. 
+  /**
+   * Create an instance of OBFModel, make database (db) and base framwork (ob)
+   * available.
+   */
   public function __construct()
   {
     $this->load = OBFLoad::get_instance();
@@ -38,12 +47,20 @@ class OBFModel
     $this->user = OBFUser::get_instance();
     $this->callback_handler = OBFCallbacks::get_instance();
     $this->helpers = OBFHelpers::get_instance();
+    $this->models = OBFModels::get_instance();
   }
 
-  // shortcut to use $this->ModelName('method',arg1,arg2,...).
+  /**
+   * Shortcut to use $this->ModelName('method', arg1, arg2, ...).
+   *
+   * @param name
+   * @param args
+   *
+   * @return return_value
+   */
   public function __call($name,$args)
   {
-    if(!isset($this->$name)) 
+    if(!isset($this->$name))
     {
       $stack = debug_backtrace();
       trigger_error('Call to undefined method '.$name.' ('.$stack[0]['file'].':'.$stack[0]['line'].')', E_USER_ERROR);
@@ -54,7 +71,9 @@ class OBFModel
     return call_user_func_array($obj,$args);
   }
 
-  // invoke is used for all method calls in order to handle callbacks appropriately
+  /**
+   * Invoke is used for all method calls in order to handle callbacks appropriately.
+   */
   public function __invoke()
   {
 
@@ -63,7 +82,7 @@ class OBFModel
     $stack = debug_backtrace();
     $args = array();
     $eval_args = array();
-  
+
     // make sure our method name is specified.  determine our method name.
     if(!isset($stack[0]['args']) || count($stack[0]['args'])<1) return;
     $method = $stack[0]['args'][0];
@@ -77,15 +96,15 @@ class OBFModel
         $args[] = &$stack[0]["args"][$i];
         $eval_args[] = '$args['.($i-1).']';
       }
-    }  
+    }
 
     $eval_args = implode(',',$eval_args);
-  
+
     // call our 'init' callbacks.
     $retval = null;
     $cb_name = get_class($this).'.'.$method;
     $cb_return = $this->callback_handler->fire($cb_name,'init',$args);
-  
+
     // a callback is forcing an early return.
     if(!empty($cb_return->r)) return $cb_return->v;
 
@@ -95,10 +114,10 @@ class OBFModel
 
     // call our 'return' callbacks;
     $cb_return = $this->callback_handler->fire($cb_name,'return',$args);
-  
+
     // reset our return value list for this process chain
     $this->callback_handler->reset_retvals($cb_name);
-    
+
     // a callback is forcing an early return (taking over return value)
     if(!empty($cb_return->r)) return $cb_return->v;
 
@@ -106,11 +125,17 @@ class OBFModel
 
   }
 
-  // get or set error.  if error===null, will return error instead. if error===false, will reset error.
+  /**
+   * Get or set error.  If error is set to NULL (the default value), this will
+   * return the error . If error is set to FALSE, it'll reset the error.
+   *
+   * @param error
+   *
+   * @return error
+   */
   public function error($error=null) {
     if($error===null) return $this->error;
     else $this->error=$error;
   }
 
 }
-

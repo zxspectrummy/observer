@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -34,7 +34,6 @@ else
   $db->update('settings',array('value'=>time()));
 }
 
-
 // delete expired uploads
 $db->where('expiry',time(),'<');
 $uploads = $db->get('uploads');
@@ -46,43 +45,26 @@ foreach($uploads as $upload)
   $db->delete('uploads');
 }
 
-// remove expired emergency broadcasts
-$db->where('stop',strtotime('-7 days'),'<');
-$db->delete('emergencies');
+// remove cached schedule data for shows which stopped longer than 1 week ago (+/- some variablity due to timezones)
+$db->query('DELETE FROM shows_cache where DATE_ADD(start, INTERVAL duration SECOND) < "'.date('Y-m-d H:i:s', strtotime('-1 week')).'"');
 
-// remove non-recuring schedule items older than 3 months.
-$db->query('DELETE FROM schedules where (duration + start) < '.strtotime('-3 months'));
-
-// remove recurring schedule items which stopped longer than 3 months ago
-$db->query('DELETE FROM schedules_recurring where (duration + stop) < '.strtotime('-3 months'));
-
-// do the same for permissions
-$db->query('DELETE FROM schedules_permissions where (duration + start) < '.strtotime('-3 months'));
-$db->query('DELETE FROM schedules_permissions_recurring where (duration + stop) < '.strtotime('-3 months'));
-
-// remove cached schedule data for shows which stopped longer than 1 hour ago
-$db->query('DELETE FROM schedules_media_cache where (duration + start) < '.strtotime('-1 hour'));
-
-// remove cached liveassist button data for shows which started longer than a week ago (TODO should really have duration in there to make this tighter)
-$db->query('DELETE FROM schedules_liveassist_buttons_cache where start < '.strtotime('-1 week'));
-
-// send out device-last-connect warnings if appropriate. will not send out warnings if device has never connected.
+// send out player-last-connect warnings if appropriate. will not send out warnings if player has never connected.
 // TODO maybe put this into a notice model for similar re-use elsewhere.
-$cutoff = strtotime('-1 hour'); // connection must be made at least once/hour. this should be a setting at some point, maybe in device settings?
+$cutoff = strtotime('-1 hour'); // connection must be made at least once/hour. this should be a setting at some point, maybe in player settings?
 $connect_types = array('schedule','playlog','emergency');
 foreach($connect_types as $type)
 {
 
   $db->where('last_connect_'.$type, $cutoff, '<=');
-  $devices = $db->get('devices');
+  $players = $db->get('players');
 
-  foreach($devices as $device)
+  foreach($players as $player)
   {
 
-    $id = $device['id'];
+    $id = $player['id'];
 
-    $db->where('device_id',$id);
-    $db->where('event','device_last_connect_'.$type.'_warning');
+    $db->where('player_id',$id);
+    $db->where('event','player_last_connect_'.$type.'_warning');
     $db->where('toggled',0);
     $notices = $db->get('notices');
 
@@ -90,12 +72,12 @@ foreach($connect_types as $type)
     {
 
       $mailer = new PHPMailer\PHPMailer\PHPMailer();
-      $mailer->Body='This is a warning that device "'.$device['name'].'" has not connected for "'.$type.'" in the last hour.
+      $mailer->Body='This is a warning that player "'.$player['name'].'" has not connected for "'.$type.'" in the last hour.
 
-Please take steps to ensure this device is functioning properly.';
+Please take steps to ensure this player is functioning properly.';
       $mailer->From=OB_EMAIL_REPLY;
       $mailer->FromName=OB_EMAIL_FROM;
-      $mailer->Subject='Device Warning';
+      $mailer->Subject='Player Warning';
       $mailer->AddAddress($notice['email']);
       $mailer->Send();
 
@@ -117,7 +99,7 @@ if(!empty($tables)) foreach($tables as $nfo)
   $fragmentation = $nfo['Data_free']*100 / $nfo['Data_length'];
 
   if($fragmentation>10)
-  { 
+  {
     $db->query('OPTIMIZE TABLE `'.$nfo['Name'].'`');
   }
 }

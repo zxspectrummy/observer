@@ -49,19 +49,41 @@
       <label class="required" data-t>Groups</label>
       <div id="user_addedit_group_list"></div>
     </div>
+  </fieldset>
 
-</fieldset>
+  <fieldset class="edit_only">
+    <legend data-t>App Keys</legend>
+
+    <div class="fieldrow" hidden id="user_appkey_newkeyinfo">
+    </div>
+
+    <div class="fieldrow">
+      <table class="table" id="user_appkey_table">
+        <thead><tr>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Last Accessed</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fieldrow">
+      <button class="add" id="user_appkey_add" onclick="OB.User.manageUsersKeyAdd();" data-t>Add Key</button>
+    </div>
+  </fieldset>
 
   <p class="edit_only" >* <span data-t>Enter password only if you wish to change the password.</span></p>
-<fieldset>
 
+  <fieldset>
     <div class="fieldrow">
       <button class="add" id="item_properties_save" onclick="OB.User.manageUsersSave();" data-t>Save</button>
       <button class="edit_only delete" id="item_properties_delete" onclick="OB.User.manageUsersDelete();" data-t>Delete</button>
       <button id="item_properties_cancel" onclick="OB.UI.closeModalWindow();" data-t>Cancel</button>
     </div>
-
-</fieldset>
+  </fieldset>
 
 
 <input type="hidden" id="user_addedit_id">

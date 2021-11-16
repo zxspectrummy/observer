@@ -47,7 +47,7 @@ OB.Modules.modulesGet = function()
   $('#modules_installed_list tbody').html('');
   $('#modules_available_list tbody').html('');
 
-  OB.API.post('modules','modules_list', {}, function(response) {
+  OB.API.post('modules','search', {}, function(response) {
 
     var installed_modules = response.data.installed;
     var available_modules = response.data.available;

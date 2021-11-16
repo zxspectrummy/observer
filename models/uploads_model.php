@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,9 +19,22 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages media uploads to the server, checking for validity and returning
+ * relevant file info.
+ *
+ * @package Model
+ */
 class UploadsModel extends OBFModel
 {
 
+  /**
+  * Return whether an uploaded file ID and associated key is valid. Returns
+  * FALSE if no ID or key is provided, or if no associated row can be found in
+  * the uploads database.
+  *
+  * @return is_valid
+  */
   public function is_valid($id,$key)
   {
 
@@ -38,6 +51,14 @@ class UploadsModel extends OBFModel
 
   }
 
+  /**
+   * Get relevant info about file upload. 
+   *
+   * @param id Upload ID.
+   * @param key Upload key.
+   *
+   * @return [type, format, duration]
+   */
   public function file_info($id,$key)
   {
 

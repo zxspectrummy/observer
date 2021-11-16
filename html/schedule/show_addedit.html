@@ -18,9 +18,9 @@
 </div>
 
 <div class="fieldrow">
-  <label class="required" data-t>Scheduling Mode</label>
+  <label class="required" data-t>Repeat</label>
   <select id="show_mode">
-    <option value="once" data-t>One-Time</option>
+    <option value="once" data-t>None</option>
     <option value="daily" data-t>Daily</option>
     <option value="weekly" data-t>Weekly</option>
     <option value="monthly" data-t>Monthly</option>
@@ -36,214 +36,18 @@
 </div>
 
 <div class="fieldrow">
-  <label class="required" data-t>Start Date</label>
-  <input size="15" type="text" id="show_start_date">
-</div>
-
-<div class="fieldrow">
-  <label class="required" data-t>Start Time</label>
-  <input size="15" type="text" id="show_start_time">
+  <label class="required" data-t>Start</label>
+  <ob-datetime-input id="show_start_datetime"></ob-datetime-input>
 </div>
 
 <div class="fieldrow">
   <label class="required" data-t>Duration</label>
-  <select name="show_duration_days" id="show_duration_days">
-    <option>00</option>
-    <option>01</option>
-    <option>02</option>
-    <option>03</option>
-    <option>04</option>
-    <option>05</option>
-    <option>06</option>
-    <option>07</option>
-    <option>08</option>
-    <option>09</option>
-    <option>10</option>
-    <option>11</option>
-    <option>12</option>
-    <option>13</option>
-    <option>14</option>
-    <option>15</option>
-    <option>16</option>
-    <option>17</option>
-    <option>18</option>
-    <option>19</option>
-    <option>20</option>
-    <option>21</option>
-    <option>22</option>
-    <option>23</option>
-    <option>24</option>
-    <option>25</option>
-    <option>26</option>
-    <option>27</option>
-    <option>28</option>
-    <option>29</option>
-    <option>30</option>
-  </select> <span data-t>days</span>
-</div>
-<div class="fieldrow">
-  <label class="empty"></label>
-  <select name="show_duration_hours" id="show_duration_hours">
-    <option>00</option>
-    <option>01</option>
-    <option>02</option>
-    <option>03</option>
-    <option>04</option>
-    <option>05</option>
-    <option>06</option>
-    <option>07</option>
-    <option>08</option>
-    <option>09</option>
-    <option>10</option>
-    <option>11</option>
-    <option>12</option>
-    <option>13</option>
-    <option>14</option>
-    <option>15</option>
-    <option>16</option>
-    <option>17</option>
-    <option>18</option>
-    <option>19</option>
-    <option>20</option>
-    <option>21</option>
-    <option>22</option>
-    <option>23</option>
-  </select> <span data-t>hours</span>
-</div>
-<div class="fieldrow">
-  <label class="empty"></label>
-  <select name="show_duration_minutes" id="show_duration_minutes">
-    <option>00</option>
-    <option>01</option>
-    <option>02</option>
-    <option>03</option>
-    <option>04</option>
-    <option>05</option>
-    <option>06</option>
-    <option>07</option>
-    <option>08</option>
-    <option>09</option>
-    <option>10</option>
-    <option>11</option>
-    <option>12</option>
-    <option>13</option>
-    <option>14</option>
-    <option>15</option>
-    <option>16</option>
-    <option>17</option>
-    <option>18</option>
-    <option>19</option>
-    <option>20</option>
-    <option>21</option>
-    <option>22</option>
-    <option>23</option>
-    <option>24</option>
-    <option>25</option>
-    <option>26</option>
-    <option>27</option>
-    <option>28</option>
-    <option>29</option>
-    <option>30</option>
-    <option>31</option>
-    <option>32</option>
-    <option>33</option>
-    <option>34</option>
-    <option>35</option>
-    <option>36</option>
-    <option>37</option>
-    <option>38</option>
-    <option>39</option>
-    <option>40</option>
-    <option>41</option>
-    <option>42</option>
-    <option>43</option>
-    <option>44</option>
-    <option>45</option>
-    <option>46</option>
-    <option>47</option>
-    <option>48</option>
-    <option>49</option>
-    <option>50</option>
-    <option>51</option>
-    <option>52</option>
-    <option>53</option>
-    <option>54</option>
-    <option>55</option>
-    <option>56</option>
-    <option>57</option>
-    <option>58</option>
-    <option>59</option>
-  </select> <span data-t>minutes</span>
-</div>
-<div class="fieldrow">
-  <label class="empty"></label>
-  <select name="show_duration_seconds" id="show_duration_seconds">
-    <option>00</option>
-    <option>01</option>
-    <option>02</option>
-    <option>03</option>
-    <option>04</option>
-    <option>05</option>
-    <option>06</option>
-    <option>07</option>
-    <option>08</option>
-    <option>09</option>
-    <option>10</option>
-    <option>11</option>
-    <option>12</option>
-    <option>13</option>
-    <option>14</option>
-    <option>15</option>
-    <option>16</option>
-    <option>17</option>
-    <option>18</option>
-    <option>19</option>
-    <option>20</option>
-    <option>21</option>
-    <option>22</option>
-    <option>23</option>
-    <option>24</option>
-    <option>25</option>
-    <option>26</option>
-    <option>27</option>
-    <option>28</option>
-    <option>29</option>
-    <option>30</option>
-    <option>31</option>
-    <option>32</option>
-    <option>33</option>
-    <option>34</option>
-    <option>35</option>
-    <option>36</option>
-    <option>37</option>
-    <option>38</option>
-    <option>39</option>
-    <option>40</option>
-    <option>41</option>
-    <option>42</option>
-    <option>43</option>
-    <option>44</option>
-    <option>45</option>
-    <option>46</option>
-    <option>47</option>
-    <option>48</option>
-    <option>49</option>
-    <option>50</option>
-    <option>51</option>
-    <option>52</option>
-    <option>53</option>
-    <option>54</option>
-    <option>55</option>
-    <option>56</option>
-    <option>57</option>
-    <option>58</option>
-    <option>59</option>
-  </select> <span data-t>seconds</span>
+  <ob-duration-input id="show_duration"></ob-duration-input>
 </div>
 
 <div class="fieldrow hidden" id="show_addedit_stop">
-  <label class="required" data-t>Recurring Last Date</label>
-  <input size="15" type="text" id="show_stop_date">
+  <label class="required" data-t>Until</label>
+  <ob-date-input id="show_stop_date"></ob-date-input>
 </div>
 
 </fieldset>

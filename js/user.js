@@ -34,8 +34,6 @@ OB.User.initMenu = function()
 
 OB.User.manageUsers = function()
 {
-  $('.sf-submenu').hide();
-
   OB.UI.replaceMain('user/manage_users.html');
 
   OB.API.post('users','user_registration_get',{},function(response) {
@@ -191,7 +189,7 @@ OB.User.manageUsersEdit = function(id)
 
   });
 
-
+  OB.User.manageUsersKeyLoad(id);
 
 }
 
@@ -220,6 +218,15 @@ OB.User.manageUsersSave = function()
     fields.group_ids.push($(element).val());
 
   });
+
+  fields.appkeys = new Array();
+  $('#user_appkey_table tbody tr').each(function (index, row) {
+    fields.appkeys.push([
+      $(row).attr('data-id'),
+      $(row).find('.user_appkey_name').val()
+    ]);
+  });
+
 
   OB.API.post('users','user_manage_addedit',fields,function(data)
   {
@@ -290,13 +297,69 @@ deletemeifworks
 
 }
 
+OB.User.manageUsersKeyAdd = function () {
+  OB.API.post('users', 'user_manage_key_new', {'id': $('#user_addedit_id').val()}, function (response) {
+    if (!response.status) {
+      $('#user_addedit_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $('#user_appkey_newkeyinfo').show().html(
+      "A new App Key has been created on " +
+      format_timestamp(response.data.created) +
+      ". The secret key to use with your App key requests is:<br><br><code>" +
+      response.data.key +
+      "</code><br><br>Please save this key in a secure place."
+    );
+
+    $tr = $('<tr/>').attr('data-id', response.data.id);
+    $tr.append($('<td/>').html('<input type="text" class="user_appkey_name" value="' + response.data.name + '">'));
+    $tr.append($('<td/>').text(format_timestamp(response.data.created)));
+    $tr.append($('<td/>').text(format_timestamp(response.data.last_access)));
+    $tr.append($('<td/>').html('<button class="delete" class="user_appkey_delete" onclick="OB.User.manageUsersKeyDelete(this);">Delete</button>'));
+
+    $('#user_appkey_table tbody').append($tr);
+  });
+}
+
+OB.User.manageUsersKeyDelete = function (elem) {
+  OB.API.post('users', 'user_manage_key_delete', {
+    'user_id': $('#user_addedit_id').val(),
+    'id': $(elem).closest('tr').attr('data-id')
+  }, function (response) {
+    if (!response.status) {
+      $('#user_addedit_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $(elem).closest('tr').remove();
+    $('#user_appkey_newkeyinfo').hide();
+  });
+}
+
+OB.User.manageUsersKeyLoad = function (id) {
+  OB.API.post('users', 'user_manage_key_load', {id: id}, function (response) {
+    if (!response.status) {
+      $('#user_addedit_message').obWidget('error', response.msg);
+      return;
+    }
+
+    $.each(response.data, function (index, row) {
+      $tr = $('<tr/>').attr('data-id', row.id);
+      $tr.append($('<td/>').html('<input type="text" class="user_appkey_name" value="' + row.name + '">'));
+      $tr.append($('<td/>').text(format_timestamp(row.created)));
+      $tr.append($('<td/>').text(format_timestamp(row.last_access)));
+      $tr.append($('<td/>').html('<button class="delete" class="user_appkey_delete" onclick="OB.User.manageUsersKeyDelete(this);">Delete</button>'));
+
+      $('#user_appkey_table tbody').append($tr);
+    });
+  });
+}
+
 OB.User.manage_permissions_list = null;
 
 OB.User.managePermissions = function()
 {
-
-  $('.sf-submenu').hide();
-
   OB.UI.replaceMain('user/manage_permissions.html');
 
   OB.API.post('users','permissions_manage_list',{}, function(data) {
@@ -345,7 +408,7 @@ OB.User.managePermissions = function()
       {
 
         //T player
-        if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('player')+': ');
+        if(category.match(/^player: /)) var category_translated = category.replace(/^player: /,OB.t('player')+': ');
         else var category_translated = category; // no dynamic variable translation for now
 
         $('#permissions_table tbody').append('<tr class="permission-category" ><th colspan="1000">'+ htmlspecialchars(category_translated)+'</th></tr>');
@@ -490,7 +553,7 @@ OB.User.managePermissionsForm = function(id)
   $.each(OB.User.manage_permissions_list,function(category,permissions)
   {
     //T player
-    if(category.match(/^device: /)) var category_translated = category.replace(/^device: /,OB.t('player')+': ');
+    if(category.match(/^player: /)) var category_translated = category.replace(/^player: /,OB.t('player')+': ');
     else var category_translated = category;
 
     var $fieldset = $('<fieldset><legend data-t >'+htmlspecialchars(category_translated)+'</legend></fieldset>');

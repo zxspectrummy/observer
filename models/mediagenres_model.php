@@ -19,8 +19,24 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Secondary model for managing media genres.
+ *
+ * @package Model
+ */
 class MediaGenresModel extends OBFModel
 {
+  /**
+   * Search media genres.
+   *
+   * @param filters
+   * @param orderby
+   * @param orderdesc
+   * @param limit
+   * @param offset
+   *
+   * @return genres
+   */
   public function search($filters,$orderby,$orderdesc,$limit,$offset)
   {
 
@@ -53,6 +69,12 @@ class MediaGenresModel extends OBFModel
     return $result;
   }
 
+  /**
+   * Save a media genre.
+   *
+   * @param data
+   * @param id Optional. Specified when updating a pre-existing genre.
+   */
   public function save($data,$id=false)
   {
     // handle default: if setting default, unset other defaults for this category.
@@ -82,6 +104,14 @@ class MediaGenresModel extends OBFModel
     }
   }
 
+  /**
+   * Validate a genre before updating.
+   *
+  * @param data
+  * @param id Optional. Specified when updating a pre-existing genre.
+  *
+  * @return is_valid
+  */
   public function validate($data,$id=false)
   {
     //T A genre name is required.
@@ -91,6 +121,11 @@ class MediaGenresModel extends OBFModel
     return array(true,'Valid.');
   }
 
+  /**
+   * Delete a genre.
+   *
+   * @param id
+   */
   public function delete($id)
   {
     $this->db->where('id',$id);
@@ -99,6 +134,13 @@ class MediaGenresModel extends OBFModel
     return $delete;
   }
 
+  /**
+   * Get information about a genre by ID.
+   *
+   * @param id
+   *
+   * @return [id, name, description, media_category_id]
+   */
   public function get_by_id($id)
   {
     $this->db->where('media_genres.id',$id);

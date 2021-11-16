@@ -89,6 +89,30 @@
 
   </fieldset>
 
+  <fieldset hidden id="account_settings_appkeys">
+    <legend data-t>App Keys</legend>
+
+    <div class="fieldrow" hidden id="account_settings_newkeyinfo">
+    </div>
+
+    <div class="fieldrow">
+      <table id="account_appkey_table" class="table">
+        <thead><tr>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Last Accessed</th>
+          <th></th>
+        </tr></thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="fieldrow">
+      <button class="add" id="account_appkey_add" onclick="OB.Account.keyAdd();" data-t>Add Key</button>
+    </div>
+  </fieldset>
+
   <fieldset>
   <div class="fieldrow">
     <button class="add" onclick="OB.Account.settingsSubmit();" data-t>Save</button>

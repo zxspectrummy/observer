@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012-2020 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -19,6 +19,12 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * UI manager handles such things as themes, languages, and outputting the correct
+ * HTML in general.
+ *
+ * @package Controller
+ */
 class UI extends OBFController
 {
 
@@ -30,25 +36,36 @@ class UI extends OBFController
 		$this->theme = !empty($this->user->userdata['theme']) && $this->user->userdata['theme']!='default' ? $this->user->userdata['theme'] : false;
   }
 
+  /**
+   * List all UI themes.
+   *
+   * @return themes
+   */
   public function get_themes()
   {
-    $ui=$this->load->model('ui');
-    return array(true,'Themes',$ui->get_themes());
+    return array(true,'Themes',$this->models->ui('get_themes'));
   }
 
+  /**
+   * List all languages
+   *
+   * @return languages
+   */
   public function get_languages()
   {
-    $ui=$this->load->model('ui');
-    return array(true,'Languages',$ui->get_languages());
+    return array(true, 'Languages', $this->models->ui('get_languages'));
   }
 
-	// return HTML files as a single JS object.
+	/**
+   * Returns all HTML files in the framework as a single JSON object, including
+   * the views for all installed modules.
+   *
+   * @return [html_file => html]
+   */
 	public function html()
 	{
+		$modules = $this->models->modules('get_installed');
 
-		$modules_model = $this->load->model('modules');
-		$modules = $modules_model('get_installed');
-		
 		$this->html_data = array();
 		$this->find_core_html_files($this->theme);
 		foreach($modules as $module) $this->find_module_html_files('modules/'.$module['dir'].'/html');
@@ -62,8 +79,8 @@ class UI extends OBFController
 	{
 
 		$files = scandir('html/'.$dir);
-		
-		foreach($files as $file) 
+
+		foreach($files as $file)
 		{
 
 		  $dirfile = ($dir!='' ? $dir.'/' : '').$file;
@@ -71,7 +88,7 @@ class UI extends OBFController
 
 		  if(is_dir($fullpath) && $file[0]!='.') $this->find_core_html_files($theme,$dirfile);
 
-		  elseif(is_file($fullpath) && substr($fullpath,-5)=='.html') 
+		  elseif(is_file($fullpath) && substr($fullpath,-5)=='.html')
 		  {
 		    // use theme override?
 		    if($theme && is_file('themes/'.$theme.'/'.$fullpath)) $fullpath = 'themes/'.$theme.'/'.$fullpath;
@@ -90,15 +107,15 @@ class UI extends OBFController
 		if(!is_dir($dir)) return;
 
 		$files = scandir($dir);
-		
-		foreach($files as $file) 
+
+		foreach($files as $file)
 		{
 
 		  $dirfile = $dir.'/'.$file;
 
 		  if(is_dir($dirfile) && $file[0]!='.') $this->find_module_html_files($dirfile);
 
-		  elseif(is_file($dirfile)) 
+		  elseif(is_file($dirfile))
 		  {
 		    $index_array = explode('/',$dirfile);
 		    array_splice($index_array,2,1);
@@ -112,4 +129,3 @@ class UI extends OBFController
 
 
 }
-

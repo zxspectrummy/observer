@@ -180,17 +180,17 @@ OB.Media.mediaAddeditForm = function(id,title,editing)
     OB.Media.update_required_field(req_fields.language_id, 'language_field');
     OB.Media.update_required_field(req_fields.comments,    'comments_field');
   }
-  
+
   // req field handling for dynamic content default/hidden
   if(req_fields)
   {
     if(!editing) $form.find('.dynamic_select_field').val(req_fields.dynamic_content_default=='enabled' ? 1 : 0);
     if(req_fields.dynamic_content_hidden) $form.find('.dynamic_select_field').parent().hide();
   }
-  
+
   // one or more elements have visibility depending on permissions. call our update function to adjust this.
   OB.UI.permissionsUpdate();
-  
+
   // hide copy to add buttons if there is only one form loaded
   $('.media_addedit button.copy_to_all').toggle( $('.media_addedit').length>1 );
 
@@ -417,7 +417,6 @@ OB.Media.save = function()
     item.comments = $(element).find('.comments_field').val();
 
     item.is_copyright_owner = $(element).find('.copyright_field').val();
-    item.is_public = $(element).find('.public_field').val();
     item.is_approved = $(element).find('.approved_field').val();
     item.status = $(element).find('.status_field').val();
     item.dynamic_select = $(element).find('.dynamic_select_field').val();
@@ -447,7 +446,7 @@ OB.Media.save = function()
   $('#media_top_message').hide();
   $('#media_data .addedit_form_message').hide();
 
-  OB.API.post('media','edit',{ 'media': media_array }, function(data) {
+  OB.API.post('media','save',{ 'media': media_array }, function(data) {
 
     // one or more validation errors.
     if(data.status==false)
@@ -489,7 +488,6 @@ OB.Media.save = function()
 // media add/edit: edit page
 OB.Media.editPage = function(ids)
 {
-
   // no media IDs specified, get IDs from sidebar selection
   if(typeof(ids)=='undefined')
   {
@@ -557,7 +555,6 @@ OB.Media.editPage = function(ids)
       $form.find('.comments_field').val( media.comments );
 
       $form.find('.copyright_field').val( media.is_copyright_owner );
-      $form.find('.public_field').val( media.is_public );
       $form.find('.status_field').val( media.status );
       $form.find('.dynamic_select_field').val( media.dynamic_select );
       $form.find('.approved_field').val( media.is_approved );

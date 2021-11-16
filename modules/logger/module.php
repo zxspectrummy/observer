@@ -1,6 +1,6 @@
 <?php
 
-/*     
+/*
     Copyright 2012 OpenBroadcaster, Inc.
 
     This file is part of OpenBroadcaster Server.
@@ -43,52 +43,49 @@ class LoggerModule extends OBFModule
 		$hooks[] = 'ClientStorage.store';
 		$hooks[] = 'ClientStorage.get';
 
-		$hooks[] = 'Device.device_list';
-		$hooks[] = 'Device.edit';
-		$hooks[] = 'Device.delete';
-		$hooks[] = 'Device.get';
-		$hooks[] = 'Device.station_id_avg_duration';
-		$hooks[] = 'Device.monitor_search';
-		$hooks[] = 'Device.now_playing';
+		$hooks[] = 'Player.search';
+		$hooks[] = 'Player.save';
+		$hooks[] = 'Player.delete';
+		$hooks[] = 'Player.get';
+		$hooks[] = 'Player.station_id_avg_duration';
+		$hooks[] = 'Player.monitor_search';
+		$hooks[] = 'Player.now_playing';
 
-		$hooks[] = 'Emergency.emergencies';
-		$hooks[] = 'Emergency.save_emergency';
-		$hooks[] = 'Emergency.delete_emergency';
+		$hooks[] = 'Emergency.get';
+		$hooks[] = 'Emergency.search';
+		$hooks[] = 'Emergency.save';
+		$hooks[] = 'Emergency.delete';
 
 		$hooks[] = 'Media.formats_get';
 		$hooks[] = 'Media.formats_save';
-		$hooks[] = 'Media.media_search';
-		$hooks[] = 'Media.edit';
+		$hooks[] = 'Media.search';
+		$hooks[] = 'Media.save';
 		$hooks[] = 'Media.archive';
 		$hooks[] = 'Media.unarchive';
 		$hooks[] = 'Media.delete';
 		$hooks[] = 'Media.get';
-		$hooks[] = 'Media.get_details';
-		$hooks[] = 'Media.used';
 
-		$hooks[] = 'Modules.modules_list';
+		$hooks[] = 'Modules.search';
 		$hooks[] = 'Modules.install';
 		$hooks[] = 'Modules.uninstall';
 
 		$hooks[] = 'Playlist.get';
-		$hooks[] = 'Playlist.get_details';
-		$hooks[] = 'Playlist.playlist_search';
-		$hooks[] = 'Playlist.edit';
+		$hooks[] = 'Playlist.search';
+		$hooks[] = 'Playlist.save';
 		$hooks[] = 'Playlist.validate_dynamic_properties';
 		$hooks[] = 'Playlist.delete';
-		$hooks[] = 'Playlist.used';
 
-		$hooks[] = 'Schedule.friendly_schedule';
-		$hooks[] = 'Schedule.get_show';
-		$hooks[] = 'Schedule.get_show_recurring';
-		$hooks[] = 'Schedule.get_permission';
-		$hooks[] = 'Schedule.get_permission_recurring';
-		$hooks[] = 'Schedule.shows';
-		$hooks[] = 'Schedule.permissions';
-		$hooks[] = 'Schedule.delete_permission';
-		$hooks[] = 'Schedule.delete_show';
-		$hooks[] = 'Schedule.save_show';
-		$hooks[] = 'Schedule.save_permission';
+		$hooks[] = 'Shows.get';
+		$hooks[] = 'Shows.get_recurring';
+		$hooks[] = 'Shows.search';
+		$hooks[] = 'Shows.delete';
+		$hooks[] = 'Shows.save';
+
+		$hooks[] = 'Timeslots.get';
+		$hooks[] = 'Timeslots.get_recurring';
+		$hooks[] = 'Timeslots.search';
+		$hooks[] = 'Timeslots.delete';
+		$hooks[] = 'Timeslots.save';
 
 		$hooks[] = 'Settings.category_list';
 		$hooks[] = 'Settings.category_edit';
@@ -109,7 +106,7 @@ class LoggerModule extends OBFModule
 		$hooks[] = 'Users.permissions_manage_delete';
 		$hooks[] = 'Users.permissions_manage_addedit';
 		$hooks[] = 'Users.permissions_manage_list';
-	
+
 		foreach($hooks as $hook)
 			$this->callback_handler->register_callback('LoggerModel.log',$hook,'return',0);
 
@@ -131,7 +128,7 @@ class LoggerModule extends OBFModule
 		$data['name'] = 'view_logger_log';
 		$data['description'] = 'view log produced by logger module';
 		$data['category'] = 'administration';
-	
+
 		$this->db->insert('users_permissions',$data);
 
 		return true;

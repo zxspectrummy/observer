@@ -19,21 +19,31 @@
     along with OpenBroadcaster Server.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Manages everything account related. Covers logging and logging out,
+ * permissions, groups, account settings, creating new accounts, and recovering
+ * passwords. Specifically to be used by individual accounts; for managing lists
+ * of permissions, users, and groups, use the Users controller.
+ *
+ * @package Controller
+ */
 class Account extends OBFController
 {
 
   public function __construct()
   {
     parent::__construct();
-
-    $this->UsersModel = $this->load->model('Users');
-    $this->PermissionsModel = $this->load->model('Permissions');
-
   }
 
+  /**
+   * Login using the provided username and password.
+   *
+   * @param username
+   * @param password
+   * @return [id, key, key_expiry]
+   */
   public function login()
   {
-
     $username = trim($this->data('username'));
     $password = trim($this->data('password'));
 
@@ -45,6 +55,11 @@ class Account extends OBFController
     else return array(true,'Login Successful',$login[2]);
   }
 
+  /**
+   * Return currently logged in username and user id.
+   *
+   * @return [id, username]
+   */
   public function uid()
   {
     $data['id']=$this->user->param('id');
@@ -53,10 +68,16 @@ class Account extends OBFController
     return array(true,'UID/Username',$data);
   }
 
+  /**
+   * Return currently logged in user permissions.
+   *
+   * @return permission_array
+   */
   public function permissions()
   {
-
-    $permissions = $this->PermissionsModel('get_user_permissions',$this->user->param('id'));
+    $this->user->require_authenticated();
+    
+    $permissions = $this->models->permissions('get_user_permissions',$this->user->param('id'));
     //T Permissions
     return array(true,'Permissions',$permissions);
 
@@ -71,26 +92,43 @@ class Account extends OBFController
 
   }
 
+  /**
+   * Return currently logged in user groups.
+   *
+   * @return group_names_array
+   */
   public function groups()
   {
-    $groups = $this->PermissionsModel('get_user_groups',$this->user->param('id'));
+    $this->user->require_authenticated();
+    
+    $groups = $this->models->permissions('get_user_groups',$this->user->param('id'));
     //T Groups
     return array(true,'Groups',$groups);
   }
 
+  /**
+   * Logout currently logged in user.
+   */
   public function logout()
   {
+    $this->user->require_authenticated();
+    $this->user->disallow_appkey();
+    
     $logout = $this->user->logout();
 
     //T Logged Out
     if($logout) return array(true,'Logged Out');
     else return array(false,'Unable to log out, an unknown error occurred.');
-
   }
 
+  /**
+   * Return userdata (except for sensitive information) for currently logged in
+   * user.
+   *
+   * @return user_fields_array
+   */
   public function settings()
   {
-
     $this->user->require_authenticated();
 
     $userdata = $this->user->userdata;
@@ -103,9 +141,21 @@ class Account extends OBFController
 
   }
 
+  /**
+   * Update currently logged in user settings.
+   *
+   * @param name
+   * @param password
+   * @param password_again
+   * @param email
+   * @param display_name
+   * @param language
+   * @param theme
+   * @param dyslexia_friendly_font Boolean set to TRUE for using a dyslexia-friendly font.
+   * @param sidebar_display_left Boolean set to TRUE when displaying the sidebar on the left side.
+   */
   public function update_settings()
   {
-
     $this->user->require_authenticated();
 
     $user_id = $this->user->param('id');
@@ -120,37 +170,48 @@ class Account extends OBFController
     $data['theme'] = trim($this->data('theme'));
     $data['dyslexia_friendly_font'] = trim($this->data('dyslexia_friendly_font'));
     $data['sidebar_display_left'] = trim($this->data('sidebar_display_left'));
+    $data['appkeys'] = $this->data('appkeys');
 
-    $validation = $this->UsersModel('settings_validate',$user_id,$data);
+    $validation = $this->models->users('settings_validate',$user_id,$data);
 
     if($validation[0]==false) return [false,$validation[1]];
 
-    $this->UsersModel('settings_update',$user_id,$data);
+    $this->models->users('settings_update',$user_id,$data);
 
     //T Settings have been updated. User interface setting changes may require you refresh the application to take effect.
     return [true,'Settings have been updated. User interface setting changes may require you refresh the application to take effect.'];
-
   }
 
+  /**
+   * Send message to provided email to aid in recovering account with forgotten
+   * password.
+   *
+   * @param email
+   */
   public function forgotpass()
   {
-
     $email = trim($this->data('email'));
 
-    $validation = $this->UsersModel('forgotpass_validate',$email);
+    $validation = $this->models->users('forgotpass_validate',$email);
 
     if($validation[0]==false) return $validation;
 
-    $this->UsersModel('forgotpass_process',$email);
+    $this->models->users('forgotpass_process',$email);
 
     return array(true,'A new password has been emailed to you.');
-
   }
 
+  /**
+   * Create a new account using the provided fields if user registration is
+   * currently enabled, and all the fields are validated.
+   *
+   * @param name
+   * @param email
+   * @param username
+   */
   public function newaccount()
   {
-
-    if(!$this->UsersModel->user_registration_get())
+    if(!$this->models->users('user_registration_get'))
     {
       return array(false,'New account registration is currently disabled.');
     }
@@ -160,14 +221,85 @@ class Account extends OBFController
     $data['email'] = trim($this->data('email'));
     $data['username'] = trim($this->data('username'));
 
-    $validation = $this->UsersModel('newaccount_validate',$data);
+    $validation = $this->models->users('newaccount_validate',$data);
     if($validation[0]==false) return $validation;
 
-    $this->UsersModel('newaccount_process',$data);
+    $this->models->users('newaccount_process',$data);
 
     return array(true,'A new account has been created.  A randomly generated password has been emailed to you.');
-
   }
 
+  /**
+   * Generate a new App Key for the logged in user. Requires the 'manage_appkeys'
+   * permission. Connects to the users model.
+   *
+   * @return [id, name, key]
+   */
+   public function key_new () {
+     $this->user->require_permission('manage_appkeys');
 
+     $id = $this->user->param('id');
+     if (empty($id)) return array(false, 'Invalid user ID.');
+
+     $result = $this->models->users('user_manage_key_new', $id);
+     if ($result) return array(true, 'Created new user App Key.', $result);
+
+     return array(false, 'Failed to create new user App Key.');
+   }
+
+  /**
+   * Delete App Key for currently logged in user. Requires 'manage_appkeys'
+   * permission. Connects to users model.
+   *
+   * @param id
+   *
+   * @return is_deleted?
+   */
+   public function key_delete () {
+     $this->user->require_permission('manage_appkeys');
+
+     $id = $this->data('id');
+     $user_id = $this->user->param('id');
+
+     if (empty($id)) return array(false, 'Invalid key ID.');
+     if (empty($user_id)) return array(false, 'Invalid user ID.');
+
+     $result = $this->models->users('user_manage_key_delete', $id, $user_id);
+     if ($result) return array(true, 'Successfully deleted App Key.');
+
+     return array(false, 'Failed to delete App Key.');
+   }
+   
+  /**
+   * Save App Key permissions. Requires 'manage_appkeys' permission. Connects to users model.
+   * 
+   * @param id
+   * @param permissions
+   */
+   public function key_permissions_save()
+   {
+     $this->user->require_permission('manage_appkeys');
+
+     $id = $this->data('id');
+     $permissions = trim($this->data('permissions'));
+     $user_id = $this->user->param('id');
+     
+     return $this->models->users('user_manage_key_permissions_save', $id, $permissions, $user_id);
+   }
+
+  /**
+   * Load App Keys for currently logged in user. Requires 'manage_appkeys'
+   * permission. Connects to users model.
+   *
+   * @return appkeys
+   */
+   public function key_load () {
+     $this->user->require_permission('manage_appkeys');
+     
+     $id = $this->user->param('id');
+     if (empty($id)) return array(false, 'Invalid user ID.');
+
+     $result = $this->models->users('user_manage_key_load', $id);
+     return array(true, 'Successfully loaded App Keys.', $result);
+   }
 }

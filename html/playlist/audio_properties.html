@@ -1,15 +1,23 @@
+<obwidget type="message" id="item_properties_message"></obwidget>
+
 <div>
 
 <fieldset>
 <legend data-t>Audio Properties</legend>
 
-<p data-t>There are presently no properties you can set for audio tracks.</p>
+<p>Coming soon.</p>
+
+<div class="fieldrow" hidden>
+  <label class="required" data-t>Crossfade With Next</label>
+  <input type="number" min="0" max="30" value="0" step="0.1" id="audio_properties_crossfade"> <span data-t>seconds</span>
+</div>
 
 </fieldset>
 
 <fieldset>
 <div class="fieldrow">
-  <button onclick="OB.UI.closeModalWindow();" data-t>Close</button>
+  <button class="add" id="item_properties_save" data-t>Save</button>
+  <button onclick="OB.UI.closeModalWindow();" data-t>Cancel</button>
 </div>
 </fieldset>
 

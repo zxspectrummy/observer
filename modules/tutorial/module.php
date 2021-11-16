@@ -23,7 +23,7 @@ class TutorialModule extends OBFModule
 {
 
 	public $name = 'Tutorial v1.0';
-	public $description = 'Provide a quick tutorial running through the basics of OpenBroadcaster.';
+	public $description = 'Interactive tutorial running through the basics of OBServer.';
 
 	public function callbacks()
 	{
