@@ -1,3 +1,5 @@
+[![CodeQL](https://github.com/openbroadcaster/observer/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/openbroadcaster/observer/actions/workflows/codeql-analysis.yml)
+
 #  OpenBroadcaster Multimedia Framework
 
 ## Overview
