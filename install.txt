@@ -2,7 +2,9 @@ OpenBroadcaster - Server Installation Instructions
 
 These instructions are an alternative to using ob.installer.sh.
 
-*** After install, log in as user with Admin privileges and then run https://YOUR_IP/updates ***
+*** After install, set OB_UPDATES_USER and OB_UPDATES_PW in config.php and then run https://YOUR_IP/updates ***
+
+Administrator login is no longer supported for OB updates since July 2020.
 
 Note: When using special characters in the password, they need to use single quotes instead of double quotes when they echo the string 
 
