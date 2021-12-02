@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+        - name: app
+          env:
+            - name: MYSQL_HOST
+              value: db
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: MYSQL_USER
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: ADMIN_PASSWORD
+            - name: OBCONF_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: reply_email
+            - name: OBCONF_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: site_url
+          image: observer:latest
+          ports:
+            - containerPort: 9000
+          resources: {}
+          imagePullPolicy: Never
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - "/opt/observer/setup.sh"
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: default.conf
+            - name: www-storage
+              mountPath: /var/www/html
+        - name: nginx
+          image: nginx:alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/nginx.conf
+              subPath: default.conf
+            - name: www-storage
+              mountPath: /var/www/html/
+      initContainers:
+        - name: init-db
+          image: busybox
+          command: [ 'sh', '-c', 'until nc -z db:3306; do echo waiting for db; sleep 2; done;' ]
+      restartPolicy: Always
+      volumes:
+        - name: www-storage
+          persistentVolumeClaim:
+            claimName: pv-www-claim
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
+status: {}

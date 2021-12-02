@@ -15,11 +15,8 @@ RUN set -ex && \
     vorbis-tools \
     vim && \
   docker-php-ext-install pdo_mysql mysqli gd && \
-  rm -rf /var/www/html && \
-  mkdir -p ${SCRIPT_ROOT} /var/www/html
+  mkdir -p ${SCRIPT_ROOT}/app
 
-COPY . /var/www/html
+COPY . ${SCRIPT_ROOT}/app
 
 ADD docker/setup.sh ${SCRIPT_ROOT}
-
-RUN ${SCRIPT_ROOT}/setup.sh

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  reply_email: admin@example.com
+  site_url: http://localhost/
