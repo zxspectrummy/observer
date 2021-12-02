@@ -171,8 +171,8 @@ class OBFUser
       ]);
       $this->userdata['key_id'] = $key_id;
 
-      setcookie('ob_auth_id',$key_id,0,'/',null,false,false);
-      setcookie('ob_auth_key',$key,0,'/',null,false,false);
+      setcookie('ob_auth_id',$key_id,time() + 60 * 60,'/',null,false,false);
+      setcookie('ob_auth_key',$key,time() + 60 * 60,'/',null,false,false);
 
       // return key data.
       return array(true,'Login successful.',array('id'=>$key_id,'key'=>$key, 'key_expiry'=>$key_expiry));
