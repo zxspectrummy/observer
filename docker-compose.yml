@@ -1,0 +1,47 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
+    ports:
+      - "3306:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_USER=${OB_DB_USER}
+      - MYSQL_PASSWORD=${OB_DB_PASS}
+
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    build:
+      context:
+        ./app
+    restart: unless-stopped
+    ports:
+      - "9000"
+    volumes:
+      - app:/var/www/html
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=${OB_DB_USER}
+      - MYSQL_PASSWORD=${OB_DB_PASS}
+      - OBCONF_URL=${OBCONF_URL}
+      - OBCONF_EMAIL=${OBCONF_EMAIL}
+      - OBCONF_PASS=${OBCONF_PASS}
+    depends_on:
+      - db
+
+  web-nginx:
+    build: ./web-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - app:/var/www/html:ro
+    depends_on:
+      - app
+
+volumes:
+  db:
+  app:
